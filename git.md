@@ -102,10 +102,11 @@ Host *
   - If you created your key with a different name, or if you are adding an existing key that has a different name, replace `id_rsa` in the command with the name of your private key file
 
 ```unix
-$ ssh-add -K ~/.ssh/id_rsa
+ssh-add -K ~/.ssh/id_rsa
 ```
 
 - TIP: the `-K` option is a version of `ssh-add`, which stores the passphrases in your Keychain for you when you add an SSH key to the SSH-Agent
+
 -Then, add your SSH key to your Github account (instructions below)
 
 ## Add SSH key to your Github account

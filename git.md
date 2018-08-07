@@ -77,4 +77,4 @@ pbcopy < ~/.ssh/<ssh-filename>.pub>
 
 <img src="https://help.github.com/assets/images/help/settings/userbar-account-settings.png"
      alt="User-bar-account-settings"
-     style="align: center;" />
+     style="align: middle;" />

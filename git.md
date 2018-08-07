@@ -74,3 +74,7 @@ pbcopy < ~/.ssh/<ssh-filename>.pub>
 - In the upper-right corner of any Github page, click your profile photo, then click **Settings**
 
 ![User-bar-account-settings](https://help.github.com/assets/images/help/settings/userbar-account-settings.png)
+
+<img src="https://help.github.com/assets/images/help/settings/userbar-account-settings.png"
+     alt="User-bar-account-settings"
+     style="align: center;" />

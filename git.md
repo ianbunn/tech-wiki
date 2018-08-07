@@ -54,6 +54,60 @@ git commit -m "<enter your message>"
 git push -u origin master
 ```
 
+## Generate a new SSH key and add it to the SSH-Agent
+
+https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent/
+
+### Generating a new SSH Key
+
+Follow the steps below:
+
+- Open Terminal
+- Paste the command below, substituting your Github email address
+
+```unix
+ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
+```
+
+- This creates a new SSH key, using the provided email as a label
+  - `Generating public/private rsa key pair.`
+- When you're prompted to "Enter a file in which to save the key", press `Enter`
+  - This accepts the default file location
+    - `Enter a file in which to save your SSH key: /Users/your-user/.ssh/id_rsa [PRESS ENTER]`
+- At the prompt, type a secure passphrase
+  - `Enter passphrase (empty for no passphrase): [Type a passphrase]`
+  - `Enter same passphrase again: [Type passphrase again]`
+
+### Adding your SSH key to the SSH-Agent
+
+Follow the steps below:
+
+- Start the SSH-Agent in the background
+
+```unix
+$ eval "$(ssh-agent -s)"
+Agend pid 59566
+```
+
+- If you're using macOS Sierra 10.12.2 or later, you will need to modify your `~/.ssh/config` file to auto-load keys into the SSH-Agent and store passphrases in your Keychain
+
+```unix
+Host *
+    AddKeysToAgent yes
+    UseKeychain yes
+    IdentityFile ~/.ssh/id_rsa
+```
+
+- Add your SSH private key to the SSH-Agent and store your passphrase in Keychain
+  - If you created your key with a different name, or if you are adding an existing key that has a different name, replace `id_rsa` in the command with the name of your private key file
+
+```unix
+$ ssh-add -K ~/.ssh/id_rsa
+```
+
+- TIP: the `-K` option is a version of `ssh-add`, which stores the passphrases in your Keychain for you when you add an SSH key to the SSH-Agent
+-Then, add your SSH key to your Github account (instructions below)
+
 ## Add SSH key to your Github account
 
 https://help.github.com/articles/adding-a-new-ssh-key-to-your-github-account/
@@ -75,6 +129,16 @@ pbcopy < ~/.ssh/<ssh-filename>.pub>
 
 ![User-bar-account-settings](https://help.github.com/assets/images/help/settings/userbar-account-settings.png)
 
-<img src="https://help.github.com/assets/images/help/settings/userbar-account-settings.png"
-     alt="User-bar-account-settings"
-     style="align: middle;" />
+- In the user settings sidebar, click **SSH** and **GPG** keys
+- Click **New SSH key** or **Add SSH key**
+
+![SSH-add-key](https://help.github.com/assets/images/help/settings/ssh-add-ssh-key.png)
+
+- In the "Title" field, add a descriptive label for the new key
+  - For example, if you're using a personal MAC, you might call this key "Personal MacBook Air"
+- Paste your key into the "Key" field
+
+![SSH-key-paste](https://help.github.com/assets/images/help/settings/ssh-key-paste.png)
+
+- Click **Add SSH key**
+- If prompted, confirm your Github password

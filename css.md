@@ -19,6 +19,25 @@ https://www.w3schools.com/cssref/css_units.asp
 - **vmax** = relative to 1% of viewport’s larger dimension
 - **%** = relative to the parent element
 
+## Text Shadow Property
+
+https://www.w3schools.com/cssref/css3_pr_text-shadow.asp
+
+```css
+text-shadow: h-shadow v-shadow blur-radius color|none|initial|inherit;
+```
+
+- In the above css snippet, **h-shadow** is required, which is the position of the horizontal shadow
+  - Negative values are allowed
+- **v-shadow** is required, which is the position of the horizontal shadow
+  - Negative values are allowed
+- **blur-radius** is optional
+  - Default value is 0
+- **color** is optional, which is the color of the shadow
+- **none** is default value, which means no shadow
+- **initial** is used to set this property to its default value
+- **inherit** = inherits this property from its parent element
+
 ## Drop Caps on the Web Using Initial Letter
 
 [Magazine layout youtube video](https://www.youtube.com/watch?v=2WryRYsCHlE&t=1s)

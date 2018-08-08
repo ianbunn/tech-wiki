@@ -4,6 +4,21 @@
 
 [CSS cheat sheet documentation](https://www.w3schools.com/w3css/default.asp)
 
+## CSS Units
+
+https://www.w3schools.com/cssref/css_units.asp
+
+- **em** = relative to the font-size of the element
+  - **2em** means 2 times the size of the current font
+- **ex** = relative to the x-height of the current font
+- **ch** = relative to width of the “0” (zero)
+- **rem** = relative to font-size of the root element
+- **vw** = relative to 1% of the width of the viewport
+- **vh** = relative to 1% of the height of the viewport
+- **vmin** = relative to 1% of viewport’s smaller dimension
+- **vmax** = relative to 1% of viewport’s larger dimension
+- **%** = relative to the parent element
+
 ## Drop Caps on the Web Using Initial Letter
 
 [Magazine layout youtube video](https://www.youtube.com/watch?v=2WryRYsCHlE&t=1s)
@@ -24,18 +39,3 @@
 ```
 
 ![css-drop-caps](/images/css-drop-caps.png)
-
-## CSS Units
-
-https://www.w3schools.com/cssref/css_units.asp
-
-- **em** = relative to the font-size of the element
-  - **2em** means 2 times the size of the current font
-- **ex** = relative to the x-height of the current font
-- **ch** = relative to width of the “0” (zero)
-- **rem** = relative to font-size of the root element
-- **vw** = relative to 1% of the width of the viewport
-- **vh** = relative to 1% of the height of the viewport
-- **vmin** = relative to 1% of viewport’s smaller dimension
-- **vmax** = relative to 1% of viewport’s larger dimension
-- **%** = relative to the parent element

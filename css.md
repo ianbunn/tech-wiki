@@ -23,7 +23,7 @@ https://www.w3schools.com/cssref/css_units.asp
 
 [Magazine layout youtube video](https://www.youtube.com/watch?v=2WryRYsCHlE&t=1s)
 
-- Let users know where to start reading with initial letter
+- This layout is used to help users know where to start reading with initial letter
 
 ```css
 @supports (initial-letter: 4) or (-webkit-initial-letter: 4) {

@@ -27,7 +27,7 @@
 
 ## CSS Units
 
-https://www.w3schools.com/cssref/css3_pr_text-shadow.asp
+https://www.w3schools.com/cssref/css_units.asp
 
 - **em** = relative to the font-size of the element
   - **2em** means 2 times the size of the current font

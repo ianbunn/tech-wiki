@@ -2,7 +2,7 @@
 
 ## Hypervisors
 
-What is a Hypervisor? [[1](www.networkworld.com/article/3243262/virtualization/what-is-a-hypervisor.html)]
+What is a Hypervisor? [[1](https://www.networkworld.com/article/3243262/virtualization/what-is-a-hypervisor.html)]
 
 * Hypervisor is a process that separates a computer’s OS and applications from the underlying physical hardware
   * Hypervisor allows the the physical host to operate multiple virtual machines as guests to help maximize the effective use of computing resources:
@@ -10,7 +10,7 @@ What is a Hypervisor? [[1](www.networkworld.com/article/3243262/virtualization/w
     * Network bandwidth
     * CPU cycles
 
-History of Hypervisors [[1](www.networkworld.com/article/3243262/virtualization/what-is-a-hypervisor.html)]
+History of Hypervisors [[1](https://www.networkworld.com/article/3243262/virtualization/what-is-a-hypervisor.html)]
 
 * Hypervisors was developed in the late 1960s and 1970s by IBM for testing new OS ideas or even exploring new hardware concepts
   * The virtualization aspect allowed programmers to deploy and debug w/out jeopardizing the stability of the main PRODUCTION system
@@ -24,14 +24,14 @@ History of Hypervisors [[1](www.networkworld.com/article/3243262/virtualization/
 * In 2005, CPU vendors included hardware virtualization to their x86-based products
   * This would extend the availability (and benefits) of virtualization to PC (consumers) and server-based (professionals) audiences
 
-Benefits of Hypervisors [[1](www.networkworld.com/article/3243262/virtualization/what-is-a-hypervisor.html)]
+Benefits of Hypervisors [[1](https://www.networkworld.com/article/3243262/virtualization/what-is-a-hypervisor.html)]
 
 * Even though VMs run on the same physical hardware, they are still logically separated from each other.
   * If one VM experiences an error, crash, or a malware attack, it doesn’t extend to other VMs on the same machine, or even other machines
 * VMs are very mobile, because they are independent of the underlying hardware
   * Can be moved or migrated between local or remote virtualized servers, easier than traditional applications that are tied to physical hardware
 
-Types of Hypervisors [[1](www.networkworld.com/article/3243262/virtualization/what-is-a-hypervisor.html)]
+Types of Hypervisors [[1](https://www.networkworld.com/article/3243262/virtualization/what-is-a-hypervisor.html)]
 
 * Type 1 = “native” or “bare metal” hypervisors that run directly on the host’s hardware to control the hardware and manage the guests VMs
   * Modern type 1 hypervisors include:
@@ -51,7 +51,7 @@ Types of Hypervisors [[1](www.networkworld.com/article/3243262/virtualization/wh
   * Microsoft
   * Citrix Systems
 
-Containers VS Hypervisors [[1](www.networkworld.com/article/3243262/virtualization/what-is-a-hypervisor.html)]
+Containers VS Hypervisors [[1](https://www.networkworld.com/article/3243262/virtualization/what-is-a-hypervisor.html)]
 
 * Containers are growing in popularity as a possible replacement for hypervisors
   * Containers can place more apps into a single physical server than a VM can
@@ -68,7 +68,7 @@ Containers VS Hypervisors [[1](www.networkworld.com/article/3243262/virtualizati
     * Detection alternatives have been pursued with the SubVirt and BluePill malware, while others have demonstrated a hypervisor-layer anti-rootkit called HookSafe
       * HookSafe provides generic protection against kernel-mode rootkits
 
-Hypervisor Expansion [[1](www.networkworld.com/article/3243262/virtualization/what-is-a-hypervisor.html)]
+Hypervisor Expansion [[1](https://www.networkworld.com/article/3243262/virtualization/what-is-a-hypervisor.html)]
 
 * Hypervisors have expanded into storage hypervisors
   * Storage hypervisors take the same concept and apply it to data storage
@@ -79,7 +79,7 @@ Hypervisor Expansion [[1](www.networkworld.com/article/3243262/virtualization/wh
     * OS virtualization
     * Application virtualization
 
-Embedded Hypervisor [[1](www.networkworld.com/article/3243262/virtualization/what-is-a-hypervisor.html)]
+Embedded Hypervisor [[1](https://www.networkworld.com/article/3243262/virtualization/what-is-a-hypervisor.html)]
 
 * Embedded hypervisors support the requirements of the embedded systems
   * These are different from hypervisors that target web server and desktop applications
@@ -87,4 +87,4 @@ Embedded Hypervisor [[1](www.networkworld.com/article/3243262/virtualization/wha
 * In an embedded systems, various components function collectively to provide the device’s functionality
   * Mobile virtualization overlaps with embedded system virtualization, and shares some use cases
 
-[[1](www.networkworld.com/article/3243262/virtualization/what-is-a-hypervisor.html)] Shaw, Keith. “What Is a Hypervisor?” Network World, Network World, 19 Dec. 2017, 12:18, www.networkworld.com/article/3243262/virtualization/what-is-a-hypervisor.html.
+[[1](https://www.networkworld.com/article/3243262/virtualization/what-is-a-hypervisor.html)] Shaw, Keith. “What Is a Hypervisor?” Network World, Network World, 19 Dec. 2017, 12:18, www.networkworld.com/article/3243262/virtualization/what-is-a-hypervisor.html.

@@ -2,11 +2,14 @@
 
 ## Review file permissions
 
-Run the command below to see file permissions ![permissions diagram](/images/linux-permissions-diagram.png)
+Run the command below to see file permissions:
 
 ```shell
 ls -al
 ```
+
+See the diagram below for Linux file permissions:
+![permissions diagram](/images/linux-permissions-diagram.png)
 
 ## Change to super-user
 

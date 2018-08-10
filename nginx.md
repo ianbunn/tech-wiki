@@ -11,6 +11,22 @@ Nginx is a web server which can also be used as a:
 - Mail proxy
 - HTTP cache
 
+## Restart Nginx web server
+
+Run the following ommands as a root user:
+
+First:
+
+```php
+service nginx restart
+```
+
+Second:
+
+```php
+service nginx reload
+```
+
 ## Resolve Nginx: 413: Request Entity Too Large Error
 
 This solution allows you to upload 2M size image files using Nginx reverse proxy. To resolve this, follow the steps below:
@@ -26,3 +42,5 @@ client_max_body_size 2m;
 ```
 
 - Reload the Nginx server by running the command `service nginx reload`
+
+The steps above should have fixed the upload size error

@@ -21,7 +21,7 @@ License: (ISC) <leave blank and press `Enter`>
 
 ## Add new `devDependencies` to your package.json using NPM
 
-Run the following command in terminal in your project's folder: 
+Run the following command in terminal in your project's folder:
 
 ```shell
 npm install @type/<input package name>

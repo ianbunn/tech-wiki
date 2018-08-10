@@ -2,7 +2,7 @@
 
 ## Review file permissions
 
-Run the command below to see file permissions [permissions diagram](/images/linux-permissions-diagram.png)
+Run the command below to see file permissions ![permissions diagram](/images/linux-permissions-diagram.png)
 
 ```shell
 ls -al

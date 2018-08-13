@@ -33,3 +33,28 @@ JS is a prototype-based programming language:
 - This type of style allows the creation of an object without first defining its class
 
 JS is a **multi-paradigm**, dynamic language, supporting object-oriented, imperative, and declarative (e.g. functional programming) styles.
+
+## You Don't Know JS (YDKJS)
+
+### JavaScript execution
+
+JS is an interpreted language, because your JS source code is processed each time the code runs
+
+- JS's V8 engine compiles the program on the fly and then immediately runs the compiled code
+
+### Expressions
+
+Expressions are statements made up of one or more expressions. Some examples include:
+
+```javascript
+a = b * 2
+```
+
+- `2` is a *literal value* expression
+- `b` is a *variable* expression
+- `b * 2` is an *arithmetic* expression
+- `a = b * 2` is an *assignment* expression
+
+General expressions are not very commonly used. General expressions run the arithmetic expression, but it will not do anything with the result, `b * 2;`
+
+Expression statements are the function call to itself, `alert(a);`

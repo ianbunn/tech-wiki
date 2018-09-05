@@ -15,3 +15,7 @@
 - `<ul>`: unordered list with bullet points
 - `<ol>`: ordered list with numbers
 - `<li>`: list of items under an unordered or ordered list
+
+## Links Reference
+
+- [W3Schools - HTML intro](https://www.w3schools.com/html/html_intro.asp)

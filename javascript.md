@@ -58,3 +58,8 @@ a = b * 2
 General expressions are not very commonly used. General expressions run the arithmetic expression, but it will not do anything with the result, `b * 2;`
 
 Expression statements are the function call to itself, `alert(a);`
+
+### Booleans
+
+Booleans are **TRUE** or **FALSE**.
+

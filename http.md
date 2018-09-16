@@ -22,3 +22,6 @@ HTTP can be used on any reliable transport layer, as long as the protocol doesn'
 
 - Most common transport layer TCP/IP
 
+HTTP can also be used to fetch parts of documents to update Web pages on demand
+
+![HTTP](https://mdn.mozillademos.org/files/13673/HTTP%20&%20layers.png)

@@ -100,3 +100,16 @@ Even with more complexity introduced in HTTP/2 by encapsulating HTTP messages in
       - The underlying TCP connection can be partially controlled using the `Connection` header
       - HTTP/2.0 went a step further by multiplexing messages over a single connection, helping keep the connection warm
   - Google is experimenting with QUIC which builds on UDP to provide a more reliable and efficient transport protocol
+
+### What can be controlled by HTTP
+
+The extensible nature of HTTP has, over time, allowed for more control and functionality of the Web
+
+Cache or authentication methods were functions handled early in HTTP history. The ability to relax the **origin constraint** has only been added in the 2010s
+
+Here is a list of common features controllable with HTTP:
+
+- Cache: the server can instruct proxies, and clients, what to cache and for how long
+  - Client can instruct intermediate cache proxies to ignore the stored document
+  - **Relaxing the origin constraint**: helps to prevent from snooping and other privacy concerns
+    - Web browsers enfore strict separation between Web sites

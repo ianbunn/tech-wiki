@@ -16,7 +16,7 @@ git clone https://github.com/<enter-your-github-username>/<enter-your-repo-name>
 
 ## Create a new repository using MacOS Terminal
 
-Run the following commands in the folder you are creating your repository and in the order below:
+- Run the following commands in the folder you are creating your repository and in the order below:
 
 ```unix
 echo "# <enter message> README.md
@@ -25,6 +25,12 @@ echo "# <enter message> README.md
 ```unix
 git add README.md
 ```
+
+```unix
+git add .gitignore
+```
+
+Here is a collection of templates; language and framework specific: [Github - .gitignore details](https://github.com/github/gitignore)
 
 ```unix
 git commit -m "<enter your message>"
@@ -56,7 +62,7 @@ git push -u origin master
 
 ## Generate a new SSH key and add it to the SSH-Agent
 
-https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent/
+[Github - generate a new SSH key and addding it to SSH agent](https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent/)
 
 ### Generating a new SSH Key
 
@@ -110,7 +116,7 @@ ssh-add -K ~/.ssh/id_rsa
 
 ## Add SSH key to your Github account
 
-https://help.github.com/articles/adding-a-new-ssh-key-to-your-github-account/
+[Github - add SSH to account](https://help.github.com/articles/adding-a-new-ssh-key-to-your-github-account/)
 
 Follow the steps below:
 

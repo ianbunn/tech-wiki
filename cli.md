@@ -2,12 +2,14 @@
 
 ## Basic Vi commands for Vi editor
 
-Here is a [cheat sheet](https://assets.digitalocean.com/articles/linux_basics/ls-l.png) by the Colorado State University Computer Science Department
-
 - `:wq` = write changes and quit Vi editor
 - `:q!` = DO NOT write changes and quit Vi editor
+- `pwd` = print working directory's name
+- `cat [filename]` = used when you want to view the contents of a file
+- `ls` = list all contents of a directory
+- `ls -a` = list all contents of a directory with hidden files
 
-## Create a text file by accessing Nano editor
+### Create a text file by accessing Nano editor
 
 Run `nano index.html`
 
@@ -18,21 +20,13 @@ Then, press `Control + "C"` to exit Nano editor
 - Nano editor will ask you to save, append, etc.
   - Press `"Enter"`
 
-## Create a file in Terminal for MacOS
+### Create a file
 
 Run `touch <name-of-file.txt>`
 
-## Move a file to a different folder
+### Move a file to a different folder
 
 Run `mv <name-of-file.txt> <folder-name>`
-
-## Change PEM key permissions for SSH
-
-Run `chmod 400 <enter-name-of-key.pem>`
-
-## SSH into an EC2 instance
-
-Run `ssh ec2-user@<enter.IP> -i <enter-key-name.pem>`
 
 ## iOS Computers - Terminal
 

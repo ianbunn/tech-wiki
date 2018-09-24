@@ -33,3 +33,12 @@ Run `chmod 400 <enter-name-of-key.pem>`
 ## SSH into an EC2 instance
 
 Run `ssh ec2-user@<enter.IP> -i <enter-key-name.pem>`
+
+## iOS Computers - Terminal
+
+### How to empty your trash
+
+Steps to empty your trash using Terminal:
+
+1. Open Terminal
+2. Run the following command: `sudo rm -rf ~/Trash/*`

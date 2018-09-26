@@ -1,6 +1,6 @@
 # Command Line Interface (CLI)
 
-## Basic Vi commands for Vi editor
+## Basic commands for CLI
 
 - `:wq` = write changes and quit Vi editor
 - `:q!` = DO NOT write changes and quit Vi editor
@@ -8,6 +8,17 @@
 - `cat [filename]` = used when you want to view the contents of a file
 - `ls` = list all contents of a directory
 - `ls -a` = list all contents of a directory with hidden files
+- `touch [file-name]` = creates a new file
+- `rm [file-name]` = removes or deletes a file
+- `open [file-name]` = open file
+
+### Use multiple commands in one line
+
+Use `;` to make multiple commands
+
+```shell
+mkdir one_folder second_folder ; touch one.html two.html ; mkdir first_day_stuff ; mv one.html first_day_stuff ; mv two.html first_day_stuff
+```
 
 ### Create a text file by accessing Nano editor
 

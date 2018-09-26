@@ -149,7 +149,7 @@ pbcopy < ~/.ssh/<ssh-filename>.pub>
 - Click **Add SSH key**
 - If prompted, confirm your Github password
 
-### How to check your username in GitHub
+## How to check your username in GitHub
 
 Run the following query in your Terminal (MAC) to verify your username:
 `ssh -T git@github.com`

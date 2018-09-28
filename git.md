@@ -1,5 +1,9 @@
 # Git
 
+`git status` will always give you the branch, untracked files, and committed files
+
+`git add` adds it to the local branch
+
 ## Cloning an existing repository
 
 Run the following command to clone an existing repository:

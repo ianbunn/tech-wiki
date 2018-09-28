@@ -14,7 +14,7 @@ Run the follwoing command to clone an existing repository into a different named
 git clone https://github.com/<enter-your-github-username>/<enter-your-repo-name>.git tech-notes
 ```
 
-## Create a new repository using MacOS Terminal
+## Create a new repository using CLI (MacOS Terminal)
 
 - Run the following commands in the folder you are creating your repository and in the order below:
 

@@ -58,3 +58,14 @@ text-shadow: h-shadow v-shadow blur-radius color|none|initial|inherit;
 ```
 
 ![css-drop-caps](/images/css-drop-caps.png)
+
+`display` can be used with:
+
+- `block`
+- `inline`
+- `none`
+- `list-item`
+- `table`
+- `flex`
+
+`visibility` can be set to `hidden`, but it will always take space as if it was visible

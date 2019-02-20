@@ -86,6 +86,26 @@ NOTE that `mongod` doesn't have a `b` at the end.
 
 Read the output on the console.log to make sure that the server for MongoDB is running correctly.
 
+#### Kill previous MongoDB server
+
+To kill the previous `mongod` instance, first search for a list of tasks running on your machine by running this command:
+
+```shell
+sudo lsof -iTCP -sTCP:LISTEN -n -P
+```
+
+Search for `mongod` COMMAND and its `PID` and `type`. Using the `PID`, run the following command:
+
+```shell
+sudo kill <insert_mongod_PID>
+```
+
+Another command to run to kill `mongod` instance:
+
+```shell
+mongo --eval "db.getSiblingDB('admin').shutdownServer()"
+```
+
 #### Create DB
 
 Start a new database by switching to it using the command below:

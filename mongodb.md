@@ -29,8 +29,9 @@ Column VS Field
 
 ### Research
 
-What are the advantages of using a noSQL database like MongoDB according to the MongoDB Website?
-A: MongoDB stores data in flexible, JSON-like documents, meaning fields can vary from document to document and data structure can be changed over time.
+**What are the advantages of using a noSQL database like MongoDB according to the MongoDB Website?**
+
+**A**: MongoDB stores data in flexible, JSON-like documents, meaning fields can vary from document to document and data structure can be changed over time.
 
 The document model maps to the objects in your application code, making data easy to work with.
 
@@ -41,8 +42,9 @@ MongoDB is a distributed database at its core, so high availability, horizontal 
 MongoDB is free and open-source. Versions released prior to October 16, 2018 are published under the AGPL. All versions released after October 16, 2018, including patch fixes for prior versions, are published under the Server Side Public
 License (SSPL) v1.
 
-What are the advantages of using a noSQL database like MongoDB according to the web (places like Quora)?
-A: https://www.mongodb.com/scale/advantages-of-nosql
+**What are the advantages of using a noSQL database like MongoDB according to the web (places like Quora)?**
+
+**A**: https://www.mongodb.com/scale/advantages-of-nosql
 
 ## Server CLI
 

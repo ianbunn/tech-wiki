@@ -44,7 +44,7 @@ License (SSPL) v1.
 
 **What are the advantages of using a noSQL database like MongoDB according to the web (places like Quora)?**
 
-**A**: https://www.mongodb.com/scale/advantages-of-nosql
+**A**: [MongoDB - Advantages of NoSQL](https://www.mongodb.com/scale/advantages-of-nosql)
 
 ## Server CLI
 

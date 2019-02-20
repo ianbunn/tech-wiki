@@ -18,9 +18,13 @@ License (SSPL) v1.
 ### Terminology compared to SQL
 
 SQL VS MongoDB (NoSQL)
+
 Database VS Database
+
 Table VS Collection
+
 Row VS Document
+
 Column VS Field
 
 ### Research

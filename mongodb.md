@@ -1,5 +1,10 @@
 # MongoDB
 
+## Helpful links
+
+- [MongoDB Docs](https://docs.mongodb.com/)
+- [MongoDB Docs - CRUD operations](https://docs.mongodb.com/manual/crud/)
+
 ## Intro to MongoDB
 
 MongoDB is a NoSQL database. It stores data in BSON format, AKA effectively compressed JSON.

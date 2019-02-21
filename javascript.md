@@ -1,8 +1,10 @@
 # JavaScript
 
-## MDN Web Docs
+## Books and other research
 
-### First class functions
+### MDN Web Docs
+
+#### First class functions
 
 First class functions are treated like any other variable:
 
@@ -13,7 +15,7 @@ First class functions are treated like any other variable:
   - You have to user another variable to return the function itself without invoking its returned function
 - A first class function can be assigned as a value to a variable
 
-### Non-browser environments
+#### Non-browser environments
 
 Many non-browser environments use JS, such as:
 
@@ -21,7 +23,7 @@ Many non-browser environments use JS, such as:
 - Apache CouchDB
 - Adobe Acrobat
 
-### Prototype-based programming language
+#### Prototype-based programming language
 
 JS is a prototype-based programming language:
 
@@ -34,15 +36,15 @@ JS is a prototype-based programming language:
 
 JS is a **multi-paradigm**, dynamic language, supporting object-oriented, imperative, and declarative (e.g. functional programming) styles.
 
-## You Don't Know JS (YDKJS)
+### You Don't Know JS (YDKJS)
 
-### JavaScript execution
+#### JavaScript execution
 
 JS is an interpreted language, because your JS source code is processed each time the code runs
 
 - JS's V8 engine compiles the program on the fly and then immediately runs the compiled code
 
-### Expressions
+#### Expressions
 
 Expressions are statements made up of one or more expressions. Some examples include:
 
@@ -59,7 +61,6 @@ General expressions are not very commonly used. General expressions run the arit
 
 Expression statements are the function call to itself, `alert(a);`
 
-### Booleans
+#### Booleans
 
 Booleans are **TRUE** or **FALSE**.
-

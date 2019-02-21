@@ -30,3 +30,9 @@ npm install @type/<input package name>
 The new package should be added to your package.json, and looks like below:
 
 ![package-json-sample](/images/package-json-sample.png)
+
+## Interesting NPM packages
+
+Cross-Site Request Forgery (CSRF) Protection
+
+- [csurf](https://www.npmjs.com/package/csurf)

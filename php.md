@@ -5,6 +5,15 @@ Some basics:
 - `==` used when comparing two variables
 - `[]` used when introducing a new array
 
+## Variables
+
+Declare variables with a `$` prefix
+
+```php
+$name = 'Peleke'
+$age = 23
+```
+
 ## Arrays
 
 ```php
@@ -24,6 +33,10 @@ Some basics:
 `$_GET` is not secure; it appears in the address bar in plain text
 
 `$_GET` is used to know who's accessing which resource by adding a `$_GET` variable as a suffix for the link navigated by the user
+
+## Constructors and Destructors
+
+[PHP - docs - constructors and destructors](http://php.net/manual/en/language.oop5.decon.php)
 
 ## Session Variables
 

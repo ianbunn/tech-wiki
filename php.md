@@ -14,6 +14,10 @@ $name = 'Peleke'
 $age = 23
 ```
 
+### Global Variables
+
+[PHP - docs - $GLOBALS](http://php.net/manual/en/reserved.variables.globals.php)
+
 ## Arrays
 
 ```php

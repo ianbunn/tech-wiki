@@ -1,11 +1,11 @@
 # PHP
 
-Some basics:
+## Some basics
 
 - `==` used when comparing two variables
 - `[]` used when introducing a new array
 
-## Variables
+### Variables
 
 Declare variables with a `$` prefix
 
@@ -18,7 +18,7 @@ $age = 23
 
 [PHP - docs - $GLOBALS](http://php.net/manual/en/reserved.variables.globals.php)
 
-## Arrays
+### Arrays
 
 ```php
 <? php
@@ -32,13 +32,13 @@ $age = 23
 >
 ```
 
-## `$_GET`
+### `$_GET`
 
 `$_GET` is not secure; it appears in the address bar in plain text
 
 `$_GET` is used to know who's accessing which resource by adding a `$_GET` variable as a suffix for the link navigated by the user
 
-## Constructors and Destructors
+### Constructors and Destructors
 
 [PHP - docs - constructors and destructors](http://php.net/manual/en/language.oop5.decon.php)
 
@@ -60,3 +60,10 @@ We can create cookies or remove them by starting a session or setting a time in 
 - Level 3 - `$salt` it by adding `md5` in front of the value
   - To secure data in MySQL is called `hash` or `md5`
 - Level 4 - adding a changing `$salt` to the `md5` string by adding another hashing step to the user's password
+
+## Installing Composer and Laravel using `brew`
+
+1. `brew install composer`
+2. Make sure it's the latest version by running `composer --version`
+3. Install Laravel: `composer global require "laravel/installer"`
+4. Set the Laravel build to this folder: `export PATH="~/.composer/vendor/bin:$PATH"`

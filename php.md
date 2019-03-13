@@ -67,3 +67,12 @@ We can create cookies or remove them by starting a session or setting a time in 
 2. Make sure it's the latest version by running `composer --version`
 3. Install Laravel: `composer global require "laravel/installer"`
 4. Set the Laravel build to this folder: `export PATH="~/.composer/vendor/bin:$PATH"`
+5. Create a new folder by running Laravel: `laravel new projectname`
+6. `cd projectname`
+7. Run project with: `php artisan serve`
+
+### Run an existing Laravel project
+
+Run `composer install`
+
+In your folders, you'll see the `vendor` created. This is compared to the `node_modules` created after `npm install`

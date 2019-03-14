@@ -1,4 +1,4 @@
-# JavaScript
+# Javascript
 
 ## Books and other research
 
@@ -38,7 +38,7 @@ JS is a **multi-paradigm**, dynamic language, supporting object-oriented, impera
 
 ### You Don't Know JS (YDKJS)
 
-#### JavaScript execution
+#### Javascript execution
 
 JS is an interpreted language, because your JS source code is processed each time the code runs
 
@@ -48,7 +48,7 @@ JS is an interpreted language, because your JS source code is processed each tim
 
 Expressions are statements made up of one or more expressions. Some examples include:
 
-```javascript
+```Javascript
 a = b * 2
 ```
 

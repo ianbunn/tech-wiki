@@ -74,3 +74,27 @@ There are a few possible causes for the "Not Found" error:
 - `.htaccess` file CHMOD settings
 
 More information in [Turbofuture - WP not found error fix](https://turbofuture.com/internet/wordpress-not-found-error-fix)
+
+## WP theme development using Ansible by [@roots](https://github.com/roots/trellis) (NOTES NOT COMPLETED)
+
+### Helpful links
+
+- [Ansible - install guide](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#latest-releases-via-pip)
+- [Left off here, since I stopped working on a local environment and decided to go the long, easy way via FTP, BORING!](https://docs.ansible.com/ansible/latest/reference_appendices/config.html#ansible-configuration-settings-locations)
+- [Video I was following to set up Trellis (left off on min marker 5:35)](https://www.youtube.com/watch?v=E8lRan53ZgoGithub/roots/Trellis)
+- [Github - @roots/trellis](https://github.com/roots/trellis)
+
+**Make sure you have the latest `pip` installed (version 10 >=)**
+
+Start by running the following commands:
+
+```shell
+sudo easy_install pip
+sudo pip install ansible
+```
+
+After installation is complete, you will receive this message:
+
+```shell
+Successfully installed MarkupSafe-1.1.0 ansible-2.7.4 asn1crypto-0.24.0 bcrypt-3.1.4 cffi-1.11.5 cryptography-2.4.2 ipaddress-1.0.22 jinja2-2.10 paramiko-2.4.2 pycparser-2.19 pynacl-1.3.0
+```

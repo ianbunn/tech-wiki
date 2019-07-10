@@ -47,3 +47,15 @@ Steps to empty your trash using Terminal:
 
 1. Open Terminal
 2. Run the following command: `sudo rm -rf ~/Trash/*`
+
+### Mount a Network Drive
+
+Replace the following in the command below:
+
+- USERNAME
+- @Root/To/Network/Drive with the drive you are wanting to mount
+- YourLocalShare/YourMountedDrive should be created before you run the command below
+
+```sql
+sudo mount -t smbfs -o -f=0777,-d=0777 '//USERNAME@Root/To/Network/Drive' ~/YourLocalShare/YourMountedDrive
+```

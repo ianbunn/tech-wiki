@@ -4,6 +4,10 @@
 
 `git add` adds it to the local branch
 
+`git log` displays all commits' details
+
+`git log -1` displays the last commit's details
+
 ## Cloning an existing repository
 
 Run the following command to clone an existing repository:

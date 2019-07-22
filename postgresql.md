@@ -7,3 +7,427 @@
 [PostgreSQL 11 - 9.7 Pattern Matching](https://www.postgresql.org/docs/current/functions-matching.html)
 
 [PostgreSQL 11 - 9.9 Date/Time Functions and Operators](https://www.postgresql.org/docs/current/functions-datetime.html)
+
+[PostgreSQL 11 - 9.24 Set Returning Functions](https://www.postgresql.org/docs/current/functions-srf.html)
+
+## Data Types
+
+[PostgreSQL - Data types](https://www.postgresql.org/docs/11/datatype.html)
+
+* ANSI data types
+  * character
+  * character varying (varchar)
+  * character large object
+  * nchar
+  * nchar varying
+* Binary data types
+  * binary
+  * binary varying
+  * binary large object
+* Number - exact or decimal type
+  * numeric
+  * decimal
+* Whole numbers - difference in storage size
+  * smallint - 2 bytes +/- 32,000
+    * Aka int2
+  * integer - 4 bytes +/- 2,000,000,000
+    * Aka int4
+  * bigint - 8 bytes +/- 9x10^18
+    * Aka int8
+* Inexact decimal types
+  * float
+  * real
+  * double precision
+* Boolean
+  * true or false
+* Date and time data types
+  * date
+  * time
+  * timestamp
+  * timestamptz
+  * interval
+
+### Create a custom data type
+
+```sql
+CREATE TYPE mpaa_rating AS ENUM (
+	'G',
+	'PG',
+	'PG-13',
+	'R',
+	'NC-17');
+```
+
+### Coalesce
+
+```sql
+select
+	coalesce(title, '[title]') || ' is ' || coalesce(length || ' minutes ', 'unknown length') as length_desc
+from film;
+```
+
+### Type casting
+
+```sql
+select
+	int '33',
+	'33'::int,
+	cast('33' as int);
+```
+
+```sql
+-- numeric needs to provide (precision, scale)
+select
+	0.4235::numeric(5, 4) * 10000000,
+	0.4235::real * 10000000;
+```
+* Other examples of type casting:
+
+```sql
+select int '33';
+select int '33.3'; --errored out bc 33.3 is not a int and no explicit coercion is happening
+select cast(33.3 as int); 
+select cast(33.8 as int);
+select 33::text;
+select 'hello'::varchar(2);
+select cast(32768 as smallint); --32000 is the highest that can be represented by a smallint, caps out at 32,768
+select 12.1::numeric(1,1);--12 does not fit in 1 precision and 1 scale
+```
+
+## Date and Time Functions and Operators
+
+* Find all timezone names
+
+```sql
+select *
+from pg_timezone_names
+order by name;
+```
+
+* Find all timezones' abbreviations
+
+```sql
+select *
+from pg_catalog.pg_timezone_abbrevs;
+```
+
+### Time standards
+
+```sql
+--ISO yyyy-mm-dd
+select '2018-01-01'::date - '2017-01-01'::date;
+
+--ISO HH:MM:SS
+select '12:30:22'::time;
+```
+
+### Select current time details
+
+`show timezone;`
+
+```sql
+select
+	current_date,
+	current_time,
+	current_timestamp;
+```
+
+### Show day time as interval
+
+```sql
+select
+	title,
+	cast(rental_duration || ' days' as interval) as duration,
+	cast(rental_duration + 1 || ' days' as interval) as "duration + 1"
+from film;
+```
+
+### Find the busiest hour from a set of timestamps
+
+```sql
+select
+	date_part('hour', rental_date) as hr,
+	count(*)
+from rental
+group by hr
+order by count desc;
+```
+
+### Find an amount based on the month from a set of dates and amounts
+
+```sql
+select
+	date_trunc('month', payment_date) as "month",
+  	sum(amount) as total
+from payment
+group by "month"
+order by "month";
+```
+
+### Find the last day and sum the amount of items based on a set of dates
+
+```sql
+select
+	count(*) as "total # EOM rentals"
+from rental
+where
+	date_trunc('month', rental_date) + interval '1 month' - interval '1 day'
+	= date_trunc('day', rental_date);
+```
+
+### Find the amount of hours based on 2 dates
+
+```sql
+select
+	customer_id,
+	round(sum(date_part('epoch', return_date - rental_date)) / 3600) as sum_hours
+from rental
+group by customer_id
+order by sum_hours desc
+limit 3;
+```
+
+### Find the amount based on a set of dates that occur on weekends
+
+```sql
+select
+	sum(amount) as "total $ on weekends"
+from payment
+where extract(isodow from payment_date) between 6 and 7;
+```
+
+```sql
+select sum(amount) as "total $"
+from payment
+where date_part('isodow', payment_date) in (6, 7);
+```
+
+## String Functions and Operators
+
+### String concatenation
+
+```sql
+-- outputs null for when email is null
+select first_name || ' has email ' || email
+from customer
+where email is null;
+
+-- outputs the defaullt string using coalesce for nulls
+select first_name || ' has email ' || coalesce(email, 'unknown')
+from customer
+where email is null;
+```
+
+### Concatenation
+
+```sql
+-- it will skip the nulls
+select concat(first_name, ' has email ', email)
+from customer;
+```
+
+### Trim
+
+```sql
+select length(trim('   ian         '));
+```
+
+```sql
+select *
+from address
+where length(trim(address2)) > 0 and
+	address2 is not null;
+```
+
+#### Find the names that have spaces in it
+
+```sql
+select title
+from film
+where length(title) - length(trim(title)) > 0;
+```
+
+## Set Returning Functions
+
+### GENERATE_SERIES
+
+```sql
+select *
+from 
+	generate_series(
+		'2019-01-01 05:00 UTC'::timestamptz,
+		'2019-12-01 05:00 UTC'::timestamptz,
+		'1 month'
+	)
+```
+
+## Aggregate Functions
+
+### `COUNT`
+
+```sql
+select
+	count(*) as "# customers",
+	count(email) as "# customers with email",
+	100.0 * count(email) / count(*) as "# with email" --if 100.0 * wasn't there, it would've output 0 bc of data types
+from customer;
+```
+
+### `COUNT` with `DISTINCT`
+
+```sql
+select
+	count(distinct customer_id) --use DISTINCT inside the count aggregate function
+from payment;
+```
+
+### `AVG` as in average
+
+```sql
+select
+	avg(return_date - rental_date) as "avg rental duration"
+from rental;
+```
+
+### `SUM`
+
+```sql
+select
+	sum(amount)
+from payment;
+```
+
+### `ROUND`
+
+* Example to round when you are getting a percentage and using filter
+
+```sql
+select
+	round(100.0 * count(*) filter(where rating = 'NC-17') / count(*)) as "% NC-17",
+	round(100.0 * count(*) filter(where rating = 'PG') / count(*)) as "% PG",
+	round(100.0 * count(*) filter(where rating = 'G') / count(*)) as "% G",
+	round(100.0 * count(*) filter(where rating = 'R') / count(*)) as "% R",
+	round(100.0 * count(*) filter(where rating = 'PG-13') / count(*)) as "% PG-13"
+from film;
+```
+
+### Repeat
+
+```sql
+select rating, repeat('*', (count(*) / 10)::int) as "count/10"
+from film
+where rating is not null
+group by rating;
+```
+
+* Repeat function with left and length
+
+```sql
+select 
+	left(title, 3) || repeat('*', length(title) - 3) as "Guess!"
+from film;
+```
+
+#### Find the amount of letters a text value has
+
+```sql
+select
+	first_name,
+	length(first_name) - length(replace(first_name, 'Z', '')) as count
+from customer
+order by count desc;
+```
+
+## Group By
+
+```sql
+select
+	date_part('year', payment_date) as year,
+	date_part('month', payment_date) as month,
+	staff_id,
+	count(*) as num_payments,
+	sum(amount) as payment_total,
+	avg(amount) as avg_payment_amount
+from payment
+group by 
+	date_part('year', payment_date),
+	date_part('month', payment_date),
+	staff_id
+order by
+	year, month, staff_id
+```
+
+## Case Expressions and Aggregate Functions
+
+### Regular case expression
+
+* In every case expresion, there is an implied `else null`
+
+```sql
+select
+	case
+		when length < 60 then 'short'
+		when length between 60 and 120 then 'medium'
+		when length > 120 then 'long'
+		else 'short'
+	end,
+	count(*)
+from film
+group by 1;
+```
+
+### Case expression with aggregate function
+
+* `COUNT` and `SUM` can be used interchangebly
+
+```sql
+select
+	count(case when rating in ('R', 'NC-17') then 1 end) as adult_films,
+	count(*) as total_films,
+	100.0 * sum(case when rating in ('R', 'NC-17') then 1 else 0 end) / count(*) as percent
+from film;
+```
+
+```sql
+select
+	case
+		when length between 0 and 59 then '0-1hrs'
+		when length between 60 and 119 then '1-2hrs'
+		when length between 120 and 179 then '2-3hrs'
+		else '3hrs+'
+	end as len,
+	count(*)
+from film
+group by 1
+order by 1;
+```
+
+### PostgreSQL Filter
+
+```sql
+select 
+	count(*) filter(where rating in ('R', 'NC-17')) as adult_films,
+	count(*) filter(where rating = 'G' and length > 120) as nanny_movies
+from film;
+```
+
+```sql
+select
+	count(*)
+		filter(where return_date - rental_date < interval '3 days') as "lt 3 days",
+	count(*)
+		filter(where return_date - rental_date >= interval '3 days') as "gt 3 days",
+	count(*)
+		filter(where return_date is null) as "never returned"
+from rental;
+```
+
+* Similar to filter, `bool_and`
+
+```sql
+select
+	customer_id
+from payment
+group by customer_id
+having bool_and(amount >2);
+```

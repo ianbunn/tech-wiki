@@ -431,3 +431,114 @@ from payment
 group by customer_id
 having bool_and(amount >2);
 ```
+
+## Joins
+
+### Cross join
+
+* Cross join - cartesian product
+
+```sql
+select 
+	f.film_id, 
+	s.store_id,
+	count(i.inventory_id) as stock
+from film f
+	cross join store s
+	left outer join inventory i
+	on f.film_id = i.film_id
+	and s.store_id = i.store_id
+group by f.film_id, s.store_id
+order by stock, f.film_id, s.store_id;
+```
+
+### Inner join
+
+* Inner join - cross join + filtering
+
+```sql
+select 
+	r.customer_id,
+	count(distinct f.film_id) as num_films,
+	count(distinct fa.actor_id) as num_actors
+from rental r
+	inner join inventory i using (inventory_id)
+	inner join film f using (film_id)
+	inner join film_actor fa using (film_id)
+group by customer_id
+order by customer_id;
+```
+
+* Inner join with multiple tables and self join (cross join with itself)
+
+```sql
+select
+	r.customer_id,
+	i.film_id
+from rental r
+	inner join inventory i
+		on r.inventory_id = i.inventory_id
+	inner join rental r2
+		on r.customer_id = r2.customer_id
+		and r2.rental_date > r.rental_date
+	inner join inventory i2
+		on r2.inventory_id = i2.inventory_id
+where i.film_id = 97 and i2.film_id = 841
+```
+
+### Outer join
+
+* Outer join - cross join + filtering + add miissing rows
+
+* 3 types of outer joins:
+  * Left outer join
+  * Right outer join
+  * Full outer join
+
+```sql
+select f.film_id, f.title, fa.actor_id, a.first_name, a.last_name
+from film f
+	left outer join 
+		(film_actor fa 
+		inner join actor a using (actor_id))
+	using (film_id)
+order by f.film_id;
+```
+
+```sql
+select f.title, count(i.inventory_id)
+from film f
+	left outer join inventory i using (film_id)
+group by f.title
+order by count(i.inventory_id);
+```
+
+* Outer join with multiple conditions
+
+```sql
+select 
+	c.customer_id,
+	count(r.rental_id) num_rented
+from customer c
+	left outer join rental r
+		on c.customer_id = r.customer_id
+		and date_trunc('day', r.rental_date) = '20050524'
+group by c.customer_id
+order by num_rented desc, c.customer_id
+```
+
+* Outer join with `generate_series`
+
+```sql
+select
+	months.month,
+	count(r.rental_id)
+from generate_series(
+		'2005-01-01'::timestamptz,
+		'2005-12-01'::timestamptz,
+		'1 month'
+	) months(month)
+left outer join rental r
+	on date_trunc('month', r.rental_date) = months.month
+group by months.month;
+```

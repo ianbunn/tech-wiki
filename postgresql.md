@@ -10,6 +10,18 @@
 
 [PostgreSQL 11 - 9.24 Set Returning Functions](https://www.postgresql.org/docs/current/functions-srf.html)
 
+## Order of Operations
+
+```sql
+from
+where
+group by
+having
+select
+order by
+limit
+```
+
 ## Data Types
 
 [PostgreSQL - Data types](https://www.postgresql.org/docs/11/datatype.html)

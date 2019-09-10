@@ -58,6 +58,8 @@ limit
   * timestamp
   * timestamptz
   * interval
+* JSON
+  * Tutorial [here](http://www.postgresqltutorial.com/postgresql-json/) to work with JSON data types
 
 ### Create a custom data type
 
@@ -553,4 +555,129 @@ from generate_series(
 left outer join rental r
 	on date_trunc('month', r.rental_date) = months.month
 group by months.month;
+```
+
+## Table Subqueries
+
+```sql
+--show the avg of rentals per customer
+select avg(count)
+from (select customer_id, count(*)
+	  from rental
+	  group by customer_id) t;
+```
+
+```sql
+--side step order of operations with table subqueries
+select
+	title,
+	rental_rate,
+	replacement_cost,
+	ceil(replacement_cost / rental_rate) break_even
+from film
+where ceil(replacement_cost / rental_rate) > 30;
+
+select *
+from (select
+		  title,
+		  rental_rate,
+		  replacement_cost,
+		  ceil(replacement_cost / rental_rate) break_even
+	  from film) t
+where break_even > 30;
+```
+
+```sql
+--create a virtual table
+select f.film_id, f.title, f.length, c.desc
+from film f
+	inner join
+		(values
+		  ('short',0,60),
+		  ('medium',60,120),
+		  ('long',120,10000)) c("desc","min","max")
+  	on f.length >= c.min and f.length < c.max;
+```
+
+```sql
+--7.7 Write a query to return each customer 4 times
+select
+	c.first_name,
+	c.last_name
+from customer c
+	cross join (values(1), (2), (3), (4)) v(n)
+order by c.customer_id
+```
+
+```sql
+--7.8 Return how many rentals the biz gets on avg on each day of the week
+select
+  to_char(rent_day, 'Day') as day_name,
+  round(avg(num_rentals)) as average
+from
+  (select date_trunc('day', rental_date) as rent_day, count(*) as num_rentals
+   from rental
+   group by rent_day) as T
+group by day_name
+order by average desc;
+```
+
+## Lateral Subqueries
+
+A **lateral subquery** is when you refer to the outer select query inside the subquery.
+
+In the example below from PostgreSQL course (Mastery with Data)
+
+* Return the 3 most recent rentals for each customer
+* Join the customer table onto the most recent rentals
+
+```sql
+select
+	c.customer_id,
+	d.rental_id,
+	d.rental_date
+from customer c
+inner join lateral
+	(
+		select 
+			r.customer_id,
+			r.rental_id,
+			r.rental_date,
+			r.inventory_id
+		from rental r
+		where r.customer_id = c.customer_id
+		order by r.rental_date desc
+		limit 3
+	) as d
+on c.customer_id = d.customer_id
+```
+
+### Lateral subquery exercises
+
+```sql
+select
+	c.customer_id,
+	c.first_name,
+	c.last_name,
+	d.title,
+	d.rental_date
+from customer c
+left join lateral
+	(
+		select 
+			r.customer_id,
+			r.rental_id,
+			r.rental_date,
+			r.inventory_id,
+			f.title
+		from rental r
+		inner join inventory i
+		on i.inventory_id = r.inventory_id
+		inner join film f
+		on f.film_id = i.film_id
+		where r.customer_id = c.customer_id and f.rating = 'PG'
+		order by r.rental_date
+		limit 1
+	) as d
+on c.customer_id = d.customer_id
 ```

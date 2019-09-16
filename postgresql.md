@@ -681,3 +681,155 @@ left join lateral
 	) as d
 on c.customer_id = d.customer_id
 ```
+
+## Common Table Expressions (CTE)
+
+```sql
+--7.10 Write a query to list the customers who rented out the film with title "BRIDE INTRIGUE" and then at some later date rented out the film with title "STAR OPERATION"
+with rental_detail as
+(
+select
+	r.rental_date,
+	r.customer_id,
+	f.title
+from rental r
+inner join inventory i using (inventory_id)
+inner join film f using (film_id)
+)
+select r1.customer_id
+from rental_detail r1
+inner join rental_detail r2
+on r1.customer_id = r2.customer_id
+and r2.rental_date > r1.rental_date
+and r1.title = 'BRIDE INTRIGUE'
+and r2.title = 'STAR OPERATION'
+
+--7.11 calculate the amount of income received each month and compare that against the previous month's income, showing the change
+with monthly_amounts as
+(
+select
+	date_trunc('month', payment_date) as month,
+	sum(amount) total
+from payment
+group by month
+)
+select
+	curr.month,
+	curr.total income,
+	prev.total "prev month income",
+	(curr.total - prev.total) change
+from monthly_amounts curr
+left join monthly_amounts prev
+	on curr.month = prev.month + interval '1 month'
+```
+
+## Window Functions
+
+```sql
+select *
+from (select
+	title,
+	length,
+	row_number() over (partition by rating order by length),
+	rank() over (partition by rating order by length),
+	dense_rank() over (partition by rating order by length)
+	from film) t
+where rank <= 4
+```
+
+## Helpful Query Examples
+
+```sql
+--7.12 Write a query to return the customers who rented a film in 2005 but none in 2006
+select
+	distinct r.customer_id
+from rental r
+where date_part('year', r.rental_date) = 2005
+and customer_id not in
+(select customer_id
+	from rental
+	where date_part('year', rental_date) = 2006)
+order by r.customer_id
+
+/*
+--7.13 What are the top 3 countries the customers are from. Show both the number of customers 
+from each country and percentage (round the percentage to the nearest whole number)
+*/
+select
+co.country,
+count(*) num_customers,
+round(100 * count(*) / (select count(*) from customer)) as "percent"
+from customer c
+	inner join address a using (address_id)
+	inner join city ci using (city_id)
+	inner join country co using (country_id)
+group by co.country
+order by num_customers desc
+limit 3
+
+/*
+7.14 Write a query to perform a running total of payments received, grouping by month 
+(ie. for each month return the amount of money received that month and also the total 
+amount of money received up to (and including) that month - this is a useful view to 
+have if you wanted to produce a cumulative chart). Hint - Re-use the monthly_amounts CTE from exercise 7.11
+*/
+with monthly_amounts as
+(
+select
+	date_trunc('month', payment_date) as month,
+	sum(amount) total
+from payment
+group by month
+)
+select
+	ma1.month,
+	ma1.total,
+	(select
+		sum(ma2.total)
+	from monthly_amounts ma2
+	where ma2.month <= ma1.month) cumamount
+from monthly_amounts ma1
+order by ma1.month
+
+/*
+--7.15 The rental table has 16,044 rows but the maximum rental ID is 16,049. 
+This suggests that some rental IDs have been skipped over. Write a query 
+to find the missing rental IDs. The generate_series function may come in handy
+
+Solution:
+This was a particularly tricky one! generate_series is used to obtain the full 
+list of IDs from the min to the max and then via a correlated subquery, 
+we only keep those that don't exist in the rental table.
+*/
+select
+s.id
+from generate_series(
+  (select min(rental_id) from rental),
+  (select max(rental_id) from rental)) as s(id)
+ where not exists
+ 	(select *
+ 	from rental
+ 	where rental_id = s.id)
+ 	
+/*
+ * 7.16 In an earlier exercise I asked you to see if you could find a way to return the 
+ * last 3 payments made in Jan, 2007 but ordered ascending. You've got the tools now to 
+ * accomplish this - see if you can figure it out!
+
+Solution:
+
+The key insight to accomplish this is to realize you can find and select the 3 rows 
+you're after using a table subquery. Within that subquery you're able to order the payments 
+in descending order to be able to pick the last 3, but then outside of that subquery you're 
+once again free to specify a new ordering for display purposes!
+ */
+select payment_id, amount, payment_date
+from 
+  (select payment_id, amount, payment_date
+   from payment
+   where payment_date >= '2007-01-01'
+     and payment_date < '2007-02-01'
+   order by payment_date desc
+   limit 3) as p
+order by payment_date asc;
+```

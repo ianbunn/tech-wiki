@@ -1,14 +1,64 @@
 # PostgreSQL
 
+## Notes
+
+### How to find the `hba_file`
+
+In your database viewer, run the following query:
+
+```postgresql
+SHOW hba_file;
+```
+
+The output should be the path to the directory that contains the `hba_file`
+
+### How to make auto increment as a primary key when creating a table
+
+```postgresql
+create table (
+  id serial primary key,
+  title varchar(100) not null,
+  primary_author varchar(100) null
+);
+```
+
+#### Using a custom sequence
+
+```postgresql
+create sequence books_sequence
+  start 2
+  increment 2
+```
+
+#### Inserting into a sequenced table
+
+```postgresql
+insert into books
+  (id, title, primary_author)
+values
+  (nextval('books_sequence), 'A Catcher in the Rye', 'J.D. Salinger');
+```
+
+#### Additional custom options
+
+There are additional options listed below:
+
+* `minvalue`
+* `maxvalue`
+* `cycle` - allows the sequence to "loop around" once it reaches its `maxvalue`
+* `start` - starting value for sequence
+
 ## Docs
 
-[PostgreSQL 11 - 9.4 String Functions and Operators](https://www.postgresql.org/docs/11/functions-string.html)
+[PostgreSQL (current) - 9.4 String Functions and Operators](https://www.postgresql.org/docs/current/functions-string.html)
 
-[PostgreSQL 11 - 9.7 Pattern Matching](https://www.postgresql.org/docs/current/functions-matching.html)
+[PostgreSQL (current) - 9.7 Pattern Matching](https://www.postgresql.org/docs/current/functions-matching.html)
 
-[PostgreSQL 11 - 9.9 Date/Time Functions and Operators](https://www.postgresql.org/docs/current/functions-datetime.html)
+[PostgreSQL (current) - 9.9 Date/Time Functions and Operators](https://www.postgresql.org/docs/current/functions-datetime.html)
 
-[PostgreSQL 11 - 9.24 Set Returning Functions](https://www.postgresql.org/docs/current/functions-srf.html)
+[PostgreSQL (current) - 9.24 Set Returning Functions](https://www.postgresql.org/docs/current/functions-srf.html)
+
+[PostgreSQL 12 - 9.1.24 `psql`](https://www.postgresql.org/docs/current/app-psql.html)
 
 ## Order of Operations
 
@@ -24,7 +74,7 @@ limit
 
 ## Data Types
 
-[PostgreSQL - Data types](https://www.postgresql.org/docs/11/datatype.html)
+[PostgreSQL - Data types](https://www.postgresql.org/docs/12/datatype.html)
 
 * ANSI data types
   * character

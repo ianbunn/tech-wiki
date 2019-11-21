@@ -36,3 +36,34 @@ The new package should be added to your package.json, and looks like below:
 Cross-Site Request Forgery (CSRF) Protection
 
 - [csurf](https://www.npmjs.com/package/csurf)
+
+## Troubleshoot
+
+### Reinstall Node or Fix "No Such File..." Error
+
+Symptom:
+
+* Running `npm -v` or any `npm...` command will give the error message: `env: node: No such file or directory`
+
+Solution:
+
+* Fully uninstall node with the command below:
+
+```shell
+curl -ksO https://gist.githubusercontent.com/nicerobot/2697848/raw/uninstall-node.sh
+chmod +x ./uninstall-node.sh
+./uninstall-node.sh
+rm uninstall-node.sh
+```
+
+* Using `brew` run the following command to reinstall node after uninstalling from step above:
+
+```shell
+brew install node
+```
+
+* Run the following command to link `node` to `brew`:
+
+```shell
+brew link node
+```

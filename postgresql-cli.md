@@ -1,5 +1,28 @@
 # PostgreSQL CLI Commands
 
+## Start and Stop `postgresql` with Homebrew
+
+1. `Using your terminal, navigate to see if the `homebrew.mxcl.postgresql.plist` is listed in `~/Library/LaunchAgents`
+   1. If it's not listed, run `brew services start postgresql`
+   2. You should be able to see the `homebrew.mxcl.postgresql.plist` listed in the directory `~/Library/LaunchAgents`
+
+## Setup `postgresql` to Run at Startup
+
+1. Check if dir `~/Library/LaunchAgents/`
+   1. Create it if it doesn't exist
+2. Find the `plist` file that came w/postgres install
+   1. File is titled `homebrew.mxcl.postgresql.plist`
+   2. Mine was in `/usr/local/Cellar/postgresql/11.5_1` dir
+   3. Run the following command to copy it to the `~/Library/LaunchAgents/` dir
+      1. `cp /usr/local/Cellar/postgresql/11.5_1/homebrew.mxcl.postgresql.plist ~/Library/LaunchAgents/`
+3. You should be able to navigate to `~/Library/LaunchAgents/` and see the file `homebrew.mxcl.postgresql.plist`
+4. Run the following command to load the file
+   1. `launchctl load -w homebrew.mxcl.postgresql.plist`
+5. After computer reboots, postgres should start automatically
+
+## All CLI Commands from Help
+
+```shell
 General
   \copyright             show PostgreSQL usage and distribution terms
   \crosstabview [COLUMNS] execute query and display results in crosstab
@@ -126,3 +149,4 @@ Large Objects
   \lo_list
   \lo_unlink LOBOID      large object operations
 (END)
+```

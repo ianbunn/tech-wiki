@@ -1,10 +1,8 @@
 # Javascript
 
-## Books and other research
+## [MDN Web Docs](https://developer.mozilla.org/)
 
-### MDN Web Docs
-
-#### First class functions
+### First class functions
 
 First class functions are treated like any other variable:
 
@@ -15,7 +13,9 @@ First class functions are treated like any other variable:
   - You have to user another variable to return the function itself without invoking its returned function
 - A first class function can be assigned as a value to a variable
 
-#### Non-browser environments
+---
+
+### Non-browser environments
 
 Many non-browser environments use JS, such as:
 
@@ -23,7 +23,9 @@ Many non-browser environments use JS, such as:
 - Apache CouchDB
 - Adobe Acrobat
 
-#### Prototype-based programming language
+---
+
+### Prototype-based programming language
 
 JS is a prototype-based programming language:
 
@@ -36,15 +38,54 @@ JS is a prototype-based programming language:
 
 JS is a **multi-paradigm**, dynamic language, supporting object-oriented, imperative, and declarative (e.g. functional programming) styles.
 
-### You Don't Know JS (YDKJS)
+---
 
-#### Javascript execution
+### Map() Object
+
+The `Map()` object holds key-value pairs and remembers the original insertion order of the keys. Any value (both objects and primitive values) may be used as either a key or a value.
+
+#### Properties
+
+`Map.length` - the value of the `length` property is `0`.
+
+`get Map[@@species]` - the constructor fx that is used to create derived objects.
+
+`Map.prototype` - represents the prototype for the `Map` constructor. Allows the addition of properties to all `Map` objects.
+
+#### How to use
+
+```js
+let kvArray = [['key1', 'value1'], ['key2', 'value2']]
+
+// Use the regular Map constructor to transform a 2D key-value Array into a map
+let myMap = new Map(kvArray)
+
+myMap.get('key1') // returns "value1"
+
+// Use Array.from() to transform a map into a 2D key-value Array
+console.log(Array.from(myMap)) // Will show you exactly the same Array as kvArray
+
+// A succinct way to do the same, using the spread syntax
+console.log([...myMap])
+
+// Or use the keys() or values() iterators, and convert them to an array
+console.log(Array.from(myMap.keys())) // ["key1", "key2"]
+```
+
+Reference: [MDN web docs - Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map)
+
+---
+
+## You Don't Know JS (YDKJS)
+
+### Javascript execution
 
 JS is an interpreted language, because your JS source code is processed each time the code runs
 
 - JS's V8 engine compiles the program on the fly and then immediately runs the compiled code
+- ---
 
-#### Expressions
+### Expressions
 
 Expressions are statements made up of one or more expressions. Some examples include:
 
@@ -61,6 +102,8 @@ General expressions are not very commonly used. General expressions run the arit
 
 Expression statements are the function call to itself, `alert(a);`
 
-#### Booleans
+---
+
+### Booleans
 
 Booleans are **TRUE** or **FALSE**.

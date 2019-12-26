@@ -1,24 +1,55 @@
 # Linux
 
-## Secure Shell commands
+## Secure Shell basic commands
 
 SSH (Secure Shell) commands - network protocol for remote login to computer systems
 
-- `$sudo service ssh restart` = restart OpenSSH server
-- `$sudo service ssh start` = start OpenSSH server
-- `$sudo service ssh stop` = stop OpenSSH server
-- `$sudo USE_KDUMP=1` = enable KDUMP kernel
-- `$sudo vi /etc/default/kdump-tools` = configure local kernel crash dumps
+### `OpenSSH` server
 
-### Change PEM key permissions for SSH
+#### Start
 
-Run `chmod 400 <enter-name-of-key.pem>`
+`$sudo service ssh start`
 
-### SSH into an EC2 instance
+#### Stop
 
-Run `ssh ec2-user@<enter.IP> -i <enter-key-name.pem>`
+`$sudo service ssh stop`
 
-## Review file permissions
+#### Restart
+
+`$sudo service ssh restart`
+
+---
+
+### Kernel
+
+#### Enable `KDUMP` Kernel
+
+`$sudo USE_KDUMP=1`
+
+#### Configure Local kernel Crash Dumps
+
+`$sudo vi /etc/default/kdump-tools`
+
+---
+
+### SSH Into Server
+
+#### Change PEM Key Permissions To Be Publicly Viewable
+
+`chmod 400 <enter-name-of-key.pem>`
+
+
+#### SSH into an EC2 instance
+
+`ssh -i <enter-key-name.pem> <enter-username>@<enter.IP>`
+
+#### Act As Root User
+
+`sudo su`
+
+---
+
+### File Permissions
 
 Run the command below to see file permissions:
 
@@ -28,10 +59,6 @@ ls -al
 
 See the diagram below for Linux file permissions:
 ![permissions diagram](/images/linux-permissions-diagram.png)
-
-## Change to super-user
-
-Run `sudo su` to change to root user
 
 ## Update Linux
 

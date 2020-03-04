@@ -1,5 +1,9 @@
 # Command Line Interface (CLI)
 
+## [Common SSH Commands - Linux Shell Commands](http://www.webhostgear.com/35.html)
+
+## [Basic `vi` Commands](https://www.cs.colostate.edu/helpdocs/vi.html)
+
 ## Basic commands for CLI
 
 - `:wq` = write changes and quit Vi editor

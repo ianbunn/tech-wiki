@@ -2,6 +2,12 @@
 
 WordPress (WP) = Content Management System (CMS)
 
+## [Change & Update WP URLs in DB when Site is Moved to New Host](https://wpbeaches.com/updating-wordpress-mysql-database-after-moving-to-a-new-url/)
+
+## [Configure the WP Domain Name in `wp-config.php`](https://docs.bitnami.com/installer/apps/wordpress/administration/configure-domain/)
+
+## [WP Permissions Update Error](https://aaronjholbrook.com/wordpress-permissions-update-error-resolved/)
+
 ## Changing domain names in WP
 
 To change the domain name in WordPress, you have to SSH into the server:

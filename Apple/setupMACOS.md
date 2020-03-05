@@ -59,3 +59,37 @@
 * TSLint
 * Vetur
 * vscode-icons
+
+## Google Chrome Extensions
+
+* AdBlock - best ad blocker
+* Allow CORS: Access-Control-Allow-Origin
+* Browser Width
+* ColorZilla
+* CSS Peeper
+* Dark Mode
+* Design Grid Overlay
+* Fruumo Tab Manager
+* Full Page Screen Capture
+* Google Calendar
+* Google Translate
+* JSON Formatter
+* LastPass
+* Markdown Viewer
+* MetaMask
+* Page Ruler Redux
+* Quire
+* React Developer Tools
+* Redux DevTools
+* Refined Hacker News
+* Refined Twitter
+* SAML-tracer
+* Save to Pocket
+* Screencastify - Screen Video Recorder
+* Stylus
+* Tampermonkey
+* Tile Tabs WE
+* Toby Mini
+* Vue.js devtools
+* Wappalyzer
+* XV - XML Viewer

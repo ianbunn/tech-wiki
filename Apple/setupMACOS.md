@@ -2,37 +2,32 @@
 
 ## Applications
 
-* Alfred4
-* Amazon Photos
-* DBeaver
+* [Alfred4](https://www.alfredapp.com/)
+* [DBeaver](https://dbeaver.io/download/)
 * Docker
-* Discord
-* FileZilla
-* FireFox Developer Edition
-* GIF Brewery 3
+* [Discord](https://discordapp.com/download)
+* [FileZilla](https://filezilla-project.org/download.php?platform=osx#close)
+* Firefox Browser
+* Firefox Developer Edition Browser
 * Howler Timer
-* iTerm
-* Jumpcut
-* LastPass
+* iTerm2
+* [Jumpcut](https://snark.github.io/jumpcut/)
 * Magnet
-* Opera
+* Opera Browser
 * Slack
 * Spotify
-* SpotMenu
-* Telegram
+* [SpotMenu](https://github.com/kmikiy/SpotMenu#easy-install)
+* [Telegram](https://macos.telegram.org/)
 * Visual Studio Code
 
 ## Visual Studio Extensions
 
 * change-case
-* Code Spell Checker
 * Color the tag name
 * Custom CSS and JS Loader
 * Debugger for Chrome
-* Docker
 * DotENV
 * ESLint
-* GitLens - Git supercharged
 * Guides
 * Highlight Matching Tag
 * HTML CSS Support
@@ -41,7 +36,6 @@
 * JSON5 syntax
 * Live Server
 * Markdown All in One
-* Markdown Preview Github Styling
 * markdownlint
 * npm
 * npm Intellisense
@@ -78,7 +72,6 @@
 * Markdown Viewer
 * MetaMask
 * Page Ruler Redux
-* Quire
 * React Developer Tools
 * Redux DevTools
 * Refined Hacker News

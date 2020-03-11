@@ -1,5 +1,18 @@
 # PostgreSQL
 
+## Command Line
+
+```sh
+# Enter psql in dir with docker-compose and psql
+docker-compose exec <replace-name-of-docker-container> psql -U <replace-username> <replace-table-name>
+
+# View all tables
+\dt
+
+# Truncate database for users
+truncate <replace-db-name> cascade ;$$
+```
+
 ## Notes
 
 ### How to find the `hba_file`

@@ -1,4 +1,4 @@
-# Javascript
+# Javascript Notes
 
 ## [MDN Web Docs](https://developer.mozilla.org/)
 

@@ -56,7 +56,13 @@ Peace,
 
 ##### VueJS
 
+[NuxtJS Cheat Sheet](Javascript/VueJS/Nuxtjs-Cheat-Sheet.pdf)
+
+[Vue 3 Cheat Sheet](Javascript/VueJS/Vue-3-Cheat-Sheet.pdf)
+
 [Vue Animations](Javascript/VueJS/vueAnimations.md)
+
+[Vue Essentials Cheat Sheet](Javascript/VueJS/Vue-Essentials-Cheat-Sheet.pdf)
 
 #### Linux
 

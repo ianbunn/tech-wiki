@@ -8,6 +8,12 @@
 
 `git log -1` displays the last commit's details
 
+`git branch -d <branch>` removes branch name indicated in command
+
+`git branch -d -f <branch>` removes branch name indicated in command, -f flag is added to force a branch delete that contains unmerged changes (**BE CAREFUL!**)
+
+`git push origin --delete <branch>` removes a branch from remotes
+
 ## Cloning an existing repository
 
 Run the following command to clone an existing repository:
@@ -164,3 +170,11 @@ Run the following query in your Terminal (MAC) to verify your username:
 `ssh -T git@github.com`
 
 Enter your password when prompted
+
+## Resources
+
+[Duplicating a repository](https://help.github.com/en/github/creating-cloning-and-archiving-repositories/duplicating-a-repository) - to duplicate a repo w/out forking it, run a special clone command, then mirror-push to the new repo
+
+[Fetching private GitHub repos from a Docker container](https://medium.com/paperchain/fetching-private-github-repos-from-a-docker-container-273f25ec5a74) - 2 solutions, via SSH and via HTTPS w/Access Token method
+
+[Using a private GitHub repo as a dependency with NPM or Yarn](https://dotlayer.com/how-to-use-a-private-github-repo-as-a-dependency-with-yarn-npm/)

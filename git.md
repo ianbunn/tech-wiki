@@ -14,6 +14,16 @@
 
 `git push origin --delete <branch>` removes a branch from remotes
 
+`git stash list` lists all stashes
+
+`git stash` saves a stash
+
+`git stash drop stash@{i}` drops/removes a stash indicated as `i` based on the position in the stashes
+
+`git stash show -p` to see the most recent stash
+
+`git stash show -p stash@{i}` to see the stash indicated as `i` based on the position in the stashes
+
 ## Cloning an existing repository
 
 Run the following command to clone an existing repository:

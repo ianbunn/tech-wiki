@@ -10,7 +10,7 @@
 
 `git branch -d <branch>` removes branch name indicated in command
 
-`git branch -d -f <branch>` removes branch name indicated in command, -f flag is added to force a branch delete that contains unmerged changes (**BE CAREFUL!**)
+`git branch -D <branch>` removes branch name indicated in command, capital `-D` flag is added to force a branch delete that contains unmerged changes (**BE CAREFUL!**)
 
 `git push origin --delete <branch>` removes a branch from remotes
 
@@ -23,6 +23,8 @@
 `git stash show -p` to see the most recent stash
 
 `git stash show -p stash@{i}` to see the stash indicated as `i` based on the position in the stashes
+
+`git branch replace_this_branch_name $(echo "replace this message" | git commit-tree HEAD^{tree})` to clean all commits to relevant feature commits
 
 ## Cloning an existing repository
 

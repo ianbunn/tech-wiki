@@ -26,6 +26,8 @@
 
 `git branch replace_this_branch_name $(echo "replace this message" | git commit-tree HEAD^{tree})` to clean all commits to relevant feature commits
 
+`git pull --allow-unrelated-histories` to force a merge to happen after cleaning commits
+
 ## Cloning an existing repository
 
 Run the following command to clone an existing repository:

@@ -28,6 +28,16 @@
 
 `git pull --allow-unrelated-histories` to force a merge to happen after cleaning commits
 
+## Clone to make PRs on other accounts
+
+1. Clone local repo and cd into it: `git clone <repo>` & `cd <repo>`
+
+2. Remove origin to then add your repo as origin: `git remote remove origin`
+
+3. Set main repo as upstream: `git remote add upstream git@github.com:<account>/<repo>.git`
+
+4. Add your repo as origin: `git remote add origin <your-fork>.git`
+
 ## Cloning an existing repository
 
 Run the following command to clone an existing repository:
@@ -192,3 +202,13 @@ Enter your password when prompted
 [Fetching private GitHub repos from a Docker container](https://medium.com/paperchain/fetching-private-github-repos-from-a-docker-container-273f25ec5a74) - 2 solutions, via SSH and via HTTPS w/Access Token method
 
 [Using a private GitHub repo as a dependency with NPM or Yarn](https://dotlayer.com/how-to-use-a-private-github-repo-as-a-dependency-with-yarn-npm/)
+
+## Other Github resources
+
+[Fork a repo](https://help.github.com/en/github/getting-started-with-github/fork-a-repo)
+
+[Configuring a remote for a fork](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/configuring-a-remote-for-a-fork)
+
+[Syncing a fork](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/syncing-a-fork)
+
+[Github@DianaEromsele - Notes](https://gist.github.com/DianaEromosele/fa228f6f6099a8996d3cb891109ab975)

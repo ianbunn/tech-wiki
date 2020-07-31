@@ -122,3 +122,11 @@ Replace `docker-compose.yml` with the name of the docker file in environment:
 ```sh
 docker-compose -f docker-compose.yml down --rmi all
 ```
+
+### Error - no space left on device
+
+BE CAREFUL when running this, if you want to keep some data:
+
+```sh
+docker volume rm $(docker volume ls -qf dangling=true)
+```

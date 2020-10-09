@@ -2,15 +2,29 @@
 
 ## Applications
 
-* [Alfred4](https://www.alfredapp.com/)
-* [DBeaver](https://dbeaver.io/download/)
+### Development
+
 * Docker
+* iTerm2
+
+#### DB Viewer
+
+* DataGrip
+* ~~[DBeaver](https://dbeaver.io/download/)~~
+
+#### IDE
+
+* WebStorm
+* ~~Visual Studio Code~~
+
+### Productivity
+
+* [Alfred4](https://www.alfredapp.com/)
 * [Discord](https://discordapp.com/download)
 * [FileZilla](https://filezilla-project.org/download.php?platform=osx#close)
 * Firefox Browser
 * Firefox Developer Edition Browser
 * Howler Timer
-* iTerm2
 * [Jumpcut](https://snark.github.io/jumpcut/)
 * Magnet
 * Opera Browser
@@ -18,9 +32,10 @@
 * Spotify
 * [SpotMenu](https://github.com/kmikiy/SpotMenu#easy-install)
 * [Telegram](https://macos.telegram.org/)
-* Visual Studio Code
 
 ## Visual Studio Extensions
+
+For when I was using VSC (now I'm into WebStorm):
 
 * change-case
 * Color the tag name

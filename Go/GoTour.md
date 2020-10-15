@@ -1,4 +1,4 @@
-# [A Tour of Go](https://tour.golang.org/)
+# [A Tour of Go](https://tour.golang.org/list)
 
 ## Packages
 
@@ -191,4 +191,195 @@ Vars declared w/out an explicit initial value are given their **zero** value, or
  
  Numeric constants are **high-precision** values.
  
+ ## `for`
  
+ Go only has `for` as its looping construct.
+ 
+ `for` loop contains 3 components separated by `;` (semicolons):
+ 
+ 1. init statement: executed before the first iteration, a short variable declaration, and the variables declared there are visible only in the scope of the `for` statement.
+ 2. condition expression: evaluated before e/iteration.
+ 3. post statement: executed at the end of e/iteration.
+ 
+ The `for` loop will stop iterating once the `bool` condition evaluates to `false`.
+ 
+ ```go
+package main
+
+import "fmt"
+
+func main() {
+    sum := 0
+    for i := 0; i < 10; i++ {
+        sum += i
+    }
+    fmt.Println(sum)
+}
+
+// Output
+// 45 
+```
+
+The init and post statements are **optional**:
+
+```go
+func main() {
+    sum := 1
+    for ; sum < 1000; {
+        sum += sum
+    }
+    fmt.Println(sum)
+}
+```
+ 
+ You could also drop the semicolons, and it resembles a `while` loop in other languages:
+ 
+ ```go
+ func main() {
+     sum := 1
+     for sum < 1000 {
+         sum += sum
+     }
+     fmt.Println(sum)
+ }
+```
+
+### Infinite `for` loop
+
+If the loop condition is omitted, infinite loop is compactly expressed:
+
+```go
+func main() {
+	for {
+	}
+}
+```
+
+### Exercise: Loops and functions
+
+This exercise is solved using [Newton's method](https://en.wikipedia.org/wiki/Newton%27s_method):
+
+```go
+package main
+
+import (
+	"fmt"
+)
+
+func Sqrt(x float64) float64 {
+	z := float64(1)
+	for i := 1; i <= 10; i++ {
+		z -= (z*z - x) / (2*z)
+		fmt.Println(z)
+	}
+	return z
+}
+
+func main() {
+	fmt.Println(Sqrt(16))
+}
+
+```
+
+## `if`
+
+`if` statements are like `for` loops, and they don't need parentheses, only braces are required.
+
+```go
+func sqrt(x float64) string {
+	if x < 0 {
+		return sqrt(-x) + "i"
+	}
+	return fmt.Sprint(math.Sqrt(x))
+}
+```
+
+Multiple evaluations in the `if` statement can be separated with a `;` (semicolon).
+
+Vars declared by the statement are only in scope until the end of `if` statement.
+
+### `if` and `else`
+
+Vars declared inside an `if` are also available inside any of the `else` blocks.
+
+## `switch`
+
+A `switch` statement is a way to write a sequence of `if - else` statements.
+
+No need to add the `break` keyword at the end of each case.
+
+`switch` cases need not to be constants, and the values involved need not be integers.
+
+`switch` cases evaluate cases from top to bottom, stopping when a case succeeds.
+
+```go
+package main
+
+import (
+	"fmt"
+	"runtime"
+)
+
+func main() {
+	fmt.Print("Go runs on ")
+	switch os := runtime.GOOS; os {
+	case "darwin":
+		fmt.Println("OS X.")
+	case "linux":
+		fmt.Println("Linux.")
+	default:
+		// freebsd, openbsd,
+		// plan9, windows...
+		fmt.Printf("%s.\n", os)
+	}
+}
+
+```
+
+### `switch` with no condition
+
+`switch` w/out a condition is the same as `switch true`:
+
+```go
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+func main() {
+	t := time.Now()
+	switch {
+	case t.Hour() < 12:
+		fmt.Println("Good morning!")
+	case t.Hour() < 17:
+		fmt.Println("Good afternoon.")
+	default:
+		fmt.Println("Good evening.")
+	}
+}
+```
+
+## `defer`
+
+`defer` statement defers the execution of a function until the surrounding function returns.
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	defer fmt.Println("world")
+
+	fmt.Println("hello")
+}
+```
+
+### Stacking `defer` statements
+
+Deferred function calls are pushed onto a **stack**.
+
+When a function returns, its deferred calls are executed in **last-in-first-out** order.
+

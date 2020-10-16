@@ -383,3 +383,596 @@ Deferred function calls are pushed onto a **stack**.
 
 When a function returns, its deferred calls are executed in **last-in-first-out** order.
 
+## Pointers
+
+A pointer holds the memory address of a value.
+
+In `var p *int`, the `*int` is a pointer to a type value. Its zero value is `nil`.
+
+A pointer can also indirectly (dereference) change the operand's value.
+
+The `&` operator generates a pointer to its operand.
+
+```go
+i := 42
+p = &i // pointer to i
+```
+
+The `*` operator denotes the pointer's underlying value.
+
+```go
+fmt.Println(*p) // read whatever p is pointing to
+*p = 21 // set whatever p is point to new value
+```
+
+A full example:
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	i, j := 42, 2701
+
+	p := &i         // point to i
+	fmt.Println(*p) // read i through the pointer
+	*p = 21         // set i through the pointer
+	fmt.Println(i)  // see the new value of i
+
+	p = &j         // point to j
+	*p = *p / 37   // divide j through the pointer
+	fmt.Println(j) // see the new value of j
+}
+
+// Output
+// 42
+// 21
+// 73
+```
+
+**NOTE**: Go has no pointer arithmetic.
+
+## Structs
+
+A `struct` is a collection of fields.
+
+```go
+package main
+
+import "fmt"
+
+type Dummy struct {
+    X int
+    Y int
+}
+
+func main() {
+    fmt.Println(Dummy{1, 2})
+}
+
+// Output
+// { 1, 2 }
+```
+
+### Struct fields
+
+`struct` fields are accessed using a `.` (dot).
+
+```go
+package main
+
+import "fmt"
+
+type Vertex struct {
+	X int
+	Y int
+}
+
+func main() {
+	v := Vertex{1, 2}
+	v.X = 4
+	fmt.Println(v.X)
+	fmt.Println(v.Y)
+}
+
+// Output
+// 4
+// 2
+```
+
+### Pointers to structs
+
+`struct` fields can be accessed through a `struct` pointer.
+
+```go
+package main
+
+import "fmt"
+
+type Vertex struct {
+	X int
+	Y int
+}
+
+func main() {
+	v := Vertex{1, 2}
+	p := &v
+	p.X = 1e9
+	fmt.Println(v)
+	fmt.Println(p)
+	fmt.Println(*p)
+}
+
+//Output
+// {1000000000 2}
+// &{1000000000 2}
+// {1000000000 2}
+```
+
+### Struct literals
+
+A `struct` literal denotes a newly allocated struct value by listing the value of its fields inside the braces for that `struct`.
+
+List a subset of fields by using the struct value's `Name: 1`. The order of named field is irrelevant.
+
+```go
+package main
+
+import "fmt"
+
+type Vertex struct {
+	X, Y int
+}
+
+var (
+	v1 = Vertex{1, 2}  // has type Vertex
+	v2 = Vertex{X: 1}  // Y:0 is implicit
+	v3 = Vertex{}      // X:0 and Y:0
+	p  = &Vertex{X: 1, Y: 2} // has type *Vertex
+)
+
+func main() {
+	fmt.Println(v1, p, v2, v3)
+}
+
+// Output
+// {1 2} &{2 2} {1 0} {0 0}
+```
+
+## Arrays
+
+Type `[n]T` is an array of `n` values of type `T`.
+
+The expression `var a [10]int` declares a variable `a` as an array of 10 integers.
+
+An array's length is part of its type, so arrays cannot be resized.
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	var a [2]string
+	a[0] = "Hello"
+	a[1] = "World"
+	fmt.Println(a[0], a[1])
+	fmt.Println(a)
+
+	primes := [7]int{2, 3, 5, 7, 11, 13}
+	fmt.Println(primes)
+}
+
+// Output
+// Hello World
+// [Hello World]
+// [2 3 5 7 11 13 0]
+// On the last array for `primes`, the last value in the array is 0 since it is not explicitly declared
+```
+
+### Slices
+
+A slice is a dynamically-sized, flexible view into the elements of an array.
+
+The type `[]T` is a slice with elements of type `T`.
+
+A slice is formed by specifying 2 indices, a low and a high bound, separated by a `:` (colon), `a[low : high]`.
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	primes := [6]int{2, 3, 5, 7, 11, 13}
+
+	var s []int = primes[1:4]
+	var a []int = primes[0:1]
+	fmt.Println(s)
+	fmt.Println(a)
+}
+
+// Output
+// [3 5 7]
+// [2]
+```
+
+#### Slices are like references to arrays
+
+A slice DOES NOT store any data, it just describes a section of an underlying array.
+
+Changing the elements of a slice modifies the corresponding elements of its underlying array.
+
+Other slices that share the same underlying array will contain those changes.
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	names := [4]string{
+		"John",
+		"Paul",
+		"George",
+		"Ringo",
+	}
+	fmt.Println(names)
+
+	a := names[0:2]
+	b := names[1:3]
+	fmt.Println(a, b)
+
+	b[0] = "XXX"
+	fmt.Println(a, b)
+	fmt.Println(names)
+}
+
+// Output
+// [John Paul George Ringo]
+// [John Paul] [Paul George]
+// [John XXX] [George Ringo]
+// [John XXX George Ringo]
+```
+
+#### Slice literals
+
+A slice literal is like an array without the explicit length.
+
+This is an array literal: `[3]bool{true, true, false}`
+
+This is a slice literal, that creates the same array as above, then builds a slice that references it: `[]bool{true, true, false}`
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	q := []int{2, 3, 5, 7, 11, 13}
+	fmt.Println(q)
+
+	r := []bool{true, false, true, true, false, true}
+	fmt.Println(r)
+
+	s := []struct {
+		i int
+		b bool
+	}{
+		{2, true},
+		{3, false},
+		{5, true},
+		{7, true},
+		{11, false},
+		{13, true},
+	}
+	fmt.Println(s)
+}
+
+// Output
+// [2 3 5 7 11 13]
+// [true false true true false true]
+// [{2 true} {3 false} {5 true} {7 true} {11 false} {13 true}]
+```
+
+#### Slice defaults
+
+When slicing, you may omit the high or low bounds to use their defaults instead.
+
+The default is zero for low bound and the length of the slice for the high bound.
+
+For the array `var a [10]int`, these slice expressions are equivalent:
+
+```go
+a[0:10]
+a[:10]
+a[0:]
+a[:]
+```
+
+Another example:
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	s := []int{2, 3, 5, 7, 11, 13}
+
+	s = s[1:4]
+	fmt.Println(s)
+
+	s = s[:2]
+	fmt.Println(s)
+
+	s = s[1:]
+	fmt.Println(s)
+}
+
+// Output
+// [3 5 7]
+// [3 5]
+// [5]
+```
+
+#### Slice length and capacity
+
+A slice has both a `len` (length) and `cap` (capacity).
+
+The `len` of a slice is the number of elements it contains.
+
+The `cap` of a slice is the number of elements in the underlying array, counting from the 1st element in the slice.
+
+You can extend a slice's length by re-slicing it, provided it has sufficient capacity.
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	s := []int{2, 3, 5, 7, 11, 13}
+	printSlice(s)
+
+	// Slice the slice to give it zero length.
+	s = s[:0]
+	printSlice(s)
+
+	// Extend its length.
+	s = s[:4]
+	printSlice(s)
+
+	// Drop its first two values.
+	s = s[2:]
+	printSlice(s)
+}
+
+func printSlice(s []int) {
+	fmt.Printf("len=%d cap=%d %v\n", len(s), cap(s), s)
+}
+
+// Output
+// len=6 cap=6 [2 3 5 7 11 13]
+// len=0 cap=6 []
+// len=4 cap=6 [2 3 5 7]
+// len=2 cap=4 [5 7]
+```
+
+#### Nil slices
+
+The zero value of a slice is `nil`.
+
+A `nil` slice has a `len` and `cap` of 0 and has no underlying array.
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	var s []int
+	fmt.Println(s, len(s), cap(s))
+	fmt.Println(s)
+	if s == nil {
+		fmt.Println("nil!")
+	}
+}
+
+// Output
+// [] 0 0
+// []
+// nil!
+```
+
+#### Creating a slice with `make`
+
+Slices can be created w the built-in `make` function; this is how to create dynamically-sized arrays.
+
+The `make` function allocates a zeroed array and returns a slice referring to that array, `a := make([]int, 5) // len(a)=5`.
+
+To specify a `cap`, pass a third arg, `b := make([]int, 0, 5) // len(b)=0, cap(b)=5`.
+
+Other examples:
+
+```go
+b = b[:cap(b)] // len(b)=5, cap(b)=5
+b = b[1:]      // len(b)=4, cap(b)=4
+```
+
+Full example:
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	a := make([]int, 5)
+	printSlice("a", a)
+
+	b := make([]int, 0, 5)
+	printSlice("b", b)
+
+	c := b[:2]
+	printSlice("c", c)
+
+	d := c[2:5]
+	printSlice("d", d)
+}
+
+func printSlice(s string, x []int) {
+	fmt.Printf("%s len=%d cap=%d %v\n",
+		s, len(x), cap(x), x)
+}
+
+// Output
+// a len=5 cap=5 [0 0 0 0 0]
+// b len=0 cap=5 []
+// c len=2 cap=5 [0 0]
+// d len=3 cap=3 [0 0 0] 
+```
+
+#### Slices of slices
+
+Slices can contain any type, including other slices:
+
+```go
+package main
+
+import (
+	"fmt"
+	"strings"
+)
+
+func main() {
+	// Create a tic-tac-toe board.
+	board := [][]string{
+		[]string{"_", "_", "_"},
+		[]string{"_", "_", "_"},
+		[]string{"_", "_", "_"},
+	}
+
+	// The players take turns.
+	board[0][0] = "X"
+	board[2][2] = "O"
+	board[1][2] = "X"
+	board[1][0] = "O"
+	board[0][2] = "X"
+
+	for i := 0; i < len(board); i++ {
+		fmt.Printf("%s\n", strings.Join(board[i], " "))
+	}
+}
+
+// Output
+// X _ X
+// O _ X
+// _ _ O
+```
+
+#### Appending to a slice
+
+`append` is a built-in function to append new elements to a slice.
+
+The resulting value of `append` is a slice containing all the elements of the original slice plus the provided values.
+
+`cap` (capacity) will not be a problem, as when a slice is too small to fit all the given values a bigger array will be allocated. The returned slice will point to the newly allocated array.
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	var s []int
+	printSlice(s)
+
+	// append works on nil slices.
+	s = append(s, 0)
+	printSlice(s)
+
+	// The slice grows as needed.
+	s = append(s, 1)
+	printSlice(s)
+
+	// We can add more than one element at a time.
+	s = append(s, 2, 3, 4)
+	printSlice(s)
+}
+
+func printSlice(s []int) {
+	fmt.Printf("len=%d cap=%d %v\n", len(s), cap(s), s)
+}
+
+// Output
+// len=0 cap=0 []
+// len=1 cap=1 [0]
+// len=2 cap=2 [0 1]
+// len=5 cap=6 [0 1 2 3 4]
+```
+
+#### Range
+
+`range` form of the `for` loop iterates over a slice or map.
+
+When using `range` over a slice, 2 values are returned: index and value.
+
+```go
+package main
+
+import "fmt"
+
+var pow = []int{1, 2, 4, 8, 16, 32, 64, 128}
+
+func main() {
+	for i, v := range pow {
+		fmt.Printf("2**%d = %d\n", i, v)
+	}
+}
+
+// Output
+// 2**0 = 1
+// 2**1 = 2
+// 2**2 = 4
+// 2**3 = 8 ...
+```
+
+You can skip the index or value by assigning to `_` (underscore):
+
+```go
+for i, _ := range pow
+for _, value := range pow
+```
+
+If you only want the index, you can omit the 2nd var:
+
+```go
+for i := range pow
+```
+
+Full example:
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	pow := make([]int, 10)
+	for i := range pow {
+		pow[i] = 1 << uint(i) // == 2**i
+	}
+	for _, value := range pow {
+		fmt.Printf("%d\n", value)
+	}
+}
+
+// Output
+// 1
+// 2
+// 4
+// 8 ...
+```
+

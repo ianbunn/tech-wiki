@@ -49,6 +49,7 @@
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="nodejs_package_manager_path" value="npm" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -62,7 +63,8 @@
       <workItem from="1602644087886" duration="115000" />
       <workItem from="1602644277686" duration="2069000" />
       <workItem from="1602646435457" duration="2047000" />
-      <workItem from="1602798242535" duration="3581000" />
+      <workItem from="1602798242535" duration="4007000" />
+      <workItem from="1602878042608" duration="7775000" />
     </task>
     <servers />
   </component>
@@ -79,6 +81,7 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
     <state x="727" y="278" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1602644192281">
@@ -89,9 +92,10 @@
       <screen x="0" y="23" width="1680" height="1027" />
     </state>
     <state x="836" y="456" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.23.1680.1027@0.23.1680.1027" timestamp="1602645973485" />
-    <state x="503" y="371" key="search.everywhere.popup" timestamp="1602647340689">
-      <screen x="0" y="23" width="1680" height="1027" />
+    <state x="1640" y="-724" key="search.everywhere.popup" timestamp="1602883160056">
+      <screen x="1065" y="-1080" width="1920" height="1050" />
     </state>
+    <state x="1640" y="-724" key="search.everywhere.popup/0.0.1536.834/-855.-1082.1920.1050/1065.-1080.1920.1050@1065.-1080.1920.1050" timestamp="1602883160056" />
     <state x="503" y="371" key="search.everywhere.popup/0.23.1680.1027@0.23.1680.1027" timestamp="1602647340689" />
   </component>
 </project>

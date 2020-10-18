@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="BranchesTreeState">
     <expand>
       <path>
@@ -92,10 +95,10 @@
       <screen x="0" y="23" width="1680" height="1027" />
     </state>
     <state x="836" y="456" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.23.1680.1027@0.23.1680.1027" timestamp="1602645973485" />
-    <state x="1640" y="-724" key="search.everywhere.popup" timestamp="1602883160056">
-      <screen x="1065" y="-1080" width="1920" height="1050" />
+    <state x="503" y="371" width="672" height="678" key="search.everywhere.popup" timestamp="1603001504654">
+      <screen x="0" y="23" width="1680" height="1027" />
     </state>
     <state x="1640" y="-724" key="search.everywhere.popup/0.0.1536.834/-855.-1082.1920.1050/1065.-1080.1920.1050@1065.-1080.1920.1050" timestamp="1602883160056" />
-    <state x="503" y="371" key="search.everywhere.popup/0.23.1680.1027@0.23.1680.1027" timestamp="1602647340689" />
+    <state x="503" y="371" width="672" height="678" key="search.everywhere.popup/0.23.1680.1027@0.23.1680.1027" timestamp="1603001504654" />
   </component>
 </project>

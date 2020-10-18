@@ -976,3 +976,175 @@ func main() {
 // 8 ...
 ```
 
+#### Exercise: slices and range
+
+Example using `Pic` to return two arrays, `[[...] [...]]` of integer type and output a picture (blue figures).
+
+```go
+package main
+
+import "golang.org/x/tour/pic"
+
+func Pic(dx, dy int) [][]uint8 {
+	myArray := make([][]uint8, dy)
+	
+	for i := range myArray {
+		myArray[i] = make([]uint8, dx)
+		for j := range myArray[i] {
+			x, y := float64(i), float64(j)
+			myArray[i][j] = uint8(((x+y)/2) + 890789/23424 * x)
+		}
+	}
+
+	return myArray
+}
+
+func main() {
+	pic.Show(Pic)
+}
+
+```
+
+### Maps
+
+A map maps keys to values.
+
+The zero value of a map is `nil`.
+
+A `nil` map has:
+- No keys
+- Nor can keys be added
+
+The `make` function returns a `map` of the given type, initialized and ready for use.
+
+```go
+package main
+
+import "fmt"
+
+type Vertex struct {
+	Lat, Long float64
+}
+
+var m map[string]Vertex
+
+func main() {
+	m = make(map[string]Vertex)
+	m["Bell Labs"] = Vertex{
+		40.68433, -74.39967,
+	}
+	fmt.Println(m["Bell Labs"])
+	fmt.Println(m)
+}
+
+// Output
+// {40.68433 -74.39967}
+// map[Bell Labs:{40.68433 -74.39967}]
+```
+
+#### Map literals
+
+Same as `struct` literals but keys are required.
+
+```go
+package main
+
+import "fmt"
+
+type Vertex struct {
+	Lat, Long float64
+}
+
+var m = map[string]Vertex{
+	"Bell Labs": Vertex{
+		40.68433, -74.39967,
+	},
+	"Google": Vertex{
+		37.42202, -122.08408,
+	},
+}
+
+func main() {
+	fmt.Println(m)
+	fmt.Println(m["Google"])
+}
+
+// Output
+// map[Bell Labs:{40.68433 -74.39967} Google:{37.42202 -122.08408}]
+// {37.42202 -122.08408}
+```
+
+If the top-level type is just a `type`, you could omit it from the elements of the literal.
+
+```go
+package main
+
+import "fmt"
+
+type Vertex struct {
+	Lat, Long float64
+}
+
+var m = map[string]Vertex{
+	"Bell Labs": {40.68433, -74.39967},
+	"Google":    {37.42202, -122.08408},
+}
+
+func main() {
+	fmt.Println(m)
+}
+
+// Output
+// map[Bell Labs:{40.68433 -74.39967} Google:{37.42202 -122.08408}]
+```
+
+#### Mutating maps
+
+Insert or update an element in a map `m[key] = elem`.
+
+Delete an element in a map `delete(m, key)`.
+
+Test if a value is present w/a 2 value assignment:
+
+```go
+elem, ok = m[key]
+```
+
+If `key` is in `m`, `key` will be `true`, otherwise `false`.
+
+If `key` is not in `m`, `elem` is the zero value for the map's element type.
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	m := make(map[string]int)
+
+	m["Answer"] = 42
+	fmt.Println("The value:", m["Answer"])
+	v, ok := m["Answer"]
+	fmt.Println("The value:", v, "Present?", ok)
+
+	m["Answer"] = 48
+	fmt.Println("The value:", m["Answer"])
+	v, ok = m["Answer"]
+	fmt.Println("The value:", v, "Present?", ok)
+
+	delete(m, "Answer")
+	fmt.Println("The value:", m["Answer"])
+
+	v, ok = m["Answer"]
+	fmt.Println("The value:", v, "Present?", ok)
+}
+
+// Output
+
+// The value: 42
+// The value: 42 Present? true
+// The value: 48
+// The value: 48 Present? true
+// The value: 0
+// The value: 0 Present? false
+```

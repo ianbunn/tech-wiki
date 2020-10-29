@@ -1,12 +1,14 @@
 # [A Tour of Go](https://tour.golang.org/list)
 
-## Packages
+## Basics
+
+### Packages
 
 E/`go` program is made up of packages.
 
 Programs start running in `package main`
 
-## Import
+#### Import
 
 Import packages using their paths:
 
@@ -19,13 +21,13 @@ import (
 
 **NOTE**: for package `math/rand`, use package's last element on import path, so for this one would be `rand.Intn`
 
-## Exported names
+#### Exported names
 
 A name is exported if it begins w/a capital letter.
 
 For example, `Pi` will be exported from `math` package, but not `pi`.
 
-## Functions
+### Function
 
 Functions take zero or more arguments.
 
@@ -45,7 +47,7 @@ func add(x, y int) int {
 }
 ```
 
-### Named return values
+#### Named return values
 
 Return values may be named, defined at the top of the function and treated as variables.
 
@@ -53,7 +55,7 @@ A `return` statement w/out arguments returns the named return values. This is kn
 
 **Naked** return statements should be avoided or only used in short functions, as they can harm readibility in longer functions.
 
-### Swap function
+#### Swap function
 
 The `swap` function returns 2 strings:
 
@@ -72,7 +74,110 @@ func main() {
 }
 ```
 
-## Variables
+#### Function values
+
+Functions can be values and passed in as arguments and return values.
+
+```go
+package main
+
+import (
+	"fmt"
+	"math"
+)
+
+func compute(fn func(float64, float64) float64) float64 {
+	return fn(3, 4)
+}
+
+func main() {
+	hypot := func(x, y float64) float64 {
+		return math.Sqrt(x*x + y*y)
+	}
+	fmt.Println(hypot(5, 12))
+
+	fmt.Println(compute(hypot))
+	fmt.Println(compute(math.Pow))
+}
+
+// Output
+// 13
+// 5
+// 81
+```
+
+#### Function closures
+
+- Functions may be closures
+- A closure is a function value that references variables outside of its body
+- The function may access and assign to the referenced variables
+  - The function is **bound** to the referenced variables
+
+- In the example below, the `adder` function returns a closure
+  - Each closure is bound to its own `sum` variable
+
+```go
+package main
+
+import "fmt"
+
+func adder() func(int) int {
+	sum := 0
+	return func(x int) int {
+		sum += x
+		return sum
+	}
+
+	func main() {
+		pos, neg := adder(), adder()
+		for i := 0; i < 10; i++ {
+			fmt.Println(pos(i), neg(-2*i),)
+		}
+	}
+}
+
+// OUTPUT
+// 0 0
+// 1 -2
+// 3 -6
+// 6 -12
+// 10 -20
+// 15 -30
+// 21 -42
+// 28 -56
+// 36 -72
+```
+
+### Exercise: Fibonnaci closure
+
+In below exercise, `fibonnaci` function returns a function closure that returns successive [fibonnaci numbers](https://en.wikipedia.org/wiki/Fibonacci_number), (0, 1, 1, 2, 3, 5, ...).
+
+```go
+package main
+
+import "fmt"
+
+// fibonnaci is a function that returns
+// a function that returns an integer
+func fibonnaci() func() int {
+	a1 := 0
+	a2 := 1
+	return func() int {
+		f := a1
+		a1, a2 = a2, a2 + f
+		return f
+	}
+}
+
+func main() {
+	f := fibonnaci()
+	for i := 0; i < 10; i++ {
+		fmt.Println(f())
+	}
+}
+```
+
+### Variables
 
 `var` statement declares variables, as in function argument lists, the type is last if multiple vars are declared in one line.
 
@@ -80,7 +185,7 @@ func main() {
 var c, python, java bool
 ```
 
-### Variables w/initializers
+#### Variables w/initializers
 
 If an **initializer** is present, the type can be omitted; the var will take the type of the initializer.
 
@@ -98,7 +203,7 @@ func main() {
 // 1 2 true false no!
 ```
 
-### Short variable declarations
+#### Short variable declarations
 
 Inside a function, the `:=` short assignment statement can be used in place of `var` declaration w/implicit type.
 
@@ -119,7 +224,7 @@ func main() {
 // 1 2 3 true false no!
 ```
 
-### Basic variables types
+#### Basic variables types
 
 ```go
 bool
@@ -149,7 +254,7 @@ var (
 )
 ```
 
-### Vars type inference
+#### Vars type inference
 
 The variable's type is inferred from the value on the **right** hand side.
 
@@ -167,7 +272,7 @@ f := float64(i)
 u := uint(f)
 ```
 
-### Zero values
+#### Zero values
 
 Vars declared w/out an explicit initial value are given their **zero** value, or respective value based on var type.
 
@@ -175,7 +280,7 @@ Vars declared w/out an explicit initial value are given their **zero** value, or
  - `false` for `bool` types
  - `""` (empty string) for `string` types
  
- ## Constants
+ ### Constants
  
  Declared like vars, but with the `const` keyword.
  
@@ -187,22 +292,22 @@ Vars declared w/out an explicit initial value are given their **zero** value, or
  
  **NOTE**: Constants cannot be declared using the `:=` syntax.
  
- ### Numeric Constants
+ #### Numeric Constants
  
  Numeric constants are **high-precision** values.
  
- ## `for`
+ ### `for` loop
  
  Go only has `for` as its looping construct.
- 
+
  `for` loop contains 3 components separated by `;` (semicolons):
- 
+
  1. init statement: executed before the first iteration, a short variable declaration, and the variables declared there are visible only in the scope of the `for` statement.
  2. condition expression: evaluated before e/iteration.
  3. post statement: executed at the end of e/iteration.
- 
+
  The `for` loop will stop iterating once the `bool` condition evaluates to `false`.
- 
+
  ```go
 package main
 
@@ -217,7 +322,7 @@ func main() {
 }
 
 // Output
-// 45 
+// 45
 ```
 
 The init and post statements are **optional**:
@@ -244,7 +349,7 @@ func main() {
  }
 ```
 
-### Infinite `for` loop
+#### Infinite `for` loop
 
 If the loop condition is omitted, infinite loop is compactly expressed:
 
@@ -281,7 +386,7 @@ func main() {
 
 ```
 
-## `if`
+### `if`
 
 `if` statements are like `for` loops, and they don't need parentheses, only braces are required.
 
@@ -298,11 +403,11 @@ Multiple evaluations in the `if` statement can be separated with a `;` (semicolo
 
 Vars declared by the statement are only in scope until the end of `if` statement.
 
-### `if` and `else`
+#### `if` and `else`
 
 Vars declared inside an `if` are also available inside any of the `else` blocks.
 
-## `switch`
+### `switch`
 
 A `switch` statement is a way to write a sequence of `if - else` statements.
 
@@ -336,7 +441,7 @@ func main() {
 
 ```
 
-### `switch` with no condition
+#### `switch` with no condition
 
 `switch` w/out a condition is the same as `switch true`:
 
@@ -361,7 +466,7 @@ func main() {
 }
 ```
 
-## `defer`
+### `defer`
 
 `defer` statement defers the execution of a function until the surrounding function returns.
 
@@ -377,13 +482,13 @@ func main() {
 }
 ```
 
-### Stacking `defer` statements
+#### Stacking `defer` statements
 
 Deferred function calls are pushed onto a **stack**.
 
 When a function returns, its deferred calls are executed in **last-in-first-out** order.
 
-## Pointers
+### Pointers
 
 A pointer holds the memory address of a value.
 
@@ -433,7 +538,7 @@ func main() {
 
 **NOTE**: Go has no pointer arithmetic.
 
-## Structs
+### Structs
 
 A `struct` is a collection of fields.
 
@@ -455,7 +560,7 @@ func main() {
 // { 1, 2 }
 ```
 
-### Struct fields
+#### Struct fields
 
 `struct` fields are accessed using a `.` (dot).
 
@@ -481,7 +586,7 @@ func main() {
 // 2
 ```
 
-### Pointers to structs
+#### Pointers to structs
 
 `struct` fields can be accessed through a `struct` pointer.
 
@@ -510,7 +615,7 @@ func main() {
 // {1000000000 2}
 ```
 
-### Struct literals
+#### Struct literals
 
 A `struct` literal denotes a newly allocated struct value by listing the value of its fields inside the braces for that `struct`.
 
@@ -540,7 +645,7 @@ func main() {
 // {1 2} &{2 2} {1 0} {0 0}
 ```
 
-## Arrays
+### Arrays
 
 Type `[n]T` is an array of `n` values of type `T`.
 
@@ -976,7 +1081,7 @@ func main() {
 // 8 ...
 ```
 
-#### Exercise: slices and range
+### Exercise: slices and range
 
 Example using `Pic` to return two arrays, `[[...] [...]]` of integer type and output a picture (blue figures).
 
@@ -1110,7 +1215,7 @@ Test if a value is present w/a 2 value assignment:
 elem, ok = m[key]
 ```
 
-If `key` is in `m`, `key` will be `true`, otherwise `false`.
+If `key` is in `m`, `elem` will be the value of `m[key]`, and `ok` will be `false`.
 
 If `key` is not in `m`, `elem` is the zero value for the map's element type.
 
@@ -1149,7 +1254,7 @@ func main() {
 // The value: 0 Present? false
 ```
 
-#### Exercise: maps and `strings.Fields`
+### Exercise: maps and `strings.Fields`
 
 Using [`strings.Fields`](https://golang.org/pkg/strings/#example_Fields), it splits the strings around each instance of one or more consecutive white space characters, as defined by unicode.IsSpace, returning a slice of substrings of s or an empty slice if s contains only white space.
 
@@ -1188,9 +1293,14 @@ func main() {
 // f("A man a plan a canal panama.") = map[string]int{"A":1, "a":2, "canal":1, "man":1, "panama.":1, "plan":1}
 ```
 
-### Functions
+### Methods
 
-Functions can be values and passed in as arguments and return values.
+- Go does NOT have **classes**
+  - However, you can define methods on types
+- A **method** is a function with a *special receiver* argument
+  - The **receiver** is written in its own argument between the `func` keyword and the method name
+
+- In the example below, the `Abs` method has a **receiver** of type `Vertex` named `v`
 
 ```go
 package main
@@ -1200,22 +1310,56 @@ import (
 	"math"
 )
 
-func compute(fn func(float64, float64) float64) float64 {
-	return fn(3, 4)
+type Vertex struct {
+	X, Y float64
+}
+
+func (v Vertex) Abs() float64 {
+	return math.Sqrt(v.X*v.X + v.Y*v.Y)
 }
 
 func main() {
-	hypot := func(x, y float64) float64 {
-		return math.Sqrt(x*x + y*y)
-	}
-	fmt.Println(hypot(5, 12))
-
-	fmt.Println(compute(hypot))
-	fmt.Println(compute(math.Pow))
+	v := Vertex{3, 4}
+	fmt.Println(v.Abs())
 }
 
-// Output
-// 13
+// OUTPUT
 // 5
-// 81
+```
+
+- Methods can be used on non-struct types too
+- Methods can only be declared with a receiver whose type is defined in the same package as the method
+  - You cannot declare a method with a receiver whose type is defined in another package (which includes the built-in types such as `int`)
+
+```go
+package main
+
+import (
+	"fmt"
+	"math"
+)
+
+type MyFloat float64
+
+func (f MyFloat) Abs() float64 {
+	if f < 0 {
+		return float64(-f)
+	}
+	return float64(f)
+}
+
+func main() {
+	f := MyFloat(-math.Sqrt2)
+	fmt.Println(f.Abs())
+	p := MyFloat(2)
+	fmt.Println(p.Abs())
+	n := MyFloat(-2)
+	fmt.Println(n.Abs())
+}
+
+
+// OUTPUT
+// 1.4142135623730951
+// 2
+// 2
 ```

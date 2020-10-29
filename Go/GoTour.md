@@ -1363,3 +1363,7 @@ func main() {
 // 2
 // 2
 ```
+
+## Left off here
+
+[https://tour.golang.org/methods/4](https://tour.golang.org/methods/4)

@@ -8,6 +8,10 @@
 
 [pttrns](https://pttrns.com/) - design inspiration for mobile, iOS and Android
 
+## Image Editing Tools
+
+[Photopea](https://www.photopea.com/) - an open source "photoshop"
+
 ## User Interface
 
 [UI Playbook](https://uiplaybook.dev/) - a collection of generic elements and its functionality along with best practices and accessibility

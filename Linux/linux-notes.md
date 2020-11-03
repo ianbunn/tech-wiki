@@ -58,7 +58,7 @@ Run the command below to see file permissions:
 `ls -al`
 
 See the diagram below for Linux file permissions:
-![permissions diagram](/images/linux-permissions-diagram.png)
+![permissions diagram](./images/linux-permissions-diagram.png)
 
 ---
 

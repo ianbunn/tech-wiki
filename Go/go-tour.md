@@ -1442,6 +1442,8 @@ func main() {
 // 5
 ```
 
+##### Methods and pointer indirection
+
 - Functions with a **pointer argument** must take a **pointer**
 
 ```go
@@ -1496,3 +1498,67 @@ func main() {
 // OUTPUT
 // {60 80} &{96 72}
 ```
+
+##### Methods and pointer indirection 2
+
+The opposite is true.
+
+Functions that take a **value argument** MUST take a **value** of that SPECIFIC type...
+
+```go
+var v Vertex
+fmt.Println(Abs(v)) // OK
+fmt.Println(Abs(&v)) // Compile error
+```
+
+While methods with **value receivers** take EITHER a **value** OR **pointer** as the receiver when they're called...
+
+```go
+var v Vertex
+fmt.Println(v.Abs()) // OK
+p := &v
+fmt.Println(p.Abs(v)) // OK
+```
+
+In the case above, the method call `p.Abs()` is interpreted as `(*p).Abs()`.
+
+```go
+package main
+
+import (
+	"fmt"
+	"math"
+)
+
+type Vertex struct {
+	X, Y float64
+}
+
+func (v Vertex) Abs() float64 {
+	return math.Sqrt(v.X*v.X + v.Y*v.Y)
+}
+
+func AbsFunc(v Vertex) float64 {
+	return math.Sqrt(v.X*v.X + v.Y*v.Y)
+}
+
+func main() {
+	v := Vertex{3, 4}
+	fmt.Println(v.Abs())
+	fmt.Println(AbsFunc(v))
+
+	p := &Vertex{4, 3}
+	fmt.Println(p.Abs())
+	fmt.Println(AbsFunc(*p))
+}
+
+// OUTPUT
+// 5
+// 5
+// 5
+// 5
+```
+
+## LEFT OFF HERE
+
+[left off here - methods - 8 - choosing a value or pointer receiver](https://tour.golang.org/methods/8)

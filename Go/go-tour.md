@@ -1328,8 +1328,8 @@ func main() {
 ```
 
 - Methods can be used on non-struct types too
-- Methods can only be declared with a receiver whose type is defined in the same package as the method
-  - You cannot declare a method with a receiver whose type is defined in another package (which includes the built-in types such as `int`)
+- Methods can only be declared with a **receiver** whose type is defined in the same package as the method
+  - You cannot declare a method with a **receiver** whose type is defined in another package (which includes the built-in types such as `int`)
 
 ```go
 package main
@@ -1364,6 +1364,135 @@ func main() {
 // 2
 ```
 
-## Left off here
+#### Pointer receivers
 
-[https://tour.golang.org/methods/4](https://tour.golang.org/methods/4)
+Methods with **pointer receivers** CAN MODIFY the value to which the **receiver** points, as `Scale` does in the example below.
+
+**Pointer receivers** are more common than value receivers.
+
+If the example below had `Scale` as a value receiver, the method would operate on a COPY of the original `Vertex` value.
+
+The `Scale` method must have a pointer receiver to change the `Vertex` value declared in the `main` function.
+
+```go
+package main
+
+import (
+	"fmt"
+	"math"
+)
+
+type Vertex struct {
+	X, Y float64
+}
+
+func (v Vertex) Abs() float64 {
+	return math.Sqrt(v.X*v.X + v.Y*v.Y)
+}
+
+func (v *Vertex) Scale(f float64) {
+	v.X = v.X * f
+	v.Y = v.Y * f
+}
+
+func main() {
+	v := Vertex{3, 4}
+	v.Scale(10)
+	fmt.Println(v.Abs())
+}
+
+// OUTPUT
+// 50
+```
+
+#### Pointers and functions
+
+```go
+package main
+
+import (
+	"fmt"
+	"math"
+)
+
+type Vertex struct {
+	X, Y float64
+}
+
+func Abs(v Vertex) float64 {
+	return math.Sqrt(v.X*v.X + v.Y*v.Y)
+}
+
+func Scale(v *Vertex, f float64) {
+//func Scale(v Vertex, f float64) {
+	v.X = v.X * f
+	v.Y = v.Y * f
+}
+
+func main() {
+	v := Vertex{3, 4}
+	Scale(&v, 10)
+	//Scale(v, 10)
+	fmt.Println(Abs(v))
+}
+
+// OUTPUT
+// 50
+// Without the pointer receiver
+// 5
+```
+
+- Functions with a **pointer argument** must take a **pointer**
+
+```go
+var v Vertex
+Scale(v, 10) // Compile error
+Scale(&v, 5) // OK
+```
+
+- While methods with **pointer receivers** take either a **value** or a **pointer** as the **receiver**
+
+```go
+var v Vertex
+v.Scale(5) // OK
+p := &v
+p.Scale(10) // OK
+```
+
+- For the statement `v.Scale(5)`, even though `v` is a **value** and not a **pointer**, the method with the **pointer receiver** is called automatically
+- `go` interprets the statement `v.Scale(5)` as `(&v).Scale(5)`, since `Scale` method has a **pointer receiver**
+
+```go
+package main
+
+import "fmt"
+
+type Vertex struct {
+	X, Y float64
+}
+
+func (v *Vertex) Scale(f float64) {
+	v.X = v.X * f
+	v.Y = v.Y * f
+}
+
+func ScaleFunc(v *Vertex, f float64) {
+	v.X = v.X * f
+	v.Y = v.Y * f
+}
+
+func main() {
+	v := Vertex{3, 4}
+	v.Scale(2)
+	ScaleFunc(&v, 10)
+
+	p := &Vertex{4, 3}
+	p.Scale(3)
+	ScaleFunc(p, 8)
+
+	fmt.Println(v, p)
+}
+
+// OUTPUT
+// {60 80} &{96 72}
+```

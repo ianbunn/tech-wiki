@@ -1368,11 +1368,11 @@ func main() {
 
 Methods with **pointer receivers** CAN MODIFY the value to which the **receiver** points, as `Scale` does in the example below.
 
-**Pointer receivers** are more common than value receivers.
+**Pointer receivers** are more common than *value receivers*.
 
-If the example below had `Scale` as a value receiver, the method would operate on a COPY of the original `Vertex` value.
+If the example below had `Scale` as a *value receiver*, the method would operate on a COPY of the original `Vertex` value.
 
-The `Scale` method must have a pointer receiver to change the `Vertex` value declared in the `main` function.
+The `Scale` method must have a **pointer receiver** to change the `Vertex` value declared in the `main` function.
 
 ```go
 package main
@@ -1559,6 +1559,159 @@ func main() {
 // 5
 ```
 
-## LEFT OFF HERE
+## Value receiver or pointer receiver
 
-[left off here - methods - 8 - choosing a value or pointer receiver](https://tour.golang.org/methods/8)
+2 reasons to use a **pointer receiver**:
+
+1. So the method can modify the value the **pointer receiver** points to
+2. To avoid copying the value on each method call
+
+All in all, a method can use either a **value receiver** or **pointer receiver**, but not a mix of both.
+
+## Interfaces
+
+An **interface** type is defined as a set of method signatures.
+
+```go
+package main
+
+import (
+	"fmt"
+	"math"
+)
+
+type Abser interface {
+	Abs() float64
+}
+
+func main() {
+	var a Abser
+	// Returns a float64
+	f := MyFloat(-math.Sqrt2)
+	v := Vertex{3, 4}
+
+	a = f  // a MyFloat implements Abser
+	a = &v // a *Vertex implements Abser
+
+	// In the following line, v is a Vertex (not *Vertex)
+	// and does NOT implement Abser.
+	a = v
+
+	fmt.Println(a.Abs())
+}
+
+type MyFloat float64
+
+func (f MyFloat) Abs() float64 {
+	if f < 0 {
+		return float64(-f)
+	}
+	return float64(f)
+}
+
+type Vertex struct {
+	X, Y float64
+}
+
+// If *Vertex below, there is an error:
+// cannot use v (type Vertex) as type Abser in assignment:
+// Vertex does not implement Abser (Abs method has pointer receiver)
+// func (v *Vertex) Abs() float64 {
+func (v Vertex) Abs() float64 {	
+	return math.Sqrt(v.X*v.X + v.Y*v.Y)
+}
+
+```
+
+### Interfaces are implemented implicitly
+
+Implicit interfaces decouple the definition of an interface from its logic, which could then be **reusable** in any package without *prearrangement*. Example below:
+
+```go
+package main
+
+import "fmt"
+
+type I interface {
+	M()
+}
+
+type T struct {
+	S string
+}
+
+// This method means type T implements the interface I,
+// but we don't need to explicitly declare that it does so.
+func (t T) M() {
+	fmt.Println(t.S)
+}
+
+func main() {
+	var i I = T{"hello"}
+	i.M()
+}
+
+// OUTPUT:
+// hello
+```
+
+### Interfaces are a tuple
+
+Interfaces can be thought of as a "tuple":
+
+`(value, type)`
+
+An interface value holds a value of a specific underlying concrete type.
+
+Calling a method on an interface value executes the method of the same name on its underlying type.
+
+```go
+package main
+
+import (
+	"fmt"
+	"math"
+)
+
+type I interface {
+	M()
+}
+
+type T struct {
+	S string
+}
+
+func (t *T) M() {
+	fmt.Println(t.S)
+}
+
+type F float64
+
+func (f F) M() {
+	fmt.Println(f)
+}
+
+func main() {
+	var i I
+
+	i = &T{"Hello"}
+	describe(i)
+	i.M()
+
+	i = F(math.Pi)
+	describe(i)
+	i.M()
+}
+
+func describe(i I) {
+	fmt.Printf("(%v, %T)\n", i, i)
+}
+
+// OUTPUT:
+// (&{Hello}, *main.T)
+// Hello
+// (3.141592653589793, main.F)
+// 3.141592653589793
+```
+
+## Left off here [Interface values with nil underlying values](https://tour.golang.org/methods/12)

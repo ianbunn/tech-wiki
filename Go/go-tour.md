@@ -1714,4 +1714,259 @@ func describe(i I) {
 // 3.141592653589793
 ```
 
-## Left off here [Interface values with nil underlying values](https://tour.golang.org/methods/12)
+### Interface values with `nil` values
+
+In `go` there is no pointer exception like there is in other languages, as it takes care of a method being called with a `nil` value.
+
+```go
+package main
+
+import "fmt"
+
+type I interface {
+	M()
+}
+
+type T struct {
+	S string
+}
+
+func (t *T) M() {
+	if t == nil {
+		fmt.Println(t)
+		return
+	}
+	fmt.Println(t.S)
+}
+
+func main() {
+	var i I
+
+	var t *T
+	i = t
+	describe(i)
+	i.M()
+
+	i = &T{"hello"}
+	describe(i)
+	i.M()
+}
+
+func describe(i I) {
+	fmt.Printf("(%v, %T)\n", i, i)
+}
+
+// OUTPUT:
+// (<nil>, *main.T)
+// <nil>
+// (&{hello}, *main.T)
+// hello
+```
+
+### Nil interface values
+
+When an interface holds neither value nor concrete type, `go` will panic, because there is NO *type* inside the interface *tuple* to indicate which concrete method to call.
+
+```go
+package main
+
+import "fmt"
+
+type I interface {
+	M()
+}
+
+func main() {
+	var i I
+	describe(i)
+	i.M()
+}
+
+func describe(i I) {
+	fmt.Printf("(%v, %T)\n", i, i)
+}
+
+// OUTPUT
+// (<nil>, <nil>)
+// panic: runtime error: invalid memory address or nil pointer dereference...
+```
+
+### Empty interface
+
+An empty interface, `interface {}` is an interface that implements zero methods.
+
+Empty interfaces are used when code does NOT know what the type of a value will be, so this mean it could hold values of any type.
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	var i interface{}
+	describe(i)
+
+	i = 42
+	describe(i)
+
+	i = "hello"
+	describe(i)
+}
+
+func describe(i interface{}) {
+	fmt.Printf("(%v, %T)\n", i, i)
+}
+
+// OUTPUT
+// (<nil>, <nil>)
+// (42, int)
+// (hello, string)
+```
+
+### Interface type assertion
+
+With a **type assertion**, you can access an interface value's concrete type.
+
+`t := i.(Type)`
+
+To test an interface has a concrete type or not, a **type assertion** can return 2 values:
+
+- Value
+- Boolean passing the type assertion or not
+
+`t, ok := i.(Type)`
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	var i interface{} = "hello"
+
+	s := i.(string)
+	fmt.Println(s)
+
+	s, ok := i.(string)
+	fmt.Println(s, ok)
+
+	f, ok := i.(float64)
+	fmt.Println(f, ok)
+
+	f = i.(float64) // panic
+	fmt.Println(f)
+}
+
+// OUTPUT
+// hello
+// hello true
+// 0 false
+// panic: interface conversion: interface {} is string, not float64
+```
+
+### Type switches for checking interfaces
+
+```go
+package main
+
+import "fmt"
+
+func do(i interface{}) {
+	switch v := i.(type) {
+	case int:
+		fmt.Printf("Twice %v is %v\n", v, v*2)
+	case string:
+		fmt.Printf("%q is %v bytes long\n", v, len(v))
+	case bool:
+		fmt.Printf("Truth or false? %v\n", v)
+	default:
+		fmt.Printf("I don't know about type %T!\n", v)
+	}
+}
+
+func main() {
+	do(21)
+	do("hello")
+	do(true)
+	do(3.14)
+}
+
+// OUTPUT
+// Twice 21 is 42
+// "hello" is 5 bytes long
+// Truth or false? true
+// I don't know about type float64!
+```
+
+### Stringers
+
+`Stringer` is defined by the `fmt` package.
+
+```go
+type Stringer interface {
+    String() string
+}
+```
+
+```go
+package main
+
+import "fmt"
+
+type Person struct {
+	Name string
+	Age  int
+}
+
+func (p Person) String() string {
+	return fmt.Sprintf("%v (%v years)", p.Name, p.Age)
+}
+
+func main() {
+	a := Person{"Arthur Dent", 42}
+	z := Person{"Zaphod Beeblebrox", 9001}
+	fmt.Println(a, z)
+}
+
+// OUTPUT
+// Arthur Dent (42 years) Zaphod Beeblebrox (9001 years)
+```
+
+## Exercise: Stringers
+
+```go
+package main
+
+import (
+	"fmt"
+	"strings"
+	"strconv"
+)
+
+type IPAddr [4]byte
+
+// TODO: Add a "String() string" method to IPAddr.
+func (I IPAddr) String() string {
+	var ip_list = make([]string, len(I))
+	for i, v := range I {
+		ip_list[i] = strconv.Itoa(int(v))
+	}
+	return strings.Join(ip_list, ".")
+}
+
+func main() {
+	hosts := map[string]IPAddr{
+		"loopback":  {127, 0, 0, 1},
+		"googleDNS": {8, 8, 8, 8},
+	}
+	for name, ip := range hosts {
+		fmt.Printf("%v: %v\n", name, ip)
+	}
+}
+
+// OUTPUT
+// loopback: 127.0.0.1
+// googleDNS: 8.8.8.8
+```
+
+## Left off here [Errors](https://tour.golang.org/methods/19)

@@ -1969,4 +1969,48 @@ func main() {
 // googleDNS: 8.8.8.8
 ```
 
-## Left off here [Errors](https://tour.golang.org/methods/19)
+## Errors
+
+The error type is a built-in interface.
+
+```go
+type error interface {
+  Error() string
+}
+```
+
+In `go`, checking for errors to handle them is the appropriate thing to do.
+
+```go
+package main
+
+import (
+  "fmt"
+  "time"
+)
+
+type MyError struct {
+  When time.Time
+  What string
+}
+
+func (e *MyError) Error() string {
+  return fmt.Printf("at %v, %s", e.When, e.What)
+}
+
+func run() error {
+  return &MyError{
+    time.Now(),
+    "it didn't work",
+  }
+}
+
+func main() {
+  if err := run(); err != nill {
+    fmt.Println(err)
+  }
+}
+
+// OUTPUT
+// at 2009-11-10 23:00:00 +0000 UTC m=+0.000000001, it didn't work
+```

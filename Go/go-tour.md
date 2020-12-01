@@ -2014,3 +2014,182 @@ func main() {
 // OUTPUT
 // at 2009-11-10 23:00:00 +0000 UTC m=+0.000000001, it didn't work
 ```
+
+## Exercise: Errors
+
+```go
+package main
+
+import (
+	"fmt"
+	"math"
+)
+
+type ErrNegativeSqrt float64
+
+func (e ErrNegativeSqrt) Error() string {
+	return fmt.Sprintf("ERROR: Cannot Sqrt negative number: %g", float64(e))
+}
+
+const e = 1e-8  // small delta
+
+func Sqrt(x float64) (float64, error) {
+	if x < 0 {
+        return 0, ErrNegativeSqrt(x)
+    }
+	z := x
+	val := float64(0)
+	for i := 1; i <= 10; i++ {
+		z -= (z*z - x) / (2*z)
+		if math.Abs(val - z) < e {
+			break
+		}
+		val = z
+	}
+	
+	return val, nil
+}
+
+func main() {
+	fmt.Println(Sqrt(2))
+	fmt.Println(Sqrt(0))
+	fmt.Println(Sqrt(-2))
+}
+
+// OUTPUT
+// 1.4142135623746899 <nil>
+// NaN <nil>
+// 0 ERROR: Cannot Sqrt negative number: -2
+```
+
+### Readers
+
+The `io` package provides the `io.Reader` interface, which represents the read end of a stream data.
+
+It contains a method called, `Read`:
+
+```go
+func (T) Read(b []byte) (n int, err error)
+```
+
+`Read` populates the given byte slice with data and returns the number of bytes populated and an error value. It returns an `io.EOF` error when the stream ends.
+
+```go
+package main
+
+import (
+	"fmt"
+	"io"
+	"strings"
+)
+
+func main() {
+	r := strings.NewReader("Hello, Reader!")
+
+	b := make([]byte, 8)
+	for {
+		n, err := r.Read(b)
+		fmt.Printf("n = %v err = %v b = %v\n", n, err, b)
+		fmt.Printf("b[:n] = %q\n", b[:n])
+		if err == io.EOF {
+			break
+		}
+	}
+}
+
+// OUTPUT
+// n = 8 err = <nil> b = [72 101 108 108 111 44 32 82]
+// b[:n] = "Hello, R"
+// n = 6 err = <nil> b = [101 97 100 101 114 33 32 82]
+// b[:n] = "eader!"
+// n = 0 err = EOF b = [101 97 100 101 114 33 32 82]
+// b[:n] = ""
+```
+
+## Exercise: Readers
+
+Implement a Reader type that emits an infinite stream of the ASCII character 'A'.
+
+```go
+package main
+
+import (
+	"golang.org/x/tour/reader"
+	"fmt"
+)
+
+type MyReader struct{}
+
+// TODO: Add a Read([]byte) (int, error) method to MyReader.
+func (r MyReader) Read(b []byte) (int, error) {
+	if len(b) == 0 {
+        return 0, fmt.Errorf("Buffer is not long enough")
+    }
+	b[0] = 'A'
+	return 1, nil
+}
+
+func main() {
+	reader.Validate(MyReader{})
+}
+
+// OUTPUT
+// OK!
+```
+
+## Exercise: rot13Reader
+
+A common pattern is an `io.Reader` that wraps another `io.Reader`, modifying the stream in some way.
+
+For example, the `gzip.NewReader` function takes an `io.Reader` (a stream of compressed data) and returns a `*gzip.Reader` that also implements `io.Reader` (a stream of the decompressed data).
+
+The rot13Reader type is provided for you. Make it an io.Reader by implementing its Read method.
+
+```go
+package main
+
+import (
+	"io"
+	"os"
+	"strings"
+)
+
+type rot13Reader struct {
+	r io.Reader
+}
+
+
+func rot13(p byte) byte {
+	switch {
+	case p >= 'A' && p <= 'M': p = p - 'A' + 'N'
+	case p >= 'N' && p <= 'Z': p = p - 'N' + 'A'
+	case p >= 'a' && p <= 'm': p = p - 'a' + 'n'
+	case p >= 'n' && p <= 'z': p = p - 'n' + 'a'
+	}
+	
+	return p
+}
+ 
+ 
+func (v rot13Reader)  Read(p []byte) (n int, err error) {
+	original := make([]byte, 50)
+	i, err := v.r.Read(original)
+	for index, value := range original[:i] {
+		p[index] = rot13(value)
+	}
+	return i, err
+}
+
+func main() {
+	s := strings.NewReader("Lbh penpxrq gur pbqr!")
+	r := rot13Reader{s}
+	io.Copy(os.Stdout, &r)
+}
+
+// OUTPUT
+// You cracked the code!
+```
+
+### Left off at Images
+
+[A Tour of Go - 24/26 - Images](https://tour.golang.org/methods/24)

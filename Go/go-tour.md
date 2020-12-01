@@ -2190,6 +2190,126 @@ func main() {
 // You cracked the code!
 ```
 
-### Left off at Images
+## Exercise: Images
 
-[A Tour of Go - 24/26 - Images](https://tour.golang.org/methods/24)
+
+
+```go
+package main
+
+import (
+	"image"
+	"image/color"
+	"golang.org/x/tour/pic"
+)
+
+type Image struct{
+	w, h int
+}
+
+func (i *Image) Bounds() image.Rectangle {
+	return image.Rect(0, 0, i.w, i.h)
+}
+
+func (i *Image) ColorModel() color.Model {
+	return color.RGBAModel
+}
+
+func (i *Image) At(x, y int) color.Color {
+	v := x^2 * y^2
+	return color.RGBA{uint8(v), uint8(v), 255, 255}
+}
+
+func main() {
+	m := &Image{231, 112}
+	pic.ShowImage(m)
+}
+
+// OUTPUT
+// Blue image with squares
+```
+
+## Concurrency
+
+Goroutines run in the **same address space**, so access to shared memory must be synchronized.
+
+```go
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+func say(s string) {
+	for i := 0; i < 5; i++ {
+		time.Sleep(100 * time.Millisecond)
+		fmt.Println(s)
+	}
+}
+
+func main() {
+	go say("world")
+	say("hello")
+}
+
+// OUTPUT
+// hello
+// world
+// hello
+// hello
+// world
+// ...
+```
+
+### Channels
+
+Channesl are a typed conduit through which you can send and receive values w the channel operator, `<-`.
+
+The data flows in the direction of the arrow:
+
+```go
+ch <- v    // Send v to channel ch.
+v := <-ch  // Receive from ch, and
+		   // assign value to v.
+```
+
+Like maps and slices, channels must be created before use:
+
+```go
+ch := make(chan int)
+```
+
+The example code sums the numbers in a slice, distributing the work between two goroutines. Once both goroutines have completed their computation, it calculates the final result.
+
+```go
+package main
+
+import "fmt"
+
+func sum(s []int, c chan int) {
+	sum := 0
+	for _, v := range s {
+		sum += v
+	}
+	c <- sum // send sum to c
+}
+
+func main() {
+	s := []int{7, 2, 8, -9, 4, 0}
+
+	c := make(chan int)
+	go sum(s[:len(s)/2], c)
+	go sum(s[len(s)/2:], c)
+	x, y := <-c, <-c // receive from c
+
+	fmt.Println(x, y, x+y)
+}
+
+// OUTPUT
+// -5 17 12
+```
+
+### Left off on Buffered Channels
+
+[A Tour of Go - Buffered channels 3/11](https://tour.golang.org/concurrency/3)

@@ -1969,4 +1969,347 @@ func main() {
 // googleDNS: 8.8.8.8
 ```
 
-## Left off here [Errors](https://tour.golang.org/methods/19)
+## Errors
+
+The error type is a built-in interface.
+
+```go
+type error interface {
+  Error() string
+}
+```
+
+In `go`, checking for errors to handle them is the appropriate thing to do.
+
+```go
+package main
+
+import (
+  "fmt"
+  "time"
+)
+
+type MyError struct {
+  When time.Time
+  What string
+}
+
+func (e *MyError) Error() string {
+  return fmt.Printf("at %v, %s", e.When, e.What)
+}
+
+func run() error {
+  return &MyError{
+    time.Now(),
+    "it didn't work",
+  }
+}
+
+func main() {
+  if err := run(); err != nill {
+    fmt.Println(err)
+  }
+}
+
+// OUTPUT
+// at 2009-11-10 23:00:00 +0000 UTC m=+0.000000001, it didn't work
+```
+
+## Exercise: Errors
+
+```go
+package main
+
+import (
+	"fmt"
+	"math"
+)
+
+type ErrNegativeSqrt float64
+
+func (e ErrNegativeSqrt) Error() string {
+	return fmt.Sprintf("ERROR: Cannot Sqrt negative number: %g", float64(e))
+}
+
+const e = 1e-8  // small delta
+
+func Sqrt(x float64) (float64, error) {
+	if x < 0 {
+        return 0, ErrNegativeSqrt(x)
+    }
+	z := x
+	val := float64(0)
+	for i := 1; i <= 10; i++ {
+		z -= (z*z - x) / (2*z)
+		if math.Abs(val - z) < e {
+			break
+		}
+		val = z
+	}
+	
+	return val, nil
+}
+
+func main() {
+	fmt.Println(Sqrt(2))
+	fmt.Println(Sqrt(0))
+	fmt.Println(Sqrt(-2))
+}
+
+// OUTPUT
+// 1.4142135623746899 <nil>
+// NaN <nil>
+// 0 ERROR: Cannot Sqrt negative number: -2
+```
+
+### Readers
+
+The `io` package provides the `io.Reader` interface, which represents the read end of a stream data.
+
+It contains a method called, `Read`:
+
+```go
+func (T) Read(b []byte) (n int, err error)
+```
+
+`Read` populates the given byte slice with data and returns the number of bytes populated and an error value. It returns an `io.EOF` error when the stream ends.
+
+```go
+package main
+
+import (
+	"fmt"
+	"io"
+	"strings"
+)
+
+func main() {
+	r := strings.NewReader("Hello, Reader!")
+
+	b := make([]byte, 8)
+	for {
+		n, err := r.Read(b)
+		fmt.Printf("n = %v err = %v b = %v\n", n, err, b)
+		fmt.Printf("b[:n] = %q\n", b[:n])
+		if err == io.EOF {
+			break
+		}
+	}
+}
+
+// OUTPUT
+// n = 8 err = <nil> b = [72 101 108 108 111 44 32 82]
+// b[:n] = "Hello, R"
+// n = 6 err = <nil> b = [101 97 100 101 114 33 32 82]
+// b[:n] = "eader!"
+// n = 0 err = EOF b = [101 97 100 101 114 33 32 82]
+// b[:n] = ""
+```
+
+## Exercise: Readers
+
+Implement a Reader type that emits an infinite stream of the ASCII character 'A'.
+
+```go
+package main
+
+import (
+	"golang.org/x/tour/reader"
+	"fmt"
+)
+
+type MyReader struct{}
+
+// TODO: Add a Read([]byte) (int, error) method to MyReader.
+func (r MyReader) Read(b []byte) (int, error) {
+	if len(b) == 0 {
+        return 0, fmt.Errorf("Buffer is not long enough")
+    }
+	b[0] = 'A'
+	return 1, nil
+}
+
+func main() {
+	reader.Validate(MyReader{})
+}
+
+// OUTPUT
+// OK!
+```
+
+## Exercise: rot13Reader
+
+A common pattern is an `io.Reader` that wraps another `io.Reader`, modifying the stream in some way.
+
+For example, the `gzip.NewReader` function takes an `io.Reader` (a stream of compressed data) and returns a `*gzip.Reader` that also implements `io.Reader` (a stream of the decompressed data).
+
+The rot13Reader type is provided for you. Make it an io.Reader by implementing its Read method.
+
+```go
+package main
+
+import (
+	"io"
+	"os"
+	"strings"
+)
+
+type rot13Reader struct {
+	r io.Reader
+}
+
+
+func rot13(p byte) byte {
+	switch {
+	case p >= 'A' && p <= 'M': p = p - 'A' + 'N'
+	case p >= 'N' && p <= 'Z': p = p - 'N' + 'A'
+	case p >= 'a' && p <= 'm': p = p - 'a' + 'n'
+	case p >= 'n' && p <= 'z': p = p - 'n' + 'a'
+	}
+	
+	return p
+}
+ 
+ 
+func (v rot13Reader)  Read(p []byte) (n int, err error) {
+	original := make([]byte, 50)
+	i, err := v.r.Read(original)
+	for index, value := range original[:i] {
+		p[index] = rot13(value)
+	}
+	return i, err
+}
+
+func main() {
+	s := strings.NewReader("Lbh penpxrq gur pbqr!")
+	r := rot13Reader{s}
+	io.Copy(os.Stdout, &r)
+}
+
+// OUTPUT
+// You cracked the code!
+```
+
+## Exercise: Images
+
+
+
+```go
+package main
+
+import (
+	"image"
+	"image/color"
+	"golang.org/x/tour/pic"
+)
+
+type Image struct{
+	w, h int
+}
+
+func (i *Image) Bounds() image.Rectangle {
+	return image.Rect(0, 0, i.w, i.h)
+}
+
+func (i *Image) ColorModel() color.Model {
+	return color.RGBAModel
+}
+
+func (i *Image) At(x, y int) color.Color {
+	v := x^2 * y^2
+	return color.RGBA{uint8(v), uint8(v), 255, 255}
+}
+
+func main() {
+	m := &Image{231, 112}
+	pic.ShowImage(m)
+}
+
+// OUTPUT
+// Blue image with squares
+```
+
+## Concurrency
+
+Goroutines run in the **same address space**, so access to shared memory must be synchronized.
+
+```go
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+func say(s string) {
+	for i := 0; i < 5; i++ {
+		time.Sleep(100 * time.Millisecond)
+		fmt.Println(s)
+	}
+}
+
+func main() {
+	go say("world")
+	say("hello")
+}
+
+// OUTPUT
+// hello
+// world
+// hello
+// hello
+// world
+// ...
+```
+
+### Channels
+
+Channesl are a typed conduit through which you can send and receive values w the channel operator, `<-`.
+
+The data flows in the direction of the arrow:
+
+```go
+ch <- v    // Send v to channel ch.
+v := <-ch  // Receive from ch, and
+		   // assign value to v.
+```
+
+Like maps and slices, channels must be created before use:
+
+```go
+ch := make(chan int)
+```
+
+The example code sums the numbers in a slice, distributing the work between two goroutines. Once both goroutines have completed their computation, it calculates the final result.
+
+```go
+package main
+
+import "fmt"
+
+func sum(s []int, c chan int) {
+	sum := 0
+	for _, v := range s {
+		sum += v
+	}
+	c <- sum // send sum to c
+}
+
+func main() {
+	s := []int{7, 2, 8, -9, 4, 0}
+
+	c := make(chan int)
+	go sum(s[:len(s)/2], c)
+	go sum(s[len(s)/2:], c)
+	x, y := <-c, <-c // receive from c
+
+	fmt.Println(x, y, x+y)
+}
+
+// OUTPUT
+// -5 17 12
+```
+
+### Left off on Buffered Channels
+
+[A Tour of Go - Buffered channels 3/11](https://tour.golang.org/concurrency/3)

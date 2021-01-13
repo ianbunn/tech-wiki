@@ -71,7 +71,7 @@ The IT infrastructure in AWS provides best security practices and a variety of I
 
 This section introduces the major AWServices by category.
 
-To access AWS services, you can use:
+To access AWServices, you can use:
 
 * AWS Management Console
 * Command Line Interface (CLI using AWS CLI)

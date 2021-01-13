@@ -1360,7 +1360,7 @@ IAM allows you to do the following:
 * Manage IAM policies
   * A custom JSON format policy (key value pair) can be created to give more granular permissions
   * An explicit `Effect: Deny` will override any other access that does not contain an explicit `Effect: Allow`
-* IAM policy simulator can be used to:
+* **[IAM policy simulator](https://policysim.aws.amazon.com/home/index.jsp)** can be used to:
   * Test permissions before deploying to PRODUCTION
   * Validate policy permissions
   * Troubleshoot/test to debug access errors between AWS resources

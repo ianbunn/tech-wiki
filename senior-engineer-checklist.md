@@ -1,6 +1,41 @@
 # Senior Engineer Checklist
 
-## Best Practices
+## General
+
+### Focus on Fundamentals First (3 Fs)
+
+Technology's a changin'. It is key to have a strong foundation with fundamentals to grasp new concepts, new frameworks, new technologies, etc.
+
+Some fundamentals to focus on:
+
+* Teamwork - "Seek First To Understand, Then To Be Understood." -Stephen Covey
+* Trust - there is no teamwork without trust
+* Communication - there is no trust without communication
+* Weakest link - teams are only as strong as their weakest link, seek balance and consensus
+* Automated testing - code with confidence
+* Clean code design - make your code easy to read, understand and trace
+
+### Simplicity is the best form of sophistication
+
+^ quote by Leo Da Vinci, da man. Keep it simple, stupid (K.I.S.S). Fight complexity like a brave and courageous man, a la Rambo. Balls out.
+
+Simplicity helps others maintain your code. When you can use fewer technologies, do so. Choose technologies wisely. New is not always better!
+
+"A designer knows he has achieved perfection not when there is nothing left to add, but when there is nothing left to take away." -Antoine de Saint-Exupery
+
+### Beware the Curse of Knowledge
+
+Don't ever think you know it all. Don't be a f*cking a**hole. 
+
+1. A person never stops learning
+2. There is NO WAY that ONE person knows EVERYTHING there is to know, so listen to others with an open mind
+3. Work to understand the audience
+
+### Have Patience
+
+Have patience with people that are starting in a specific topic, remember that you were once there.
+
+## JavaScriptBest Practices
 
 ### Naming Convention
 

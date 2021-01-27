@@ -71,7 +71,7 @@ The IT infrastructure in AWS provides best security practices and a variety of I
 
 This section introduces the major AWServices by category.
 
-To access AWS services, you can use:
+To access AWServices, you can use:
 
 * AWS Management Console
 * Command Line Interface (CLI using AWS CLI)
@@ -1355,7 +1355,15 @@ IAM allows you to do the following:
 * Manage IAM users and their access
 * Manage IAM roles and their permissions
   * Create roles in IAM and manage permissions to control which operations can be performed by the entity, or AWS service, that assumes the role
+  * IAM roles are always the preferred method to give AWS entities access to other AWS resources
 * Manage federated users and their permissions - identity federation to allow existing identities (users, groups, and roles) in your enterprise to access the AWS Management Console, call AWS APIs, and access resources
+* Manage IAM policies
+  * A custom JSON format policy (key value pair) can be created to give more granular permissions
+  * An explicit `Effect: Deny` will override any other access that does not contain an explicit `Effect: Allow`
+* **[IAM policy simulator](https://policysim.aws.amazon.com/home/index.jsp)** can be used to:
+  * Test permissions before deploying to PRODUCTION
+  * Validate policy permissions
+  * Troubleshoot/test to debug access errors between AWS resources
 
 ### -- Amazon GuardDuty
 

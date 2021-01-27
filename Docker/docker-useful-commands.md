@@ -1,27 +1,27 @@
 # Docker Useful Commands
 
-## `docker`
+# `docker`
 
-### All existing containers
+## `docker ps`
 
-`docker ps` - show only running containers
+`docker ps` - list only running containers
 
-`docker ps -a` - show all containers
+`docker ps -a` - flag `-a` is used to list all containers
+
+## `docker build`
 
 ### Build image from `Dockerfile`
 
-Replace `image-name` below:
+`docker build -t <image-name-or-id>`
 
-`docker build -t image-name`
-
-(See [Docker Docs](dockerDocs.md) for resource to writing better Dockerfiles)
+## `docker run`
 
 ### Pass environment variables to docker
 
-Use the flag `-e` or `--env` to pass specific variables and replace `container` below:
+Use flag `-e` or `--env` to pass specific variables and replace `container` below:
 
 ```sh
-docker run -it -e TEST=123 --env TEST2=456 --rm container /bin/ash
+docker run -it -e TEST=123 --env TEST2=456 --rm container /bin/bash
 
 # Write in terminal
 echo $TEST
@@ -30,25 +30,17 @@ echo $TEST
 
 ### Pass environment FILE to docker
 
-Use the flag `--env-file` and replace `container` below:
+Use flag `--env-file` and replace `container` below:
 
 ```sh
-docker run -it --env-file ./env.list container /bin/ash
+docker run -it --env-file ./path/to/env-file <container-id> /bin/ash
 ```
 
-Contents of file should look like this:
+Contents of environment file should look like this:
 
 ```sh
 TEST=123
 TEST2=456
-```
-
-### Execute command in container
-
-Replace `container` below:
-
-```sh
-docker exec container echo "hola container"
 ```
 
 ### Run and remove when stopped
@@ -61,17 +53,40 @@ Replace `container` below:
 docker run -it --rm container /bin/ash
 ```
 
-### See logs from container
+## `docker exec`
 
-Replace `container` below:
+### Execute command in container
+
+Flags:
+- `-i`: specifies interactive
+- `t`: enables a terminal typing interface
 
 ```sh
-docker logs -f container
+# Logs in to <container-id>
+$ docker exec -it <container-id> /bin/bash
 ```
+
+## `docker logs`
+
+### See logs from container
+
+```sh
+docker logs -f <container>
+```
+
+## `docker stop`
+
+### Stop all containers
+
+`docker stop $(docker ps -q)` - stop only active
+
+`docker stop $(docker ps -aq)` - stop all
+
+## `docker rm`
 
 ### Remove all containers with `status=exited`
 
-When running multiple containers, there could be many containers with `status=exited`. Remove all with such status with:
+When running multiple containers, there could be many containers with `status=exited`. 
 
 ```sh
 docker rm $(docker ps -q -f status=exited)
@@ -81,13 +96,15 @@ docker rm $(docker ps -q -f status=exited)
 
 `docker rmi $(docker images -q)` - image should NOT have reference to container
 
-### Stop all containers
+### **Error** - no space left on device
 
-`docker stop $(docker ps -q)` - stop only active
+BE CAREFUL when running this, if you want to keep some data:
 
-`docker stop $(docker ps -aq)` - stop all
+```sh
+docker volume rm $(docker volume ls -qf dangling=true)
+```
 
-## `docker-compose`
+# `docker-compose`
 
 User `docker-compose` when running multiple containers using `docker-compose.yml`:
 
@@ -95,7 +112,7 @@ User `docker-compose` when running multiple containers using `docker-compose.yml
 docker-compose up
 ```
 
-### Troubleshoot container issues using `docker-compose`
+## Troubleshoot container issues using `docker-compose`
 
 Replace `container` below:
 
@@ -115,18 +132,10 @@ Confirm the prompt by entering `y`, and then re-build running:
 docker-compose up container
 ```
 
-### Stop, remove containers, remove images and networks what was created by `docker-compose up`
+## Stop, remove containers, remove images and networks what was created by `docker-compose up`
 
 Replace `docker-compose.yml` with the name of the docker file in environment:
 
 ```sh
 docker-compose -f docker-compose.yml down --rmi all
-```
-
-### Error - no space left on device
-
-BE CAREFUL when running this, if you want to keep some data:
-
-```sh
-docker volume rm $(docker volume ls -qf dangling=true)
 ```

@@ -12,9 +12,13 @@
 
 ### Build image from `Dockerfile`
 
-`docker build -t <image-name-or-id>`
+`docker build -t image_name .`
 
 ## `docker run`
+
+### Run container
+
+`docker run -d --name container_name image_name`
 
 ### Pass environment variables to docker
 
@@ -33,7 +37,7 @@ echo $TEST
 Use flag `--env-file` and replace `container` below:
 
 ```sh
-docker run -it --env-file ./path/to/env-file <container-id> /bin/ash
+docker run -it --env-file ./path/to/env-file <container-id> /bin/bash
 ```
 
 Contents of environment file should look like this:
@@ -64,6 +68,15 @@ Flags:
 ```sh
 # Logs in to <container-id>
 $ docker exec -it <container-id> /bin/bash
+```
+
+## `docker cp`
+
+### Copy file from Docker container to local machine
+
+```sh
+# From local machine's terminal
+docker cp container_id:/file/path/within/container /host/path/target
 ```
 
 ## `docker logs`

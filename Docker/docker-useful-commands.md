@@ -54,7 +54,7 @@ Using option `--rm` will remove container after it is finished.
 Replace `container` below:
 
 ```sh
-docker run -it --rm container /bin/ash
+docker run -it --rm container /bin/bash
 ```
 
 ## `docker exec`

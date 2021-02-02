@@ -152,3 +152,9 @@ Replace `docker-compose.yml` with the name of the docker file in environment:
 ```sh
 docker-compose -f docker-compose.yml down --rmi all
 ```
+
+# Troubleshooting
+
+## Access localhost DB from Docker container
+
+Instead of using `localhost` as DB_HOST, use `host.docker.internal`.

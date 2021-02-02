@@ -125,3 +125,12 @@ SELECT title, firstName, lastName
 FROM books
 RIGHT JOIN authors ON books.authorId = authors.id;
 ```
+
+### Select from a JSON column
+
+Replace `table_name` and `column_name` below:
+
+```sql
+SELECT * FROM table_name
+WHERE JSON_EXTRACT(column_name, '$.attribute_name') = "string";
+```

@@ -17,4 +17,15 @@ RUN useradd apps \
 
 COPY bootstrap.sh /
 
+# If you're using Puppeteer, set chromium path
+#ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD true
+#ENV CHROMIUM_PATH $NVM_INSTALL_PATH/lib/node_modules/google-chrome-stable
+# Configure puppeteer user
+#RUN groupadd -r pptruser && useradd -r -g pptruser -G audio,video pptruser \
+#    && mkdir -p /home/pptruser/Downloads \
+#    && chown -R pptruser:pptruser /home/pptruser \
+#    && chown -R pptruser:pptruser $NVM_INSTALL_PATH/lib/node_modules \
+#    && chown -R pptruser:pptruser /usr/local
+#USER pptruser
+
 CMD '/bootstrap.sh'

@@ -190,6 +190,8 @@ Some use cases:
 
 ### -- Amazon Redshift
 
+Redshift is used for data warehouse and OLAP (online analytics processing).
+
 Redshift is cloud data lakes and/or warehouse services. Redshift has been improved by using ML, massively parallel query execution, and columnar storage on high-performance disk.  Redshift allows you to query petabytes of data (structured or unstructured) out of your data lakes using standard SQL.  
 
 Redshift AQUA (Advanced Query Accelerator) is a new distributed and hardware accelerated cache that allows Redshift to run 10x faster than any other data lake or warehouse.
@@ -500,9 +502,18 @@ Aurora features a distributed, fault-tolerant, self-healing storage system that 
 
 ### -- Amazon Relational Database Service (RDS)
 
-RDS makes it easy to setup, operate and scale relational DBs in the cloud. There are several DB instance types — optimized for memory, performance or Input/Output — and provides you with 6 familiar DB engines to choose from, including:
+RDS is used for OLTP (online transaction processing).
 
-* Amazon Aurora
+RDS makes it easy to setup, operate and scale relational DBs in the cloud.
+
+There are several DB instance types:
+
+* Optimized for memory
+* Performance or Input/Output
+
+There are 6 familiar DB engines to choose from, including:
+
+* Amazon Aurora: not availabe on free tier
 * PostgreSQL
 * MySQL
 * MariaDB
@@ -1286,10 +1297,14 @@ Elastic Load Balancing (ELB) distributes incoming app traffic across multiple ta
 Elastic Load Balancing (ELB) offers 3 types of load balancers:
 
 * **Application Load Balancer** - load balancing of HTTP and HTTPS traffic and provides advanced **request** routing targeted at the delivery of modern app architectures, including microservices and containers
-  * Operating at the individual request level (Layer 7), Application Load Balancer routes traffic to targets within VPC based on the content of the request
-* **Network Load Balancer** - load balancing of TCP traffic where extreme performance is required.
-  * Operating at the connection level (Layer 4), Network Load Balancer routes traffic to targets within VPC and is capable of handling millions of requests per second while maintaining ultra low latencies
-* **Classic Load Balancer** - basic load balancing across multiple EC2s and operates at both the request level (Layer 7) and connection level (Layer 4)
+  * Operating at the individual request level (Layer 7)
+  * Application Load Balancer routes traffic to targets within VPC based on the content of the request
+* **Network Load Balancer** - load balancing of TCP traffic where extreme performance is required
+  * Operating at the connection level (Layer 4)
+  * Network Load Balancer routes traffic to targets within VPC
+    * Capable of handling millions of requests per second while maintaining ultra low latencies
+* **Classic Load Balancer** - basic load balancing across multiple EC2s
+  * Operates at both the request level (Layer 7) and connection level (Layer 4)
 
 Elastic Load Balancing (ELB) provides **access logs** that capture detailed information about requests sent to your load balancer. You can use these access logs to analyze traffic patters and troubleshoot issues. Each log contains info such as:
 
@@ -1355,7 +1370,11 @@ IAM allows you to do the following:
 * Manage IAM users and their access
 * Manage IAM roles and their permissions
   * Create roles in IAM and manage permissions to control which operations can be performed by the entity, or AWS service, that assumes the role
-  * IAM roles are always the preferred method to give AWS entities access to other AWS resources
+  * IAM roles are always the **preferred method** to give AWS entities access to other AWS resources
+    * Roles allow you to skip creating access key id and secret key
+    * Roles are controlled by policies
+    * Changing a policy on a role takes immediate effect
+      * Example, attaching and detaching a role from a running EC2 will take effect w/out having to stop/restart EC2
 * Manage federated users and their permissions - identity federation to allow existing identities (users, groups, and roles) in your enterprise to access the AWS Management Console, call AWS APIs, and access resources
 * Manage IAM policies
   * A custom JSON format policy (key value pair) can be created to give more granular permissions
@@ -1477,6 +1496,74 @@ You can enable CORS (Cross-Origin Resource Sharing) for S3 buckets.
 ### -- Amazon Elastic Block Store (EBS)
 
 Elastic Block Store (EBS) provides persistent block storage volumes for use with EC2s.
+
+Think of drives in computers, EBS is attached to an EC2 instance. An EC2 can have multiple EBS volumes.
+
+EBS volumes need to be in the same availability zone (AZ) to attach to an EC2.
+
+EBS volumes can be used with snapshots. Snapshot used to create an EBS volume will pass on their encryption status, so if snapshot is encrypted, the newly created EBS volume will inherit the encryption.
+
+### EBS Types
+
+#### General Purpose SSD
+
+General purpose SSDs provide a balance of price and performance.
+
+* Use cases:
+  * Low-latency apps
+  * Dev and test environments
+* Volume types:
+  * gp2
+  * gp3
+* Volume size:
+  * 1 GiB - 16 TiB
+* Max IOPS p/volume:
+  * 16,000
+* Max throughput p/volume:
+  * 250 MiB/s (gp2) - 1,000 MiB/s (gp3)
+
+#### Provisioned IOPS SSD
+
+Provisioned IOPS SSDs provide high performance for mission critical, low-latency or high-throughput workloads.
+
+* Use cases:
+  * Workloads that require sustained IOPS performance or more than 16,000 IOPS p/volume
+  * IO-intensive database workloads
+* Volume types:
+  * io1
+  * io2
+  * io2 Block Express
+* Volume size:
+  * 4 GiB - 64 TiB
+* Max IOPS p/volume:
+  * 64,000 - 256,000
+* Max throughput p/volume:
+  * 1,000 MiB/s - 4,000 MiB/s
+
+#### Hard Disk Drives HDD
+
+##### Throughput Optimized HHD (st1)
+
+* Use cases:
+  * Big data
+  * Data warehouses
+  * Log processing
+* Volume size:
+  * 125 GiB - 16 TiB
+* Max IOPS p/volume:
+  * 500 MiB/s
+* Cannot be a boot volume
+
+##### Cold HDD (sc1)
+
+* Use cases:
+  * Throughput-oriented for data that is **infrequently** accessed
+  * Lowest cost
+* Volume size:
+  * 125 GiB - 16 TiB
+* Max IOPS p/volume:
+  * 250 MiB/s
+* Cannot be a boot volume
 
 ### -- Amazon Elastic File System (EFS)
 

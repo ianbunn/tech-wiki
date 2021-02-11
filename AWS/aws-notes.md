@@ -1505,6 +1505,8 @@ EBS volumes can be used with snapshots. Snapshot used to create an EBS volume wi
 
 ### EBS Types
 
+More detaile information can be found here [https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-volume-types.html](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-volume-types.html).
+
 #### General Purpose SSD
 
 General purpose SSDs provide a balance of price and performance.

@@ -511,6 +511,75 @@ RDS makes it easy to setup, operate and scale relational DBs in the cloud. There
 
 Amazon RDS offers **Read Replicas** that provide enhanced performance and durability for DB instances. This feature makes it easy to elastically scale out beyond the capacity constraints of a single DB instance for read-heavy workloads, thereby increasing aggregate read throughput.
 
+#### Automated Backups
+
+Automated backups allow you to recover your DB to any point in time within a "retention period", which can be from 1 - 35 days.
+
+User can select the backup retention period and backup window in which automated backups are created, including start time (UTC) and duration (hours).
+
+Automated backups take a full daily snapshot and will store transaction logs throughout the day. This allows to do a point in time recovery down to a second, within the retention period.
+
+Enabled by default. Backup data stored in S3, data size storage in S3 = RDS instance size.
+
+Backups are taken within a defined window.
+
+During backup, storage I/O may be supsended while your data is beiing backed up.
+
+#### Database Snapshots
+
+DB Snapshots are done manually (user initiated).
+
+Stored even after you delete the original RDS instance, unlike automated backups.
+
+#### Restoring Backups
+
+Any time an automated backup or snapshot is used, the restored version of the DB will be the new RDS instance with a new RDS endpoint.
+
+#### Encryption
+
+Encryption is done using the AWS Key Management Service (KMS) service.
+
+Once DB is encrypted, any copies or backups are going to be encrypted as well.
+
+Encrypting an existing non-encrypted DB instance is not supported, so user will have to:
+
+1. Create a snapshot of the RDS instance
+2. Make a copy of that snapshot
+3. In the copy snapshot settings, encrypt the copy of the snapshot
+
+#### Multi-AZ RDS
+
+For disaster recovery only!
+
+Multi-AZ allows to have an exact copy of PROD DB in another AZ (availability zone).
+
+AWS handles the replication for users, so changes to PROD DB will automatically be synced to the stand by DB.
+
+in the event of planned DB maintenance, DB instance failure, or an AZ failure, RDS will automatically failover to the standby DB so that DB ops can resume quickly w/out admin intervention.
+
+#### Read Replica
+
+Improves read performance.
+
+You can have 5 read replicas per PROD DB by default.
+
+You can also have read replicas of read replicas, but you will have some replication latency.
+
+Read-only of PROD DB. Achieved using Asynchronous replication from primary RDS instance to the read replica.
+
+Must have automated backups in order to deploy a read replica. Each read replica will have its own DNS endpoint.
+
+You can have read replicas that have Multi-AZ, and in another region.
+
+Available for:
+
+- MySQL server
+- PostgreSQL
+- MariaDB
+- Aurora
+
+Read replicas can be promoted to be their own DBs, but will break the replication.
+
 ### -- Amazon RDS on VMWare
 
 Amazon RDS on VMWare lets you deploy managed DBs in on-prem VMWare environments using Amazon RDS.
@@ -553,11 +622,23 @@ ElastiCache makes it easy to deploy, operate, and scale in-memory cache in the C
 
 ElastiCache improves the performance of web apps by allowing it to retrieve info from fast, managed, in-memory caches, instead of relying on slower disk-based DBs.
 
+ElastiCache can be used to improve latency and throughput for many read-heavy app workloads or computer-intensive workloads. Cached info may include the results of I/O intensive DB queries or the results of computationall-intensive calculations.
+
 There are 2 open source in-memory machine engines:
 
 * **Redis** - a Redis-compatible in-memory service that delivers the ease-of-use and power of Redis along with the availability, reliability, and performance suitable for the most demanding apps
+  * In-memory key-value store, lists and hashes, sets, etc.
+  * Used for sorting and ranking datasets in memory, such as in leaderboards, etc.
+  * Supports master/slave replication and Multi-AZ
+  * Because of the replication and persistence features of Redis, ElastiCache manages Redis more as a realtional DB
+    * Redis ElastiCache clusters are managed as stateful entities that include **failover**, similar to how RDS manages DB failover
 * **Memcached** - a protocol compliant with Memcached
   * Features available w/Memchached are that it supports simple data types and has multi-threaded performance with utilization of multiple cores
+  * Simplest way for object caching
+  * Used for read-heavy and not prone to frequent changing
+  * Pure caching solution w/no persistence
+  * ElastiCache manages nodes as a pool that can grow and shrink, similar to EC2 Auto Scaling Group
+  * Individual nodes are expendendable
 
 ### -- Amazon Neptune
 
@@ -951,6 +1032,7 @@ Systems Manager contains the following tools:
 * **Parameter Store** - an encrypted location to store important admin info such as passwords and DB strings
   * Parameter Store integrates w/AWS KMS to make it easy to encrypt the info kept in the store
   * Lambda functions can share a connection string that contains a DB's credentials, which are secret by using the Parameter Store secure string
+  * It can be passed in a CloudFormation script or Lambda function
 * **Distributor** - centrally store and systematically distribute software packages while keeping version control
   * Use Distributor to create and distribute software patches, and then install them using *Run Command* and *State Manager*
 * **Session Manager** - a browser-based interactive shell/CLI for managing Windows and Linux EC2 instances

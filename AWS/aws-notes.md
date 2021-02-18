@@ -1298,6 +1298,33 @@ CloudFront is a fast Content Delivery Network (CDN) service that securely delive
 
 CloudFront offers **Lambda@Edge**, a compute service that lets you execute functions that customize content that CloudFront delivers. You can code functions in one region and execute them in AWS locations globally that are closer to the viewer, w/out provisioning or managing servers, therefore reducing latency and improving UX.
 
+Edge Location: location where content is cached and can also be written, not a Region || AZ
+
+Origin: origin of all the files that the CDN will distribute
+
+  * Origins can be an S3 Bucket, EC2 instance, Elastic Load Balancer, or Route53
+
+Distribution: name given to the CDN, which consists of a collection of Edge Locations
+
+* 2 types of distribution:
+  * Web distribution: (HTTP/HTTPS) used for websites
+  * RTMP: (Adobe Real Time Messaging Protocol) used for media streaming or flash multi-media content
+
+Cache policy:
+
+* TTL Settings: objects are cached for the life of the TTL (Time to Live)
+* Objects can be cleared at any time, but there is a charge for this
+
+Restrict Viewer Access: use signed urls or signed cookies
+
+Other features:
+
+* AWS WAF Web ACL
+* Alternate Domain Name (CNAMEs)
+* SSL Certificate
+* Geo restriction by country
+* Invalidations (removes them from CloudFront edge caches): a faster and less expensive method is to use versioned object or directory names
+
 ### -- Amazon Route 53
 
 Route 53 is a highly available and scalable cloud Domain Name System (DNS) web service. Uses IPv4 and IPv6.
@@ -1571,9 +1598,95 @@ Create custom rules that block common attack patterns, such as SQL injection or 
 
 S3 is an object storage service that offers industry-leading scalability, data availability, security and performance.
 
-Amazon S3 is designed for 99.999999999% (11 9s) of durability.
+In other words, a great place to store your flat files. It is object-based storage and spread across multiple devices and facilities.
 
-You can enable CORS (Cross-Origin Resource Sharing) for S3 buckets.
+Amazon S3 is designed for 99.999999999% (11 x 9s) of durability.
+
+Data consistency:
+
+* PUTS of new objects: READ after WRITE consistency
+* PUTS/DELETES for updating existing objects: eventual consistency (can take some time to propagate)
+
+Other features:
+
+* Files are stored in Buckets (similar to a "folder")
+  * There is unlimited bucket storage
+  * File size limit: 0 bytes to 5 TB
+  * Largest object that can be uploaded in a single PUT is 5 GBs
+  * S3 is a universal namespace, so Buckets need to be unique globally
+    * Example of an S3 bucket link: https://s3-eu-west-1.amazonaws.com/accountname...
+* Successful ploads response is a 200 Status OK
+* Object-based storage
+  * Key is the name of the object
+  * Value is the data, a sequence of bytes
+  * Version ID important for **versioning**
+  * Metadata, data about what is stored
+  * Subresources
+    * Access Control Lists
+    * Torrent
+* You can enable CORS (Cross-Origin Resource Sharing) for S3 buckets
+* Tiered storage
+* Lifecycle management
+* Encryption
+  * Types of encryption:
+    * In Transit (SSL/TLS)
+    * At Rest (server side encryption)
+      * **Server** side encryption 
+        * **SSE-S3**: S3 Managed Keys
+        * **SSE-KMS**: AWS Key Management Service, Managed Keys
+          * Envelop key: added layer of protection
+          * Log: who has used key
+        * **SSE-C**: Server Side Encryption w/customer provided keys
+      * **Client** side encryption
+  * Enforcing server-side encryption:
+    * PUT request header needs to include: `x-amz-server-side-encryption`
+    * 2 options are available:
+      * `AES256` (SSE-S3: S3 managed keys)
+      * `ams:kms` (SSE-KMS: KMS managed keys)
+    * Enforce use of server side encryption by denying any S3 PUT request that don't include `x-amz-server-side-encryption` parameter in the request header
+* Versioning
+* Access Control Lists: who can access objects/files in a bucket
+* Bucket Policies: who can access buckets
+* Can be configured to create access logs to log all requests made to S3 bucket
+  * These logs can be written to another S3 bucket
+* Transfer Acceleration: uses CloudFront's edge locations to route data to S3 over an optimized network path
+
+S3 tier types:
+
+* S3 Standard
+* S3 - IA
+  * Lower fee, but charges for retrieval
+  * Less accessed files
+* S3 One Zone - IA
+  * Lower cost for infrequently accessed data
+  * Does not require the multi-AZ data resilience
+* S3 - Intelligent Tiering
+  * Uses ML to move data to the most cost-effective access tier, w/out performance impact or operational overhead
+* S3 Glacier
+  * Data archiving
+  * Any amounts of data at lower costs
+  * Retrieval times are configurable from minutes to hours
+* S3 Glacier Deep Archive
+  * Data archiving
+  * Lower cost storage
+  * Retrieval time are 12 hours
+* S3 Outposts
+  * New service to deliver object storage to on-premises AWS Outpost environments
+
+S3 charges based on:
+
+* Storage
+* Requests
+* Storage management pricing
+* Data transfer pricing
+* Transfer acceleration
+* Cross region replication pricing
+
+S3 performance optimization:
+
+* GET intensive workloads: can use CloudFront's edge locations
+* Mixed-workloads: avoid sequential key names for your S3 objects
+  * Instead, use a random prefix like a **hex** hash to the key name to prevent multiple objects from being stored on the same partition
 
 ### -- Amazon Elastic Block Store (EBS)
 

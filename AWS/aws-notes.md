@@ -600,6 +600,75 @@ There are 6 familiar DB engines to choose from, including:
 
 Amazon RDS offers **Read Replicas** that provide enhanced performance and durability for DB instances. This feature makes it easy to elastically scale out beyond the capacity constraints of a single DB instance for read-heavy workloads, thereby increasing aggregate read throughput.
 
+#### Automated Backups
+
+Automated backups allow you to recover your DB to any point in time within a "retention period", which can be from 1 - 35 days.
+
+User can select the backup retention period and backup window in which automated backups are created, including start time (UTC) and duration (hours).
+
+Automated backups take a full daily snapshot and will store transaction logs throughout the day. This allows to do a point in time recovery down to a second, within the retention period.
+
+Enabled by default. Backup data stored in S3, data size storage in S3 = RDS instance size.
+
+Backups are taken within a defined window.
+
+During backup, storage I/O may be supsended while your data is beiing backed up.
+
+#### Database Snapshots
+
+DB Snapshots are done manually (user initiated).
+
+Stored even after you delete the original RDS instance, unlike automated backups.
+
+#### Restoring Backups
+
+Any time an automated backup or snapshot is used, the restored version of the DB will be the new RDS instance with a new RDS endpoint.
+
+#### Encryption
+
+Encryption is done using the AWS Key Management Service (KMS) service.
+
+Once DB is encrypted, any copies or backups are going to be encrypted as well.
+
+Encrypting an existing non-encrypted DB instance is not supported, so user will have to:
+
+1. Create a snapshot of the RDS instance
+2. Make a copy of that snapshot
+3. In the copy snapshot settings, encrypt the copy of the snapshot
+
+#### Multi-AZ RDS
+
+For disaster recovery only!
+
+Multi-AZ allows to have an exact copy of PROD DB in another AZ (availability zone).
+
+AWS handles the replication for users, so changes to PROD DB will automatically be synced to the stand by DB.
+
+in the event of planned DB maintenance, DB instance failure, or an AZ failure, RDS will automatically failover to the standby DB so that DB ops can resume quickly w/out admin intervention.
+
+#### Read Replica
+
+Improves read performance.
+
+You can have 5 read replicas per PROD DB by default.
+
+You can also have read replicas of read replicas, but you will have some replication latency.
+
+Read-only of PROD DB. Achieved using Asynchronous replication from primary RDS instance to the read replica.
+
+Must have automated backups in order to deploy a read replica. Each read replica will have its own DNS endpoint.
+
+You can have read replicas that have Multi-AZ, and in another region.
+
+Available for:
+
+- MySQL server
+- PostgreSQL
+- MariaDB
+- Aurora
+
+Read replicas can be promoted to be their own DBs, but will break the replication.
+
 ### -- Amazon RDS on VMWare
 
 Amazon RDS on VMWare lets you deploy managed DBs in on-prem VMWare environments using Amazon RDS.
@@ -642,11 +711,23 @@ ElastiCache makes it easy to deploy, operate, and scale in-memory cache in the C
 
 ElastiCache improves the performance of web apps by allowing it to retrieve info from fast, managed, in-memory caches, instead of relying on slower disk-based DBs.
 
+ElastiCache can be used to improve latency and throughput for many read-heavy app workloads or computer-intensive workloads. Cached info may include the results of I/O intensive DB queries or the results of computationall-intensive calculations.
+
 There are 2 open source in-memory machine engines:
 
 * **Redis** - a Redis-compatible in-memory service that delivers the ease-of-use and power of Redis along with the availability, reliability, and performance suitable for the most demanding apps
+  * In-memory key-value store, lists and hashes, sets, etc.
+  * Used for sorting and ranking datasets in memory, such as in leaderboards, etc.
+  * Supports master/slave replication and Multi-AZ
+  * Because of the replication and persistence features of Redis, ElastiCache manages Redis more as a realtional DB
+    * Redis ElastiCache clusters are managed as stateful entities that include **failover**, similar to how RDS manages DB failover
 * **Memcached** - a protocol compliant with Memcached
   * Features available w/Memchached are that it supports simple data types and has multi-threaded performance with utilization of multiple cores
+  * Simplest way for object caching
+  * Used for read-heavy and not prone to frequent changing
+  * Pure caching solution w/no persistence
+  * ElastiCache manages nodes as a pool that can grow and shrink, similar to EC2 Auto Scaling Group
+  * Individual nodes are expendendable
 
 ### -- Amazon Neptune
 
@@ -1040,6 +1121,7 @@ Systems Manager contains the following tools:
 * **Parameter Store** - an encrypted location to store important admin info such as passwords and DB strings
   * Parameter Store integrates w/AWS KMS to make it easy to encrypt the info kept in the store
   * Lambda functions can share a connection string that contains a DB's credentials, which are secret by using the Parameter Store secure string
+  * It can be passed in a CloudFormation script or Lambda function
 * **Distributor** - centrally store and systematically distribute software packages while keeping version control
   * Use Distributor to create and distribute software patches, and then install them using *Run Command* and *State Manager*
 * **Session Manager** - a browser-based interactive shell/CLI for managing Windows and Linux EC2 instances
@@ -1293,6 +1375,33 @@ Additionally, you can create a hardware Virtual Private Network (VPN) connection
 CloudFront is a fast Content Delivery Network (CDN) service that securely delivers data, video, apps, and APIs globally with low-latency and high transfer speeds.
 
 CloudFront offers **Lambda@Edge**, a compute service that lets you execute functions that customize content that CloudFront delivers. You can code functions in one region and execute them in AWS locations globally that are closer to the viewer, w/out provisioning or managing servers, therefore reducing latency and improving UX.
+
+Edge Location: location where content is cached and can also be written, not a Region || AZ
+
+Origin: origin of all the files that the CDN will distribute
+
+  * Origins can be an S3 Bucket, EC2 instance, Elastic Load Balancer, or Route53
+
+Distribution: name given to the CDN, which consists of a collection of Edge Locations
+
+* 2 types of distribution:
+  * Web distribution: (HTTP/HTTPS) used for websites
+  * RTMP: (Adobe Real Time Messaging Protocol) used for media streaming or flash multi-media content
+
+Cache policy:
+
+* TTL Settings: objects are cached for the life of the TTL (Time to Live)
+* Objects can be cleared at any time, but there is a charge for this
+
+Restrict Viewer Access: use signed urls or signed cookies
+
+Other features:
+
+* AWS WAF Web ACL
+* Alternate Domain Name (CNAMEs)
+* SSL Certificate
+* Geo restriction by country
+* Invalidations (removes them from CloudFront edge caches): a faster and less expensive method is to use versioned object or directory names
 
 ### -- Amazon Route 53
 
@@ -1584,9 +1693,95 @@ Create custom rules that block common attack patterns, such as SQL injection or 
 
 S3 is an object storage service that offers industry-leading scalability, data availability, security and performance.
 
-Amazon S3 is designed for 99.999999999% (11 9s) of durability.
+In other words, a great place to store your flat files. It is object-based storage and spread across multiple devices and facilities.
 
-You can enable CORS (Cross-Origin Resource Sharing) for S3 buckets.
+Amazon S3 is designed for 99.999999999% (11 x 9s) of durability.
+
+Data consistency:
+
+* PUTS of new objects: READ after WRITE consistency
+* PUTS/DELETES for updating existing objects: eventual consistency (can take some time to propagate)
+
+Other features:
+
+* Files are stored in Buckets (similar to a "folder")
+  * There is unlimited bucket storage
+  * File size limit: 0 bytes to 5 TB
+  * Largest object that can be uploaded in a single PUT is 5 GBs
+  * S3 is a universal namespace, so Buckets need to be unique globally
+    * Example of an S3 bucket link: https://s3-eu-west-1.amazonaws.com/accountname...
+* Successful ploads response is a 200 Status OK
+* Object-based storage
+  * Key is the name of the object
+  * Value is the data, a sequence of bytes
+  * Version ID important for **versioning**
+  * Metadata, data about what is stored
+  * Subresources
+    * Access Control Lists
+    * Torrent
+* You can enable CORS (Cross-Origin Resource Sharing) for S3 buckets
+* Tiered storage
+* Lifecycle management
+* Encryption
+  * Types of encryption:
+    * In Transit (SSL/TLS)
+    * At Rest (server side encryption)
+      * **Server** side encryption 
+        * **SSE-S3**: S3 Managed Keys
+        * **SSE-KMS**: AWS Key Management Service, Managed Keys
+          * Envelop key: added layer of protection
+          * Log: who has used key
+        * **SSE-C**: Server Side Encryption w/customer provided keys
+      * **Client** side encryption
+  * Enforcing server-side encryption:
+    * PUT request header needs to include: `x-amz-server-side-encryption`
+    * 2 options are available:
+      * `AES256` (SSE-S3: S3 managed keys)
+      * `ams:kms` (SSE-KMS: KMS managed keys)
+    * Enforce use of server side encryption by denying any S3 PUT request that don't include `x-amz-server-side-encryption` parameter in the request header
+* Versioning
+* Access Control Lists: who can access objects/files in a bucket
+* Bucket Policies: who can access buckets
+* Can be configured to create access logs to log all requests made to S3 bucket
+  * These logs can be written to another S3 bucket
+* Transfer Acceleration: uses CloudFront's edge locations to route data to S3 over an optimized network path
+
+S3 tier types:
+
+* S3 Standard
+* S3 - IA
+  * Lower fee, but charges for retrieval
+  * Less accessed files
+* S3 One Zone - IA
+  * Lower cost for infrequently accessed data
+  * Does not require the multi-AZ data resilience
+* S3 - Intelligent Tiering
+  * Uses ML to move data to the most cost-effective access tier, w/out performance impact or operational overhead
+* S3 Glacier
+  * Data archiving
+  * Any amounts of data at lower costs
+  * Retrieval times are configurable from minutes to hours
+* S3 Glacier Deep Archive
+  * Data archiving
+  * Lower cost storage
+  * Retrieval time are 12 hours
+* S3 Outposts
+  * New service to deliver object storage to on-premises AWS Outpost environments
+
+S3 charges based on:
+
+* Storage
+* Requests
+* Storage management pricing
+* Data transfer pricing
+* Transfer acceleration
+* Cross region replication pricing
+
+S3 performance optimization:
+
+* GET intensive workloads: can use CloudFront's edge locations
+* Mixed-workloads: avoid sequential key names for your S3 objects
+  * Instead, use a random prefix like a **hex** hash to the key name to prevent multiple objects from being stored on the same partition
 
 ### -- Amazon Elastic Block Store (EBS)
 

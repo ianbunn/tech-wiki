@@ -446,19 +446,97 @@ Lambda runs code without provisioning or managing servers, **serverless**. There
 
 Setup your code to automatically trigger from other AWServices, or call it directly from any web or mobile app.
 
-To execute a Lambda function, Lambda uses the **handler**. The **handler** is the name of the method within a code that calls to execute the function.
+To execute a Lambda function, Lambda uses a **handler** method. The **handler** is the name of the method within a code that calls to execute the function.
 
-NOTE: Avoid using recursive code in your Lambda function, wherein the function automatically calls itself until some arbitrary criteria is met. This could lead to unintended volume of function invocations and escalated costs. If you do use recursive code in your Lambda function, set the function **concurrent execution limit** to ‘o’ (Zero) to throttle all invocations to the functions, while you update the code.
+NOTE: Avoid using recursive code in your Lambda function, wherein the function automatically calls itself until some arbitrary criteria is met. This could lead to unintended volume of function invocations and escalated costs. If you do use recursive code in your Lambda function, set the function **concurrent execution limit** to ‘0’ (Zero) to throttle all invocations to the functions, while you update the code.
+
+#### Event-Driven Architecture
+
+Lambdas can be automatically triggered by other AWServices or called directly from any web or mobile app.
+
+#### Lambda Triggers
+
+* DynamoDB
+* Kinesis
+* SQS
+* Application load balancer
+* API Gateway
+* Alexa
+* CloudFront
+* S3
+* SNS
+* SES
+* CloudFormation
+* CloudWatch
+* CodeCommit
+* CodePipeline
 
 #### Using Versions with AWS Lambda
 
 Each Lambda function version has a unique ARN, after you publish a version, you CAN NOT change the ARN or the function code.
 
-You can change a Lambda function code and settings ONLY on the **unpublished** version of a function. When you publish a Lambda function version, the code and most of the settings are **locked** to ensure a consistent experience for users of that version.
+You can change a Lambda function code and settings ONLY on the **unpublished** version of a function. W
+
+hen you publish a Lambda function version, the code and most of the settings are **locked** to ensure a consistent experience for users of that version.
+
+This version is titled as `$LATEST`, and when a new version is published, the new version becomes the latest.
 
 #### Using Aliases with AWS Lambda
 
-Event sources such as S3 invoke your Lambda functions, and these event sources maintain a mapping that IDs the function to invoke when events occur. If you specify a Lambda function alias in the mapping config, you don’t need to update the mapping when the Lambda function version changes.
+An alias is like a pointer to a specific version of the function code.
+
+You can create multiple versions and use different aliases to reference the version you want to use as part of the ARN (Amazon Resource Name).
+
+* `arn:aws:lambda:eu-west-2:343628538798:function:mylambda:Test` -> Version2
+* `arn:aws:lambda:eu-west-2:343628538798:function:mylambda:Prod` -> Version1
+* `arn:aws:lambda:eu-west-2:343628538798:function:mylambda:$LATEST` -> Version2
+
+If app uses an alias, instead of `$LATEST`, remember that it will not automatically use new code versions until alias is updated, or app is pointed to `$LATEST`.
+
+#### Enabling Lambda to Access VPCs Resources
+
+* Lambda needs to be allowed to connect to the private subnet
+* Lambda needs VPC Configuration info so that it may connect to the VPC
+  * Private subnet ID
+  * Security group ID (with required access)
+  * Lambda uses this info to set up Elastic Network Interfaces (ENIs) using an available IP address from your private subnet
+* If Lambda fails to access VPC, that is because its IAM Role is not allowed to assign ENIs, so make sure it has the right permissions
+  * Lambda uses the VPC info to set up ENIs using an IP from the private subnet CIDR range
+
+Using the CLI to update VPC config, you can use something like:
+
+```shell
+aws lambda update-function-configuration --function-name my-function --vpc-config SubnetIds=subnet-1122aabb,SecurityGroupIds=sg-51540123
+```
+
+The command above uses the subnet ID to grab an available IP address, and a security group to allow it to access the AWS resources to do what it needs to do.
+
+#### Advantages
+
+* Lower cost than EC2 - extremely cost effective - pay only when your code executes
+* Lambda scales automatically so you get continuous scaling
+* Independent - each event will trigger a single function
+* Serverless technology
+
+#### Disadvantages
+
+* Concurrent execution limits a certain amount of functions in a given region per account ("safety feature")
+  * 1,000 concurrent executions per region, 1,001 will receive an error with `TooManyRequestsException`
+  * HTTP Status Code: `429`
+  * Requests throughput limit exceeded
+  * Limit can be requested to be increased by AWS Support
+  * Reserved concurrency feature to reserve a set number of functions for critical processes using Lambda
+
+#### Charges
+
+Lambdas are priced based on:
+
+* Requests: first 1,000,000 requests per month are free
+  * $0.20 per month per 1,000,000 requests
+* Duration: charged in ms (millisecond) increments
+* Memory: price per GB per second
+  * Fractions of a penny's penny GB per second
+  * First 400,000 GB per second per month are free
 
 ### -- AWS Serverless Application Repository
 
@@ -1271,6 +1349,23 @@ A stage variable can be used as a part of HTTP integration URL as in following c
 * A path
   * `http://example.com/${stageVariables.<variable_name>}/prod`
 * A query string
+
+#### API Gateway Advantages
+
+* Cost effective ans serverless
+* Allows you to connect to apps running on Lambda, EC2 or Elastic Beanstalk, and services like DynamoDB and Kinesis
+* Supports multiple endpoints and targets
+  * Send each API endpoint to a different target
+* Supports multiple versions
+  * Allows you to maintain multiple versions of your API for your development, testing and production envs
+* Helps you manage traffic with **throttling** so that backend ops can withstand traffic spikes and DDoS (denial of service) attacks
+
+#### Supported API Types
+
+* RESTful APIs: optimized for stateless, serverless workloads
+  * Representational State Transfer (REST)
+  * Supports JSON (JavaScript Object Notation, key-value pairs)
+* Websocket APIs: for real-time, two-way, stateful communication, e.g. chat apps
 
 ### -- AWS Transit Gateway
 

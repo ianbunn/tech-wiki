@@ -28,6 +28,16 @@
 
 `git pull --allow-unrelated-histories` to force a merge to happen after cleaning commits
 
+## Reset to `origin/master`
+
+```shell
+# Make sure you got the latest changes
+$ git fetch origin
+
+# Reset to origin/master
+$ git reset --hard origin/master
+```
+
 ## Clone to make PRs on other accounts
 
 1. Clone local repo and cd into it: `git clone <repo>` & `cd <repo>`

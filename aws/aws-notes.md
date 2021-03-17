@@ -293,7 +293,21 @@ Benefits:
 
 ### -- AWS Step Functions
 
-Coordinate multiple AWS services into serverless workflows so you can develop and deploy apps quickly. Workflows are made up of a series of steps, and translates your workflow into a state machine diagram that is easy to understand and update.
+* Coordinate multiple AWS services into serverless workflows so you can develop and deploy apps quickly
+* Workflows are made up of a series of steps, and translates your workflow into a state machine diagram that is easy to understand and update
+* The output of one step may act as an input to the next
+* Provide orchestration for serverless apps
+* Provides logs of each step to debug/troubleshoot which step failed
+* Use cases:
+  * Sequential workflow
+  * Parallel workflow
+  * Branching workflow
+* Each of the steps is a Lambda function
+* Builds everything automatically using CloudFormation
+* Advantages
+  * Visualize serverless app
+  * Automate step functions to use the output of one step as input to the next step
+  * Logging the state of each step is done automatically to track what went wrong and where
 
 ### -- Amazon MQ
 
@@ -851,13 +865,62 @@ Cloud9 can quickly share your development environment with your team, enabling y
 
 ### -- AWS X-Ray
 
-X-Ray helps developers analyze and debug distributed apps in production or under development, such as those built using a microservice architecture.
+X-Ray helps developers **analyze and debug distributed apps** in production or under development, such as those built using a microservice architecture using AWS resources.
 
 X-Ray provides an end-to-end view of requests as they travel through your app, and shows a map of your app’s underlying components.
 
 X-Ray helps trace Lambda function giving you a granular view of your downstream services. See an example below for a Lambda async function trace using AWS X-Ray:
 
 ![Lambda-async-fx-w-x-ray](https://i.imgur.com/OoEQZoj.png)
+
+X-ray helps you track:
+
+* Latency
+* HTTP status codes
+* Errors
+
+This info helps to debug/troubleshoot connectivity and performance issues.
+
+X-ray integrates with:
+
+* AWServices
+  * EC2
+  * ECS
+  * Lambda
+  * Elastic Beanstalk
+  * SNS
+  * SQS
+  * DynamoDB
+  * Elastic Load Balancer
+  * API Gateway
+* Your apps written in:
+  * Java
+  * Node.js
+  * .NET
+  * Go
+  * Ruby
+  * Python
+* API calls
+  * Uses X-ray SDK to capture metadata for API calls made to AWServices using the AWS SDK
+
+How to install X-ray on your app
+
+1. Install X-ray SDK
+     * Gathers info from request and response headers, code in your app, and metadata about AWS resources on which it runs to send this trace data to X-ray, e.g. incoming HTTP requests, error codes, latency data
+2. Install the X-ray daemon on:
+     * EC2
+     * Elastic Beanstalk
+     * ECS in its own Docker container on your ECS cluster alongside your app
+     * OR
+     * On-prem server
+3. Instrument app using the X-ray SDK to send the required data to X-ray
+     * e.g. data about incoming HTTP requests to your app
+     * **Annotations & Indexing**
+       * Annotations can be added to record additional information from requests
+         * Annotations are key-value pairs indexed for use with filter expressions to easily search for traces that contain specific data
+         * Also, key-value pairs can be used to group related traces together in the console, e.g. `game_name=TicTacToe,game-id=324234232`
+     * X-ray daemon (agent) to buffer/queue the data to send to X-ray in batches
+       * Provides library for methods to generate X-ray data
 
 ## Game Tech
 

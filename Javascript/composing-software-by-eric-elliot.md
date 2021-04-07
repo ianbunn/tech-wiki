@@ -53,6 +53,8 @@ Monolithic systems, where you can't change or remove a class w/out understanding
 * Concatenation (dynamic object extension)
   * Properties can be concatenated one at a time or copied from existing objects, e.g., jQuery plugins are created by concatenating new methods to the jQuery delegate prototype, `jQuery.fn`
 
+** It is important to note that these types of object composition are not mutually exclusive
+
 Paused here: [Medium/javascript-scene/object-composition](https://medium.com/javascript-scene/the-hidden-treasures-of-object-composition-60cd89480381) at 3 dif forms of object composition.
 
 Ref: [Medium/javascript-scene/object-composition](https://medium.com/javascript-scene/the-hidden-treasures-of-object-composition-60cd894803810)

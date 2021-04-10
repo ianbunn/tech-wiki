@@ -291,11 +291,11 @@ Benefits:
 
 ## Application Integration
 
-### -- AWS Step Functions
+### -- Step Functions --
 
-* Coordinate multiple AWS services into serverless workflows so you can develop and deploy apps quickly
+* Coordinate multiple AWS services into **serverless** workflows so you can develop and deploy apps quickly
 * Workflows are made up of a series of steps, and translates your workflow into a state machine diagram that is easy to understand and update
-* The output of one step may act as an input to the next
+* Output from one step may act as an input to the next
 * Provide orchestration for serverless apps
 * Provides logs of each step to debug/troubleshoot which step failed
 * Use cases:
@@ -454,7 +454,7 @@ To create a custom platform, you build an Amazon Machine Image (AMI) from one of
 
 A compute engine for Elastic Container Store (ECS) that allows you to run containers without having to manage servers or clusters, so it removes the need for you to interact with or think about servers or clusters to focus on building apps.
 
-### -- AWS Lambda
+### -- AWS Lambda --
 
 Lambda runs code without provisioning or managing servers, **serverless**. There is no charge when code is not running with zero infrastructure administration.
 
@@ -463,6 +463,14 @@ Setup your code to automatically trigger from other AWServices, or call it direc
 To execute a Lambda function, Lambda uses a **handler** method. The **handler** is the name of the method within a code that calls to execute the function.
 
 NOTE: Avoid using recursive code in your Lambda function, wherein the function automatically calls itself until some arbitrary criteria is met. This could lead to unintended volume of function invocations and escalated costs. If you do use recursive code in your Lambda function, set the function **concurrent execution limit** to ‘0’ (Zero) to throttle all invocations to the functions, while you update the code.
+
+#### Upload New Function Code
+
+There are diff ways to deploy your new/updated Lambda function code, some include:
+
+1. Zip code into zip file and upload it via Lambda console
+2. Write a CloudFormation template that will deploy your env including your code
+3. Copy and paste code into the IDE inside Lambda UI
 
 #### Event-Driven Architecture
 
@@ -514,8 +522,8 @@ If app uses an alias, instead of `$LATEST`, remember that it will not automatica
   * Private subnet ID
   * Security group ID (with required access)
   * Lambda uses this info to set up Elastic Network Interfaces (ENIs) using an available IP address from your private subnet
-* If Lambda fails to access VPC, that is because its IAM Role is not allowed to assign ENIs, so make sure it has the right permissions
   * Lambda uses the VPC info to set up ENIs using an IP from the private subnet CIDR range
+* If Lambda fails to access VPC, that is because its IAM Role is not allowed to assign ENIs, so make sure it has the right permissions
 
 Using the CLI to update VPC config, you can use something like:
 
@@ -539,7 +547,9 @@ The command above uses the subnet ID to grab an available IP address, and a secu
   * HTTP Status Code: `429`
   * Requests throughput limit exceeded
   * Limit can be requested to be increased by AWS Support
-  * Reserved concurrency feature to reserve a set number of functions for critical processes using Lambda
+  * **Reserved concurrency** feature guarantees a set number of concurrent executions to always be available for critical processes using Lambda
+* Erros can come up due to execution time being too long
+  * Debug edge cases and increase timeout inside the function
 
 #### Charges
 
@@ -691,7 +701,11 @@ RDS on VMWare allows you to utilize the same simple interface for managing DBs i
 
 ### -- Amazon DynamoDB
 
-DynamoDB is a key-value and document DB that delivers single-digit millisecond performance at any scale.
+DynamoDB is a key-value and document DB that delivers single-digit millisecond performance at any scale. Highly scalable and highly computeable.
+
+DynamoDB is a NoSQL DB, but that doesn't mean it's non-relational
+
+* DynamoDB maintains the **Entity Relational Modeling** (ERM)
 
 DynamoDB offers **server-side encryption** for **ALL** table data, so no additional configuration is required. This could be used to meet requirements that call for all data to be encrypted at rest.
 
@@ -867,6 +881,8 @@ Cloud9 can quickly share your development environment with your team, enabling y
 
 X-Ray helps developers **analyze and debug distributed apps** in production or under development, such as those built using a microservice architecture using AWS resources.
 
+Uses a **service map** as a visual representation of your app.
+
 X-Ray provides an end-to-end view of requests as they travel through your app, and shows a map of your app’s underlying components.
 
 X-Ray helps trace Lambda function giving you a granular view of your downstream services. See an example below for a Lambda async function trace using AWS X-Ray:
@@ -906,7 +922,8 @@ X-ray integrates with:
 How to install X-ray on your app
 
 1. Install X-ray SDK
-     * Gathers info from request and response headers, code in your app, and metadata about AWS resources on which it runs to send this trace data to X-ray, e.g. incoming HTTP requests, error codes, latency data
+     * Provides a programmatic interface for your app to send info to the X-ray daemon
+     * X-ray Daemon gathers info from request and response headers, code in your app, and metadata about AWS resources on which it runs to send this trace data to X-ray, e.g. incoming HTTP requests, error codes, latency data
 2. Install the X-ray daemon on:
      * EC2
      * Elastic Beanstalk
@@ -1504,9 +1521,11 @@ Global Accelerator uses the highly available and congestion-free AWS global netw
 
 Global Accelerator can provide static IPs acting as fixed entry points to your app hosted on AWS, eliminating the complexity of managing specific IPs for different AWS Regions and AZs.
 
-### -- Amazon API Gateway
+### -- API Gateway --
 
 API Gateway acts as a “front door” for apps to access data, business logic, or functionality from back-end service, such as workloads running on EC2s, Lambda or any web app.
+
+Uses OpenAPI protocol, formerly known as Swagger. OpenAPI describes RESTful APIs.
 
 **Stage variables** are name-value pairs that you can define as configuration attributes associated with a deployment stage of an API. They act like environment variables and can be used in your API setup and mapping templates.
 
@@ -1525,12 +1544,42 @@ A stage variable can be used as a part of HTTP integration URL as in following c
 #### API Gateway Advantages
 
 * Cost effective ans serverless
+* Logs in CloudWatch
 * Allows you to connect to apps running on Lambda, EC2 or Elastic Beanstalk, and services like DynamoDB and Kinesis
 * Supports multiple endpoints and targets
   * Send each API endpoint to a different target
 * Supports multiple versions
   * Allows you to maintain multiple versions of your API for your development, testing and production envs
 * Helps you manage traffic with **throttling** so that backend ops can withstand traffic spikes and DDoS (denial of service) attacks
+* Allows you to import API definition files using OpenAPI definitions in YAML or JSON format
+  * Sample file can be found at [Swagger.io - basic structure file specs](http://swagger.io/docs/specification/basic-structure)
+* If needed for legacy apps using SOAP (Simple Object Access Protocol), API Gateway can be configured as a SOAP webservice passthrough
+  * When a method request carries a payload and either the Content-Type header does not match any specified mapping template or no mapping template is defined, you can choose to pass the client-supplied request payload through the integration request to the backend without transformation
+  * Also, API Gateway can be used to convert XML response to JSON format
+
+#### API Gateway Caching
+
+API Gateway returns the cached response, instead of making a new request to app.
+
+Caches endpoints responses to reduce the number of calls made and improve latency for requests to API.
+
+When cache is enabled, API Gateway caches for a specified time-to-live (TTL) period, in seconds. Default is 300 seconds.
+
+#### API Gateway Throttling
+
+Prevents API from being overwhelmed by too many requests.
+
+Uses default limits of 10,000 requests p/second, p/Region.
+
+Concurrent requests maximum is 5,000 across all APIs, p/Region. You can request an increase on these limits.
+
+When the limit has been reached for 10K requests p/sec OR 5,000 concurrent requests, a **429 Too Many Requests** error will be returned.
+
+API Gateway throttles requests to your API using the **token bucket algorithm**, where a token counts for a request.
+
+* You can enable usage plans to restrict client request submissions to within specified request rates and quotas
+* Restricts the overall request submissions so that they don't go significantly past the account-level throttling limits in a Region
+* API Gateway provides Per-client throttling limits that are applied to clients that use API keys associated with your usage policy as client identifier
 
 #### Supported API Types
 

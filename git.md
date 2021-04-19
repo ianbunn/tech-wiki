@@ -22,7 +22,9 @@
 
 `git stash show -p` to see the most recent stash
 
-`git stash show -p stash@{i}` to see the stash indicated as `i` based on the position in the stashes
+`git stash show -p stash@{i}` to check diff against selected stash (i)
+
+`git stash show -p stash@{i}:<file_name>` to check diff against a selected stash's file (file_name)
 
 `git branch replace_this_branch_name $(echo "replace this message" | git commit-tree HEAD^{tree})` to clean all commits to relevant feature commits
 

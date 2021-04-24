@@ -699,25 +699,99 @@ Amazon RDS on VMWare lets you deploy managed DBs in on-prem VMWare environments 
 
 RDS on VMWare allows you to utilize the same simple interface for managing DBs in on-prem VMWare environments as you would use in AWS.
 
-### -- Amazon DynamoDB
+### -- DynamoDB --
 
 DynamoDB is a key-value and document DB that delivers single-digit millisecond performance at any scale. Highly scalable and highly computeable.
 
-DynamoDB is a NoSQL DB, but that doesn't mean it's non-relational
+DynamoDB consists of tables, items and attributes. Compared to SQL's tables, rows (records) and columns.
 
+#### DynamoDB Primary Keys
+
+**Primary key** is used to store and retrieve data by DynamoDB.
+
+2 types of primary keys:
+
+* Partition key: based on a unique attribute, i.e. customer_id, product_id or car's VIN
+  * Value is used as input to internal hash function and the output determines the partition or physical location on DynamoDB where the data is stored
+  * All items w/same partition key are stored together and sorted accordingly per sort key value
+* Composite key (partition key + sort key)
+  * When unique key is not going to be a unique value, such as in forum posts when using user_id as partition key will not be unique, so a sort key (timestamp) could be added to have a unique combination value
+
+#### DynamoDB Secondary Index
+
+You can run a query on non-primary key attributes using **global secondary indexes** and **local secondary indexes**.
+
+Secondary index allows you to:
+
+* Perform fast queries on specific columns
+* Select columns you want included in the index and run searches on that index, rather than entire dataset
+
+**Local Secondary Indexes** can only be created at moment of table creation, and cannot be updated or removed.
+
+* *Same partition key* as original table but a different sort key
+* Gives a different view of data, organizing it with an alternative **sort key**
+* Same provision throughput as original table
+
+**Global Secondary Indexes** are more flexible and can created at *any time*.
+
+* Allows you to *use a different partition key and sort key*
+* Completely different view of data
+* Separate provision throughput for read/write
+
+#### DynamoDB Access Control
+
+Controlling access to DynamoDB can be done using:
+
+* IAM
+* IAM permissions
+* IAM roles
+
+Restricting user access can be accomplished w/ an IAM condition to only their own records.
+
+In an IAM policy, a condition needs to be added to only access the items where the partition key value matches, for example, a user_id. Example below (not json format):
+
+* Statement ID (Sid): `AllowAccessToOnlyItemsMatchingUserId`
+* Action: `dynamodb:GetItem`, `dynamodb:PutItem`, `dynamodb:UpdateItem`
+* Condition: `ForAllValues:StringEquals: { dynamodb:LeadingKeys: ${www.mygame.com:user_id } }`
+  * Attributes: `dynamodb:Attributes: [ UserId, GameTitle, TopScore ]`
+
+In a nutshell, DynamoDB can have fine-grained access control with IAM using the IAM condition parameter `dynamodb:LeadkingKeys`, which allows users to access only the items where the `partitionKey == user_id`.
+
+#### DynamoDB Advantages
+
+* DynamoDB is serverless and integrates well with Lambda, so it is a popular choice for serverless applications
+* DynamoDB is a low latency NoSQL DB, but that doesn't mean it's non-relational. It helps to start w/out a schema in mind
+* Supports both document and key-value data models
+  * Supported docs: JSON, HTML and XML
+* Uses SSD (solid state disks) storage fast performance for reads/writes.
+* Resilient spread across 3 geo data centers
+* 2 types of consistency reads:
+  * **Eventually consistent reads**: consistency across all copies of data is usually reached within a second
+    * Best for read performance
+  * **Strongly consistent reads**: always reflects all successful writes
+    * Writes are reflected across all 3 locations at once
+    * Best for read consistency
+    * DynamoDB transactions: ideal for ACID transactions (Atomic, Consistent, Isolated, Durable)
+      * Read or write multiple items across multiple tables as an *all or nothing operation*, i.e. credit card charge
 * DynamoDB maintains the **Entity Relational Modeling** (ERM)
+* DynamoDB offers **server-side encryption** for **ALL** table data, so no additional configuration is required. This could be used to meet requirements that call for all data to be encrypted at rest.
+* DynamoDB offers **DAX**, *DynamoDB Accelerator*
 
-DynamoDB offers **server-side encryption** for **ALL** table data, so no additional configuration is required. This could be used to meet requirements that call for all data to be encrypted at rest.
+#### DynamoDB DAX (Accelerator)
 
-DynamoDB offers **DAX**, *DynamoDB Accelerator*.
+DAX is a DynamoDB-compatible caching service that enables you to benefit from fast in-memory performance for demanding apps.
 
-DAX is a DynamoDB-compatible caching service that enables you to benefit from fast in-memory performance for demanding apps. DAX addresses 3 scenarios:
+DAX addresses 3 scenarios:
 
 1. As an in-memory cache, DAX reduces the response times of eventually-consistent read workloads by an order of magnitude, from single-digit milliseconds to microseconds
 2. DAX reduces operational and app complexity by providing a managed service that is API-compatible with DynamoDB, and thus requires only minimal functional changes to use w/an existing app
 3. For read-heavy or fast bursts workloads, DAX provides increased throughput and potential operational cost savings by reducing the need to over-provision read capacity units. This is beneficial for apps that require repeated reads for individual keys
 
-DynamoDB also allows you to set **Time To Live (TTL)** for when items in a table need to be expunged and deleted from the database. TTL is provided at extra cost as a way to reduce storage usage and reduce cost of storing irrelevant data w/out using provisioned throughput. With TTL enabled on a table, you can set a timestamp for deletion on a per-item basis, allowing you to limit storage usage to only those records that are
+DynamoDB also allows you to set **Time To Live (TTL)** for when items in a table need to be expunged and deleted from the database.
+
+TTL is provided at extra cost as a way to reduce storage usage and reduce cost of storing irrelevant data w/out using provisioned throughput.
+
+With TTL enabled on a table, you can set a timestamp for deletion on a per-item basis, allowing you to limit storage usage to only those records that are crucial to operations.
 
 When scanning Amazon DynamoDB tables, you should follow best practices for avoiding sudden bursts of read activity. To minimize the impact of a **scan** on a table's provisioned throughput create reduced page sizes for your app.
 

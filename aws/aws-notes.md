@@ -705,27 +705,31 @@ DynamoDB is a key-value and document DB that delivers single-digit millisecond p
 
 DynamoDB consists of tables, items and attributes. Compared to SQL's tables, rows (records) and columns.
 
+#### DynamoDB Queries
+
+Queries can only use the primary key attribute.
+
 To query or scan certain attributes and not all, you can use the `ProjectExpression` parameter to refine results.
 
 Results are sorted by *sort* key, in numeric order by default. To reverse the order, set the `ScanIndexForward` parameter to `false`.
 
+#### DynamoDB Scans
+
 A scan op examines e/item in the table, and returns all data attributes by default. Add filters to return only desired items.
 
-Query vs Scan
+Avoid scans. However, if you want to use scans, here are a few ways to improve scan performance:
+
+* Improve performance by setting a smaller page size
+* Configure DynamoDB to use **parallel scans** by logically dividing a table or index into segments and scanning each segment in parallel
+  * Avoid parallel scans if your table or index is already incurring heavy read/write activity from other applications
+* Isolate scan ops to specific tables and segregate them from your mission-critical traffic
+  * Even if that means writing data to 2 different tables
+
+#### DynamoDB Query VS Scan
 
 Query is more efficient, bc a scan first pulls all the items, then filters out to provide desired result. As data grows, scans will take longer to dump all items then filter. A scan can take all the provisioned throughput in a single op.
 
 In general, try to design tables in a way that you can use the `Query`, `Get` or `BatchGetItem` APIs.
-
-#### DynamoDB Scans
-
-Avoid scans. However, if you want to use scans, here are a few wayss to improve scan performance:
-
-* Improve perfomrance by setting a smaller page size
-* Configure DynamoDB to use **parallel scans** by logically diviing a table or index into segments and scanning each segment in parallel.
-  * Avoid parallel scans if your talbe or index is already incurring heavy read/write activity from other applications
-* Isolate scan ops to specific tables and segregate them from your mission-critical traffic
-  * Even if that means writing data to 2 different tables
 
 #### DynamoDB Primary Keys
 
@@ -734,7 +738,7 @@ Avoid scans. However, if you want to use scans, here are a few wayss to improve 
 2 types of primary keys:
 
 * Partition key: based on a unique attribute, i.e. customer_id, product_id or car's VIN
-  * Value is used as input to internal hash function and the output determines the partition or physical location on DynamoDB where the data is stored
+  * Value is used as input to internal hash function, and the output determines the partition or physical location on DynamoDB where the data is stored
   * All items w/same partition key are stored together and sorted accordingly per sort key value
 * Composite key (partition key + sort key)
   * When unique key is not going to be a unique value, such as in forum posts when using user_id as partition key will not be unique, so a sort key (timestamp) could be added to have a unique combination value
@@ -750,15 +754,32 @@ Secondary index allows you to:
 
 **Local Secondary Indexes** can only be created at moment of table creation, and cannot be updated or removed.
 
-* *Same partition key* as original table but a different sort key
+* *Same partition key* as original table, but a different sort key
 * Gives a different view of data, organizing it with an alternative **sort key**
 * Same provision throughput as original table
 
-**Global Secondary Indexes** are more flexible and can created at *any time*.
+**Global Secondary Indexes** are more flexible and can be created at *any time*.
 
 * Allows you to *use a different partition key and sort key*
 * Completely different view of data
 * Separate provision throughput for read/write
+* Initial quota of 20 global secondary indexes per table, but you can request a service quota increase
+
+#### DynamoDB Streams
+
+Streams are time-ordered sequence of item level modifications (e.g. insert, update, delete). There is a **dedicated endpoint** to access DynamoDB Stream to store event logs encrypted at rest for 24 hours. Then, it starts deleting events.
+
+By default, Streams only record primary key. It stores before and after images of the item requested.
+
+Ideal for:
+
+* Audit or archive transactions
+* Trigger an event based on a particular transaction
+  * A Stream can be an event source for Lambda
+  * Lambda then polls DynamoDB Stream and executes based on an event
+* Replicate data across multiple tables
+
+![DynamoDB Stream to trigger a workflow](./assets/images/dynamodb-stream.png)
 
 #### DynamoDB Access Control
 
@@ -783,6 +804,8 @@ In a nutshell, DynamoDB can have fine-grained access control with IAM using the 
 
 * DynamoDB is serverless and integrates well with Lambda, so it is a popular choice for serverless applications
 * DynamoDB is a low latency NoSQL DB, but that doesn't mean it's non-relational. It helps to start w/out a schema in mind
+* Using DynamoDB for session storage alleviates issues that occur with session handling in a distributed web application by moving sessions off of the local file system and into a shared location
+  * Amazon DynamoDB provides an effective solution for sharing session state across web servers without incurring drawbacks
 * Supports both document and key-value data models
   * Supported docs: JSON, HTML and XML
 * Uses SSD (solid state disks) storage fast performance for reads/writes.
@@ -803,7 +826,7 @@ In a nutshell, DynamoDB can have fine-grained access control with IAM using the 
 
 DAX is a DynamoDB-compatible caching service that enables you to benefit from fast in-memory performance for demanding apps. For **eventually consistent reads** and **read** operations ONLY.
 
-DAX is a write-through caching service. Data is written to the cache and the backend store at the same time. API call can query the DAX cluster first, and if item is not found, it can then query DynamoDB to stoore it in cache and return it to the application. Further requests will get a cache hit when they call DAX.
+DAX is a write-through caching service. Data is written to the cache, and the backend store at the same time. API call can query the DAX cluster first, and if item is not found, it can then query DynamoDB to store it in cache and return it to the application. Further, requests will get a cache hit when they call DAX.
 
 Reduces the read load on DynamoDB tables and save money on your AWS bill.
 
@@ -819,7 +842,7 @@ Ideal for:
 
 * Apps requiring **strongly consistent reads**
 * Not suitable for write-intensive apps
-* Apps that don't perform to many ops
+* Apps that don't perform too many ops
 * Apps that don't require microsecond response times, low latency response
 
 DAX addresses 3 scenarios:
@@ -838,7 +861,7 @@ TTL is provided at an extra cost as a way to reduce storage usage and reduce cos
 
 With TTL enabled on a table, you can set a timestamp for deletion on a per-item basis, allowing you to limit storage usage to only those records that are crucial to operations.
 
-Great for:
+Great for removing irrelevant or old data, for example:
 
 * Session data
 * Event logs
@@ -880,6 +903,20 @@ Provisioned is great for:
 * Read and write capacity can be forecasted
 * Predictable application traffic
 * Application traffic is consistent or increases gradually
+
+#### Provisioned Throughput Exceeded Exception Error
+
+When request rate is too high for the `read/write` capacity provisioned on your DynamoDB table, `ProvisionedThroughputExceededException` error will be returned.
+
+If you're using the AWS SDK, it will auto-retry the requests until successful, as it uses exponential backoff as default.
+
+* If after 1 minute, AWS SDK auto-retry doesn't work, your request size may be exceeding the throughput for your read/write capacity.
+
+If you're not using the AWS SDK, you could do either of the 2 methods below:
+
+* Reduce your concurrent request frequency
+* Use **exponential backoff**
+  * Uses progressively longer waits between consecutive retries, for improved flow control
 
 ### -- Amazon ElastiCache
 
@@ -1896,21 +1933,107 @@ Firewall Manager rolls out AWS WAF rules for Application Load Balancers and Amaz
 
 Now you have a single service to build firewall rules, create security policies, and enforce them in a consistent, hierarchical manner across entire Application Load Balancers and CloudFront distributions.
 
-### -- AWS Key Management Service (KMS)
+### -- Key Management Service (KMS) --
 
-Key Management Service (KMS) create and manages keys and controls the use of encryption across a wide range of AWServices and in apps.
+Key Management Service (KMS) create and manages keys and controls the use of encryption across a wide range of AWServices and in apps. Use KMS for sensitive data that you want to keep secret!
 
-KMS is integrated with CloudTrail to provide you with logs of all key usage.
+KMS is a region-based service, so a key will only have access to encrypt/decrypt data in its same region.
 
-Using KMS with Envelope Encryption, unencrypted data is encrypted using a plaintext Data key. This Data key is further encrypted using a plaintext **Master** key. This *Master* key is stored in AWS KMS and known as **Customer Master Keys** (CMK).
+A KMS key can be deleted, and it takes some time to delete setting its status to `Pending deletion`. After its deleted, there is one week grace period to restore the deleted key.
 
-AWS Owned or AWS Managed CMK can be used to generate and encrypt keys.
+KMS integrates with most others AWServices:
 
-While **AWS Owned CMK** is free of charge, **AWS Managed CMK** is chargeable.
+* S3
+* RDS
+* DynamoDB
+* Lambda
+  * To encrypt or decrypt data
+* EBS
+* EFS
+* CloudTrail
+  * Provides you with logs of all key usage
+* Developer tools
 
-Also, **AWS Managed CMK** are not encrypted at rest.
+#### KMS Symmetric or Asymmetric Key
+
+Symmetric is a single encryption key that is used for both encrypt and decrypt ops.
+
+Asymmetric is a public and private key pair that can be used for encrypt/decrypt or sign/verify ops.
+
+#### KMS Key Material Origin
+
+There are 3 choices to choose from:
+
+* KMS
+* External
+* Custom key store (CloudHSM) (Hardware Security Module)
+  * Used for single tenet requirements due to its dedicated server for storage
+
+#### KMS Customer Master Key (CMK)
+
+Master keys are created and used only within AWS KMS to help ensure their security, enable your policies to be consistently enforced, and provide a centralized log of their use. 
+
+Keys are only stored and used in the region in which they are created. They cannot be transferred to another region. For example; keys created in the EU-Central (Frankfurt) region are only stored and used within the EU-Central (Frankfurt) region.
+
+##### Customer-Managed CMK
+
+Sequence of steps to create a CMK:
+
+* Create an alias
+* Create a description
+* Choose key material origin
+* Define key admin permissions
+  * Assign users/roles/admin permissions
+* Define key usage permissions
+  * Assign users/roles/usage permissions
+
+Using KMS with **Envelope Encryption**, unencrypted data is encrypted using a plaintext data key. Envelope encryption encrypts the key that encrypts our data.
+
+By using envelope encryption, it avoids sending all data into KMS over the network.
+
+This data key is further encrypted using a plaintext **Customer Master Key** (CMK). The CMK is stored in AWS KMS and can only encrypt/decrypt data up to 4KB.
+
+![KMS Envelope Encryption](./assets/images/kms-envelope-encryption.png)
+
+While **Customer-Managed CMK** is free of charge, **AWS Managed CMK** is chargeable.
+
+##### AWS Managed CMK
+
+You can view the AWS managed CMKs in your account, view their key policies, and audit their use in AWS CloudTrail logs. However, you cannot manage these CMKs, rotate them, or change their key policies. 
+
+And, you cannot use AWS managed CMKs in cryptographic operations directly; the service that creates them uses them on your behalf.
+
+AWS-provided and AWS-managed CMK used on your behalf with AWServices integrated with KMS.
+
+Managed-CMKs are not encrypted at rest.
+
+#### AWS KMS Data Key
+
+Encryption key that you can use to encrypt data, including large amounts of data. You can use a CMK to generate, encrypt, and decrypt data keys.
+
+#### KMS API Calls
+
+`aws kms encrypt` encrypts plaintext into ciphertext by using a CMK.
+
+`aws kms decrypt` decrypts ciphertext that was encrypted by an AWS KMS CMK.
+
+`aws kms re-encrypt` decrypts ciphertext, then encrypts it entirely within AWS KMS CMK.
+
+* Ideal for when you change teh CMK or manually rotate the CMK
+
+`aws kms enable-key-rotation` enables auto-rotate every 365 days.
+
+`aws kms generate-data-key` uses CMK to generate data key to encrypt data < 4KB.
+
+#### KMS Examples
+
+##### KMS with DynamoDB
 
 Using CMK with *DynamoDB*, you can encrypt a unique data key for the table, known as the **table key**. Using AWS Owned CMK and encryption at rest, DynamoDB transparently encrypts data in a DynamoDB table, including its primary key & local and global secondary indexes, whenever the table is persisted to disk.
+
+##### KMS with EC2
+
+Create EC2 in same region as your KMS CMK. 
 
 ### -- AWS Organizations
 

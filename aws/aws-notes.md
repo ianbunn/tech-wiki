@@ -705,6 +705,28 @@ DynamoDB is a key-value and document DB that delivers single-digit millisecond p
 
 DynamoDB consists of tables, items and attributes. Compared to SQL's tables, rows (records) and columns.
 
+To query or scan certain attributes and not all, you can use the `ProjectExpression` parameter to refine results.
+
+Results are sorted by *sort* key, in numeric order by default. To reverse the order, set the `ScanIndexForward` parameter to `false`.
+
+A scan op examines e/item in the table, and returns all data attributes by default. Add filters to return only desired items.
+
+Query vs Scan
+
+Query is more efficient, bc a scan first pulls all the items, then filters out to provide desired result. As data grows, scans will take longer to dump all items then filter. A scan can take all the provisioned throughput in a single op.
+
+In general, try to design tables in a way that you can use the `Query`, `Get` or `BatchGetItem` APIs.
+
+#### DynamoDB Scans
+
+Avoid scans. However, if you want to use scans, here are a few wayss to improve scan performance:
+
+* Improve perfomrance by setting a smaller page size
+* Configure DynamoDB to use **parallel scans** by logically diviing a table or index into segments and scanning each segment in parallel.
+  * Avoid parallel scans if your talbe or index is already incurring heavy read/write activity from other applications
+* Isolate scan ops to specific tables and segregate them from your mission-critical traffic
+  * Even if that means writing data to 2 different tables
+
 #### DynamoDB Primary Keys
 
 **Primary key** is used to store and retrieve data by DynamoDB.
@@ -779,23 +801,49 @@ In a nutshell, DynamoDB can have fine-grained access control with IAM using the 
 
 #### DynamoDB DAX (Accelerator)
 
-DAX is a DynamoDB-compatible caching service that enables you to benefit from fast in-memory performance for demanding apps.
+DAX is a DynamoDB-compatible caching service that enables you to benefit from fast in-memory performance for demanding apps. For **eventually consistent reads** and **read** operations ONLY.
+
+DAX is a write-through caching service. Data is written to the cache and the backend store at the same time. API call can query the DAX cluster first, and if item is not found, it can then query DynamoDB to stoore it in cache and return it to the application. Further requests will get a cache hit when they call DAX.
+
+Reduces the read load on DynamoDB tables and save money on your AWS bill.
+
+Delivers up to 10x read performance improvement. Microsecond performance for millions of requests per second.
+
+Ideal for:
+
+* Auction apps
+* Game sites
+* Sales apps, i.e. Black Friday sale traffic
+
+**NOT** ideal for:
+
+* Apps requiring **strongly consistent reads**
+* Not suitable for write-intensive apps
+* Apps that don't perform to many ops
+* Apps that don't require microsecond response times, low latency response
 
 DAX addresses 3 scenarios:
 
-1. As an in-memory cache, DAX reduces the response times of eventually-consistent read workloads by an order of magnitude, from single-digit milliseconds to microseconds
+1. As an in-memory cache, DAX reduces the response times of eventually-consistent **read** workloads by an order of magnitude, from single-digit milliseconds to microseconds
 2. DAX reduces operational and app complexity by providing a managed service that is API-compatible with DynamoDB, and thus requires only minimal functional changes to use w/an existing app
 3. For read-heavy or fast bursts workloads, DAX provides increased throughput and potential operational cost savings by reducing the need to over-provision read capacity units. This is beneficial for apps that require repeated reads for individual keys
 
+#### DynamoDB TTL (Time to Live)
+
 DynamoDB also allows you to set **Time To Live (TTL)** for when items in a table need to be expunged and deleted from the database.
 
-TTL is provided at extra cost as a way to reduce storage usage and reduce cost of storing irrelevant data w/out using provisioned throughput.
+There has to be a TTL attribute in the table to add this feature. TTL is expressed in **epoch** or **unix** format, seconds elapsed after 12:00AM January 1, 1970.
+
+TTL is provided at an extra cost as a way to reduce storage usage and reduce cost of storing irrelevant data w/out using provisioned throughput.
 
 With TTL enabled on a table, you can set a timestamp for deletion on a per-item basis, allowing you to limit storage usage to only those records that are crucial to operations.
 
-When scanning Amazon DynamoDB tables, you should follow best practices for avoiding sudden bursts of read activity. To minimize the impact of a **scan** on a table's provisioned throughput create reduced page sizes for your app.
+Great for:
 
-Because a **scan** operation reads an entire page (by default 1MB), you can reduce the impact of the scan op by setting a smaller page size. The **scan** provides a *Limit* parameter that you can use to set the page size for your request. Each scan request that has a smaller page size uses fewer read ops and creates a *pause* between each request.
+* Session data
+* Event logs
+* Temp data
+* Reducing costs in DynamoDB
 
 #### Determine Write Capacity
 
@@ -806,6 +854,32 @@ For example, if we are writing 10 items every second and each item is 15.5KB in 
 1. `(15.5 KB/1 KB) = 15.5`
 2. Round to the nearest `1KB` so 15.5 rounded up to 16KB
 3. Multiple `16 KB * 10 items per second = 160 write capacity`
+
+#### Determine Read Capacity
+
+1 x **strongly consistent reads** of 4KB per second
+
+OR
+
+2 x **eventually consistent reads** of 4KB per second (default)
+
+#### On-demand VS Provisioned Capacity
+
+On-demand is great for:
+
+* Unpredictable workloads
+* Unknown workload
+* Spiky, short-lived peaks
+* New apps where you don't know what you're going to need
+* Pay for usage/request
+
+Difficult to predict cost, but you will have a pay-per-use model.
+
+Provisioned is great for:
+
+* Read and write capacity can be forecasted
+* Predictable application traffic
+* Application traffic is consistent or increases gradually
 
 ### -- Amazon ElastiCache
 

@@ -317,22 +317,76 @@ What are message brokers? They allow different software systems — often using 
 
 What is ActiveMQ? An open source message broker written in Java together w/a full Java Message Service (JMS).
 
-### -- Amazon SQS
+### -- Simple Queue Service (SQS) --
 
-Simple Queue Service (SQS) is a fully managed SaaS to decouple and scale micro services, distributed systems, and serverless apps. SQS eliminates the complexity and overhead associated with managing and operating message oriented middleware.
+A queue is a temporary repository for messages waiting processing. Simple Queue Service (SQS) is a fully managed SaaS to decouple and scale micro services, distributed systems, and serverless apps. SQS eliminates the complexity and overhead associated with managing and operating message oriented middleware.
+
+SQS messages can contain up to 256KB of text in any format (i.e. XML, JSON and unformatted text). SQS is pull-based, not pushed-based. Messages can be kept in the queue from one minute to 14 days, default retention rate is 4 days. If an app crashes on an EC2 or ECS, then the queue will retain all messages and wait for the next consumer to be ready to process them.
+
+A queue resolves issues that arise if the producer is producing work faster than the consumer can process it, OR if the producer or consumer are only intermittently connected to the network.
 
 SQS offers common constructs such as **dead-letter queues** and **cost allocation tags**. It provides generic web services API and it can be accessed by any programming language that the AWS SDK supports.
 
-Two types of SQS:
+#### Two types of SQS
 
-* Standard queues - offer max throughput, best-effort ordering, and at least-once delivery
-* FIFO - designed to guarantee messages are processed exactly once, in the exact order that they are sent
+* Standard queue - default type, offers max throughput, best-effort ordering, duplicates could occur and at least-once delivery
+* First in, first out queue (FIFO) - designed to guarantee messages are processed exactly once, in the exact order that they are sent, duplicates are not introduced, 300 transactions p/second (TPS) limit
+  * Good for banking transactions which need to happen in a stric order
+
+**Visibility Timeout** feature allows for a message to be set as "invisible" for another consumer after/while being processed. Default time is 30 seconds. If job is not processed within the 30 seconds, the message will be made available for another consumer to pick it up and process it. Increase timeout if necessary. Maximum is 12 hours.
+
+**Short polling** returns a response immediately even if queue being polled is empty. This can result in additional incurred costs, bc empty responses are billable.
+
+**Long polling** periodacillay polls the queue. It doesn't return a response until a message arrives in the queue or the long poll times out. It could save some money on bill, so it is preferable over short polling.
+
+**SQS Delay queue** postpones delivery of new messages for a number of seconds. Messages will remain "invisible" to consumers for the duration of the delay period. Default dealy is 0 seconds, maximum is 900 seconds (15 minutes). This will definitely affect the FIFO queues for existing messages.
+
+Manage large SQS messages (25KB - 2GB) by using S3. You'll need the AWS SDK for Java and the SQS Extended Client Library for Java to get, put and delete S3. You CANNOT do this using AWS CLI, AWS Management Console / SQS Console, SQS API.
+
+##### SQS Examples
+
+SQS decouples app components so they can run independently, easing message management between components.
 
 When creating a 2-tiered service, for example an app with premium (paid) and basic (non-paid) customers, you'd want to give preference for paid customers, so you can do that with SQS by creating 2 separate SQS queues, so messages can be processed by the app from the high priority queue first (paid) then basic customers can access the app second.
 
-### -- Amazon SNS
+### -- Simple Notification Services (SNS)
 
-Simple Notification Services (SNS) is a highly available, durable, secure, fully managed publisher/sub messaging service that enables you to decouple micro services, distributed systems, and serverless apps. Using Amazon SNS topics, your pub system can disperse messages to a large number of subscriber endpoints for parallel processing. SNS can be used to send notifications to end users using mobile push, SMS, and email.
+A service that makes it easy to set up, operate, and send notifications from AWS.
+
+Simple Notification Services (SNS) is a highly available, durable, secure, fully managed publisher/sub messaging service that enables you to decouple micro services, distributed systems, and serverless apps.
+
+Using Amazon SNS topics, your pub system can disperse messages to a large number of subscriber endpoints for parallel processing.
+
+SNS can be used to send notifications to end users using:
+
+* Mobile push notifications
+  * Devices available
+    * Apple
+    * Google
+    * Fire OS
+    * Windows
+    * Android
+* SMS text message
+* Email
+* SQS queue
+* Any HTTP endpoint
+
+You can also use a **Trigger Lambda** functions to process the message, publish to another SNS topic, or send message somewhere else.
+
+Pub-sub model is where applications **publish** or **push** messages to a *topic*; subscribers **receive** messages from a *topic*, hence the pub, publish and sub, subscribe model.
+
+A **topic** is an access point, allowing recipients to subscribe to and receive copies of the same notification. SNS delivers appropriately-formatted messages to e/subscriber (e.g. iOS, Android, SMS, etc.)
+
+SNS offers durable storage by storing messages redundantly across multiple Availability Zones (AZs).
+
+SNS Benefits:
+
+* Instantaneous, push-based delivery (no polling)
+* Simple to setup with API
+* Flexible for different transport protocols
+* Inexpensive, pay-as-you-go model w/no up-front costs
+* Easy to configure on AWS Console
+* High availability expected for a Production environment
 
 ### -- Amazon SWF
 
@@ -590,7 +644,19 @@ A self-service, cloud-based contact center service that makes it easy for any bu
 
 ### -- Amazon SES
 
-Simple Email Service (SES) is a cloud-based email sending service designed to help digital marketers and app developers send marketing, notification, and transactional emails.
+Simple Email Service (SES) is a cloud-based email sending service designed to help digital marketers and app developers send marketing, notification, and transactional emails. SES uses a pay-as-you-go model.
+
+You can use SES to send and receive email, incoming emails will be delivered to an S3 bucket. Incoming emails can be used to trigger Lambda functions and SNS notifications.
+
+Use cases:
+
+* Automated emails
+* Online purchases confirmations
+* Order status updates
+* Marketing emails
+* Ads
+* Newsletters
+* Events
 
 ## Database
 

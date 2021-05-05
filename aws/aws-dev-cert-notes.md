@@ -1,4 +1,4 @@
-# AWS Cloud Platform
+# AWS Developer Certificate Notes
 
 This section introduces the major AWServices by category.
 
@@ -268,7 +268,7 @@ SQS offers common constructs such as **dead-letter queues** and **cost allocatio
 
 **Short polling** returns a response immediately even if queue being polled is empty. This can result in additional incurred costs, bc empty responses are billable.
 
-**Long polling** periodacillay polls the queue. It doesn't return a response until a message arrives in the queue or the long poll times out. It could save some money on bill, so it is preferable over short polling.
+**Long polling** periodacillay polls the queue. It doesn't return a response until a message arrives in the queue or the long poll times out. It could save some money on bill, so it is preferable over short polling. Long poll has a maximum of 20 seconds for a long-poll timeout.
 
 **SQS Delay queue** postpones delivery of new messages for a number of seconds. Messages will remain "invisible" to consumers for the duration of the delay period. Default dealy is 0 seconds, maximum is 900 seconds (15 minutes). This will definitely affect the FIFO queues for existing messages.
 
@@ -421,19 +421,76 @@ Launch and manage a virtual private server with AWS, which includes everything n
 
 Batch dynamically provisions the optimal quantity and type of compute resources based on the volume and specific resource requirements of the batch jobs submitted.
 
-### -- AWS Elastic Beanstalk
+### -- AWS Elastic Beanstalk ---
 
 Elastic Beanstalk deploys and scales web apps and services developed with Java, .NET, PHP Node.js, Python, Ruby, Go, and Docker on familiar servers such as Apache, Nginx, Passenger, and Internet Information Services (IIS).
 
-There are a couple of deployment methods to use AWS Elastic Beanstalk.
+Elastic Beanstalk provisions AWS resources for you and deals with systems administration tasks, such as OS and app server udpates, monitoring, metrics, health checks, etc.
 
-* **Immutable deployment** - performs an immutable update to launch a full set of new instances running the new version of the app in a *separate* Auto Scaling group, alongside the instances running the old version of the app
-  * Immutable deployments can prevent issues caused by partially completed rolling deployments. If new instances don’t pass health checks, Elastic Beanstalk terminates them, leaving the original instances untouched
-* **Blue/Green deployment** - have *separate* deployment environments
+Elastic Beanstalk can fully manage the EC2 instances for you or you can take full administrative control.
 
-Elastic Beanstalk supports custom platforms. A custom platform lets you develop an entire new platform from scratch, customizing the OS, additional software, and scripts that Elastic Beanstalk runs on platform instances. This allows you to build a platform for an app that uses a language or other infrastructure software, for which Elastic Beanstalk doesn't provide a platform out of the box.
+#### Elastic Beanstalk Configuration Files
+
+Configure your platform by defining packages to install, create Linux users and groups, run shell commands, enable services, load balancer configuration, etc.
+
+These files can be written in `YAML` or `JSON`.
+
+The file MUST have a `.config` extension and be inside a folder called `.ebextensions` dir (must be in top-level dir of app source code bundle). Config file could be placed under your source control with the rest of your app code.
+
+#### Elastic Beanstalk Custom Platforms
+
+Elastic Beanstalk supports custom platforms. A **custom platform** lets you develop an entire new platform from scratch, customizing the OS, additional software, and scripts that Elastic Beanstalk runs on platform instances. This allows you to build a platform for an app that uses a language or other infrastructure software, for which Elastic Beanstalk doesn't provide a platform out of the box.
 
 To create a custom platform, you build an Amazon Machine Image (AMI) from one of the supported OSs and add further customizations. You create your own Elastic Beanstalk platform using **Packer**, which is an open-source tool for creating machine images for many platforms, including AMIs for use w EC2s.
+
+Platform created in Elastic Beanstalk is highly configurable.
+
+#### Updating Elastic Beanstalk
+
+Upload a new application version, but it will not be deployed anywhere until you configure it based on deployment type. In actions, you'll need to select "Deploy" on the new version uploaded.
+
+In Elastic Beanstalk environment's Configuration for your project, go to "Modify rolling updates and deployments" to select deployment type.
+
+#### Deployment Types
+
+* **All at once**: deploys to all hosts concurrently
+  * You will experience a total outage
+  * Ideal for testing environments  
+  * Not ideal for mission-critical systems
+  * Involves a service interruption  
+  * If update fails, a rollback will be needed to change to original version for all of your instances
+* **Rolling**: deploys the new version in batches
+  * Each batch is taken out of service while the deployment takes place
+  * Environment capacity will be reduced by the number of instances in a batch while the deployment takes place
+  * Ideal for local websites with low traffic  
+  * Not ideal for mission-critical systems
+  * If update fails, rollbacks will be needed per batch deployed, so it will take a bit of time
+* **Rolling with additional batch**: launches an additional batch of instances, then deploys the new version in batches
+  * Rolling VS Rolling with additional batch, environment capacity will NOT be reduced
+  * If update fails, rollbacks will be same as Rolling type, so it will take a bit of time
+* **Immutable**: deploys the new version to a fresh group of instances before deleting the old instances
+  * Once new instances pass their health checks, old instances should be terminated
+  * If update fails, just delete the new instances and keep the original instances, so it is instantaneous
+  * IDEAL for mission-critical systems
+  * Performs an immutable update to launch a full set of new instances running the new version of the app in a *separate* Auto Scaling group, alongside the instances running the old version of the app
+* **Traffic Splitting**: installs new version on a new set of instances, then forwards a percentage of incoming client traffic to the new app version for evaluation, and the rest to the old instances
+  * Enables **canary testing** to test for errors before completely splitting traffic to all the new instances
+
+#### Elastic Beanstalk and RDS
+
+You can launch an RDS instance from within or outside an Elastic Beanstalk.
+
+**Option 1**: Launch RDS Within Elastic Beanstalk - if you terminate the environment, the DB will be terminated
+
+* Good for test environments
+
+**Option 2**: Launch RDS Outside Elastic Beanstalk - use RDS console or AWS CLI to create RDS, so after tearing down your app env, you will not affect the DB instance
+
+* Preferred approach for PROD environments for more flexibility
+
+For option 2, you'd have to connect to your DB from your environment's Auto Scaling **security group**.
+
+Also, you'll need to provide a connection string to your app servers using Elastic Beanstalk **environment properties** (in Configuration).
 
 ### -- AWS Fargate
 
@@ -2125,6 +2182,10 @@ Other features:
 * Can be configured to create access logs to log all requests made to S3 bucket
   * These logs can be written to another S3 bucket
 * Transfer Acceleration: uses CloudFront's edge locations to route data to S3 over an optimized network path
+
+#### S3 File Gateway
+
+A **file gateway** supports a file interface into S3 and combines a service and a virtual software app. You can think of a file gateway as a file system mount on S3.
 
 S3 tier types:
 

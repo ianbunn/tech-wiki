@@ -377,17 +377,100 @@ Use Chime for online meetings, video conference, calls, chat, and to share conte
 
 ## Compute
 
-### -- Amazon EC2
+### -- Elastic Cloud Compute (EC2) --
 
 EC2 services are cloud hypervisors providing you with complete control of your computing resources. EC2 changes the economics of computing by allowing you to pay only for compute usage only.
 
 There are 3 types of EC2 Instances:
 
-* On-demand - pay for compute capacity by the hour with no long-term commitments
-* Reserved Instances - discount up to 75% compared to On-demand instance prices
-* Spot Instances - discount up to 90% compared to On-demand instance prices, and lets you take advantage of unused EC2 capacity in the AWS cloud
+* On-demand - pay for compute capacity by the hour or second with no long-term commitments
+* Reserved Instances - discount up to 72% compared to **on-demand** instance prices
+  * Great if you have known, fixed requirements
+* Spot Instances - discount up to 90% compared to on-demand instance prices, and lets you take advantage of unused EC2 capacity in the AWS cloud
+  * Prices fluctuate with supply and demand
+  * Great for apps with flexible start and end times
+* Dedicated Instances - a physical EC2 server dedicated for your use
+  * Great if you have server-bound licenses to reuse or **compliance requirements**
 
-### -- Amazon EC2 Auto Scaling
+#### EC2 Instance Profiles and IAM Roles
+
+Use `aws cli` to create a role and assumre a role from an instance profile. Command sample below:
+
+```sh
+aws iam create-role --role-name DEV_ROLE --assume-role-policy-document file://path_to_file.json
+```
+
+You can also create a policy:
+
+```sh
+aws iam create-policy --policy-name DevS3ReadAccess --policy-document file//path_to_file.json
+# OUTPUT
+# Policy creted in json format
+```
+
+Then, you can attach policy to the role created previously:
+
+```sh
+aws iam attach-role-policy --role-name DEV_ROLE --policy-arn "arn:aws:iam::545353234343:policy/DevS3ReadAccess"
+# NO OUTPUT
+```
+
+To confirm that the policy was attached to the role, run:
+
+```sh
+aws iam list-attached-role-policies --role-name DEV_ROLE
+# OUTPUT
+# Attached policies to role in json format
+```
+
+Then, we can create an `instance-profile` as such:
+
+```sh
+aws iam create-instance-profile --instance-profile-name DEV_PROFILE
+# OUTPUT
+# Instance profile in json format
+```
+
+Then, add the role to the instance-profile:
+
+```sh
+aws iam add-role-to-instance-profile --instance-profile-name DEV_PROFILE --role-name DEV_ROLE
+# NO OUTPUT
+```
+
+Confirm with running:
+
+```sh
+aws iam get-instance-profile --instance-profile-name DEV_PROFILE
+# OUTPUT
+# Instance profile with roles attached in json format
+```
+
+Run the following to associate IAM instance profile with EC2's instance ID, so copy it from the console:
+
+```sh
+aws ec2 associate-iam-instance-profile --instance-id i-035fd342fd3be93b -iam-instance-profile Name="DEV_PROFILE"
+# OUTPUT
+# IAM instance profile association in json format
+```
+
+Lasty, confirm by describing EC2 instance and seeing details for IAM instance profile:
+
+```sh
+aws ec2 describe-instances --instance-ids i-035fd342fd3be93b
+# OUTPUT
+# EC2 details in json format
+```
+
+To run a last double-check, run the following to see the role in the EC2 instance:
+
+```sh
+aws sts get-caller-identity
+# OUTPUT
+# STS token with ARN role name
+```
+
+#### EC2 Auto Scaling
 
 EC2 Auto Scaling helps you maintain app availability and allows you to automatically add or remove EC2 instances according to user-defined conditions.
 
@@ -421,7 +504,7 @@ Launch and manage a virtual private server with AWS, which includes everything n
 
 Batch dynamically provisions the optimal quantity and type of compute resources based on the volume and specific resource requirements of the batch jobs submitted.
 
-### -- AWS Elastic Beanstalk ---
+### -- Elastic Beanstalk ---
 
 Elastic Beanstalk deploys and scales web apps and services developed with Java, .NET, PHP Node.js, Python, Ruby, Go, and Docker on familiar servers such as Apache, Nginx, Passenger, and Internet Information Services (IIS).
 
@@ -496,7 +579,7 @@ Also, you'll need to provide a connection string to your app servers using Elast
 
 A compute engine for Elastic Container Store (ECS) that allows you to run containers without having to manage servers or clusters, so it removes the need for you to interact with or think about servers or clusters to focus on building apps.
 
-### -- AWS Lambda --
+### -- Lambda --
 
 Lambda runs code without provisioning or managing servers, **serverless**. There is no charge when code is not running with zero infrastructure administration.
 
@@ -506,7 +589,7 @@ To execute a Lambda function, Lambda uses a **handler** method. The **handler** 
 
 NOTE: Avoid using recursive code in your Lambda function, wherein the function automatically calls itself until some arbitrary criteria is met. This could lead to unintended volume of function invocations and escalated costs. If you do use recursive code in your Lambda function, set the function **concurrent execution limit** to ‘0’ (Zero) to throttle all invocations to the functions, while you update the code.
 
-#### Upload New Function Code
+#### Upload New Lambda Code
 
 There are diff ways to deploy your new/updated Lambda function code, some include:
 
@@ -514,7 +597,7 @@ There are diff ways to deploy your new/updated Lambda function code, some includ
 2. Write a CloudFormation template that will deploy your env including your code
 3. Copy and paste code into the IDE inside Lambda UI
 
-#### Event-Driven Architecture
+#### Lambda Event-Driven Architecture
 
 Lambdas can be automatically triggered by other AWServices or called directly from any web or mobile app.
 
@@ -535,7 +618,7 @@ Lambdas can be automatically triggered by other AWServices or called directly fr
 * CodeCommit
 * CodePipeline
 
-#### Using Versions with AWS Lambda
+#### Using Versions with Lambda
 
 Each Lambda function version has a unique ARN, after you publish a version, you CAN NOT change the ARN or the function code.
 
@@ -575,14 +658,14 @@ aws lambda update-function-configuration --function-name my-function --vpc-confi
 
 The command above uses the subnet ID to grab an available IP address, and a security group to allow it to access the AWS resources to do what it needs to do.
 
-#### Advantages
+#### Lambda Advantages
 
 * Lower cost than EC2 - extremely cost effective - pay only when your code executes
 * Lambda scales automatically so you get continuous scaling
 * Independent - each event will trigger a single function
 * Serverless technology
 
-#### Disadvantages
+#### Lambda Disadvantages
 
 * Concurrent execution limits a certain amount of functions in a given region per account ("safety feature")
   * 1,000 concurrent executions per region, 1,001 will receive an error with `TooManyRequestsException`
@@ -593,7 +676,7 @@ The command above uses the subnet ID to grab an available IP address, and a secu
 * Erros can come up due to execution time being too long
   * Debug edge cases and increase timeout inside the function
 
-#### Charges
+#### Lambda Charges
 
 Lambdas are priced based on:
 
@@ -656,9 +739,17 @@ Aurora is up to 5x faster than standard MySQL and 3x faster than standard Postgr
 
 Aurora features a distributed, fault-tolerant, self-healing storage system that auto-scales up to 64TB per DB instance.
 
-### -- Amazon Relational Database Service (RDS)
+### -- Relational Database Service (RDS) --
 
-RDS is used for OLTP (online transaction processing).
+RDS is used for OLTP (online transaction processing). It is great for:
+
+* Processing lots of small transactions
+  * Customer orders
+  * Banking transactions
+  * Payments
+  * Booking systems
+
+RDS is not suitable for **OLAP** (online analytics processing). Use **RedShift** for OLAP and data warehousing tasks like analyzing large amounts of data, reporting, and sales forecasting.
 
 RDS makes it easy to setup, operate and scale relational DBs in the cloud.
 
@@ -678,41 +769,48 @@ There are 6 familiar DB engines to choose from, including:
 
 Amazon RDS offers **Read Replicas** that provide enhanced performance and durability for DB instances. This feature makes it easy to elastically scale out beyond the capacity constraints of a single DB instance for read-heavy workloads, thereby increasing aggregate read throughput.
 
-#### Automated Backups
+#### RDS Automated Backups
 
-Automated backups allow you to recover your DB to any point in time within a "retention period", which can be from 1 - 35 days.
+Automated backups allow you to recover your DB to any point in time within a **retention period**, which can be from 1 - 35 days. This option gives you more bang for your buck compared to manual DB snapshot.
 
 User can select the backup retention period and backup window in which automated backups are created, including start time (UTC) and duration (hours).
 
-Automated backups take a full daily snapshot and will store transaction logs throughout the day. This allows to do a point in time recovery down to a second, within the retention period.
+Automated backups take a full daily snapshot and will store **transaction logs** throughout the day. This allows to do a point in time recovery down to a second, within the retention period.
 
-Enabled by default. Backup data stored in S3, data size storage in S3 = RDS instance size.
+Automated backups are enabled by default. Backup data is stored in S3 and free, data size storage in S3 = RDS instance size, so if you have a 10GB DB, then you will get 10GB free worth of storage in S3.
 
-Backups are taken within a defined window.
+Backups are taken within a defined window, i.e. between 2am - 5am.
 
-During backup, storage I/O may be supsended while your data is beiing backed up.
+During backup, **storage I/O may be supsended while your data is beiing backed up**, and you may experience increased latency.
 
-#### Database Snapshots
+#### RDS Database Snapshots (Manual)
 
-DB Snapshots are done manually (user initiated).
+DB Snapshots are done manually (user initiated). It provides a snapshot of the storage volume attached to the DB instance.
 
 Stored even after you delete the original RDS instance, unlike automated backups.
 
-#### Restoring Backups
+You can backup to a known state as frequently as you wish, and then restore to that specific state in time.
 
-Any time an automated backup or snapshot is used, the restored version of the DB will be the new RDS instance with a new RDS endpoint.
+#### Restoring RDS Backups
 
-#### Encryption
+Any time an automated backup or snapshot is used, the restored version of the DB will be the new RDS instance with a new DNS endpoint.
 
-Encryption is done using the AWS Key Management Service (KMS) service.
+#### RDS Encryption
 
-Once DB is encrypted, any copies or backups are going to be encrypted as well.
+Backups are encrypted at rest.
+
+Enable encryption at creation time, selecting the encryption option in the console.
+
+Encryption is done using the AWS Key Management Service (KMS) service, AES-256 encryption.
+
+Once DB is encrypted, any copies, logs or backups are going to be encrypted as well, including any other underlying storage.
 
 Encrypting an existing non-encrypted DB instance is not supported, so user will have to:
 
 1. Create a snapshot of the RDS instance
 2. Make a copy of that snapshot
 3. In the copy snapshot settings, encrypt the copy of the snapshot
+4. Do a DB restore with the encrypted snapshot
 
 #### Multi-AZ RDS
 
@@ -722,15 +820,17 @@ Multi-AZ allows to have an exact copy of PROD DB in another AZ (availability zon
 
 AWS handles the replication for users, so changes to PROD DB will automatically be synced to the stand by DB.
 
-in the event of planned DB maintenance, DB instance failure, or an AZ failure, RDS will automatically failover to the standby DB so that DB ops can resume quickly w/out admin intervention.
+In the event of planned DB maintenance, DB instance failure, or an AZ failure, RDS will automatically failover to the standby DB so that DB ops can resume quickly w/out admin intervention.
 
 #### Read Replica
 
 Improves read performance.
 
-You can have 5 read replicas per PROD DB by default.
+You can have 5 read replicas per PROD DB by default in the same AZ, cross-AZ, or cross-region.
 
 You can also have read replicas of read replicas, but you will have some replication latency.
+
+Ideal for read-heavy workloads such as user reports.
 
 Read-only of PROD DB. Achieved using Asynchronous replication from primary RDS instance to the read replica.
 
@@ -740,10 +840,10 @@ You can have read replicas that have Multi-AZ, and in another region.
 
 Available for:
 
-- MySQL server
-- PostgreSQL
-- MariaDB
-- Aurora
+* MySQL server
+* PostgreSQL
+* MariaDB
+* Aurora
 
 Read replicas can be promoted to be their own DBs, but will break the replication.
 
@@ -972,7 +1072,7 @@ If you're not using the AWS SDK, you could do either of the 2 methods below:
 * Use **exponential backoff**
   * Uses progressively longer waits between consecutive retries, for improved flow control
 
-### -- Amazon ElastiCache
+### -- ElastiCache --
 
 ElastiCache makes it easy to deploy, operate, and scale in-memory cache in the Cloud.
 
@@ -985,6 +1085,7 @@ There are 2 open source in-memory machine engines:
 * **Redis** - a Redis-compatible in-memory service that delivers the ease-of-use and power of Redis along with the availability, reliability, and performance suitable for the most demanding apps
   * In-memory key-value store, lists and hashes, sets, etc.
   * Used for sorting and ranking datasets in memory, such as in leaderboards, etc.
+  * Used for data persistence
   * Supports master/slave replication and Multi-AZ
   * Because of the replication and persistence features of Redis, ElastiCache manages Redis more as a realtional DB
     * Redis ElastiCache clusters are managed as stateful entities that include **failover**, similar to how RDS manages DB failover
@@ -1438,9 +1539,11 @@ Systems Manager contains the following tools:
   * Define a *Maintenance Window* so that patches are applied only during set times that fit business needs
 * **Automation** - simplifies common maintenance and deployment tasks used to apply patches, update drivers and agents, or bake apps into AMIs using a streamlined, repeatable and auditable process
 * **Parameter Store** - an encrypted location to store important admin info such as passwords and DB strings
+  * Plain text or encrypted values
+  * Reference your parameters using parameter name, e.g. in a bootstrap script
   * Parameter Store integrates w/AWS KMS to make it easy to encrypt the info kept in the store
   * Lambda functions can share a connection string that contains a DB's credentials, which are secret by using the Parameter Store secure string
-  * It can be passed in a CloudFormation script or Lambda function
+  * It can be passed in a CloudFormation script, CodeBuild, CodePipeline, CodeDeploy or Lambda functions
 * **Distributor** - centrally store and systematically distribute software packages while keeping version control
   * Use Distributor to create and distribute software patches, and then install them using *Run Command* and *State Manager*
 * **Session Manager** - a browser-based interactive shell/CLI for managing Windows and Linux EC2 instances
@@ -1722,9 +1825,11 @@ Other features:
 * Geo restriction by country
 * Invalidations (removes them from CloudFront edge caches): a faster and less expensive method is to use versioned object or directory names
 
-### -- Amazon Route 53
+### -- Route 53 --
 
 Route 53 is a highly available and scalable cloud Domain Name System (DNS) web service. Uses IPv4 and IPv6.
+
+You can map a domain name to an EC2 instance, Elastic Load Balancer, S3 Bucket.
 
 Use Route 53 to configure DNS health checks to route traffic to healthy endpoints, or to independently monitor the health of your app and its endpoints.
 
@@ -1737,6 +1842,12 @@ You can also manage traffic globally through a variety of routing types, includi
 All of the above can be combined with DNS Failover to enable a variety of low-latency, fault-tolerant architectures.
 
 Route 53 also offers Domain Name Registration.
+
+#### Route 53 Terminology
+
+* **Hosted Zone**: a container for DNS records for your domain
+* **Alias**: allows you to troute traffic addressed to the zone apex, or the top of the DNS namespace, e.g. rforrevolution.com, and send it to a resource within AWS, e.g. Elastic Load Balancer
+* **A Record**: allows you to route traffic to a resource, such as a web server, using an IPv4 address
 
 ### -- AWS Private Link
 
@@ -1845,29 +1956,35 @@ App Mesh uses the open source [EnvoyProxy.io](http://Envoyproxy.io)
 
 With Cloud Map, define custom names for app resources, and it maintains the updated location of these **dynamically** changing resources.
 
-### -- Elastic Load Balancing
+### -- Elastic Load Balancer --
 
-Elastic Load Balancing (ELB) distributes incoming app traffic across multiple targets, such as EC2s, containers, and IPs.
+Elastic Load Balancer (ELB) distributes incoming app traffic across multiple targets, such as EC2s, containers, and IPs.
 
-Elastic Load Balancing (ELB) offers 3 types of load balancers:
+Elastic Load Balancer (ELB) offers 3 types of load balancers:
 
 * **Application Load Balancer** - load balancing of HTTP and HTTPS traffic and provides advanced **request** routing targeted at the delivery of modern app architectures, including microservices and containers
   * Operating at the individual request level (Layer 7)
   * Application Load Balancer routes traffic to targets within VPC based on the content of the request
 * **Network Load Balancer** - load balancing of TCP traffic where extreme performance is required
+  * Most expensive!
   * Operating at the connection level (Layer 4)
   * Network Load Balancer routes traffic to targets within VPC
     * Capable of handling millions of requests per second while maintaining ultra low latencies
 * **Classic Load Balancer** - basic load balancing across multiple EC2s
   * Operates at both the request level (Layer 7) and connection level (Layer 4)
+* **Gateway Load Balancers** - provides load balancing for third-party virtual apps
 
-Elastic Load Balancing (ELB) provides **access logs** that capture detailed information about requests sent to your load balancer. You can use these access logs to analyze traffic patters and troubleshoot issues. Each log contains info such as:
+Elastic Load Balancer (ELB) provides **access logs** that capture detailed information about requests sent to your load balancer. You can use these access logs to analyze traffic patters and troubleshoot issues. Each log contains info such as:
 
 * Time the request was received
 * Client's IP address
 * Latencies
 * Request paths
 * Server responses
+
+Use **X-Forwarded-For** HTTP header if you need the IPv4 address of your end-user.
+
+If you're getting a **504 error**, that is a gateway timeout. The app is not responding within the timeout period, so troubleshoot your app or DB server.
 
 ## Robotics
 
@@ -1916,7 +2033,7 @@ While traditional directory solutions, such as AD Lightweight Directory Services
 
 Simply define the schema, create directory, and then populate your directory by making calls to the Cloud Directory API.
 
-### -- AWS Identity and Access Management (IAM)
+### -- Identity and Access Management (IAM) --
 
 Using IAM, you can create and manage AWS users and groups, and use permissions to allow and deny their access to AWS resources.
 
@@ -1928,7 +2045,7 @@ IAM allows you to do the following:
   * IAM roles are always the **preferred method** to give AWS entities access to other AWS resources
     * Roles allow you to skip creating access key id and secret key
     * Roles are controlled by policies
-    * Changing a policy on a role takes immediate effect
+    * Changing a policy on a role takes **immediate effect**
       * Example, attaching and detaching a role from a running EC2 will take effect w/out having to stop/restart EC2
 * Manage federated users and their permissions - identity federation to allow existing identities (users, groups, and roles) in your enterprise to access the AWS Management Console, call AWS APIs, and access resources
 * Manage IAM policies
@@ -1938,6 +2055,13 @@ IAM allows you to do the following:
   * Test permissions before deploying to PRODUCTION
   * Validate policy permissions
   * Troubleshoot/test to debug access errors between AWS resources
+
+Remember:
+
+* Always give your users the minimum amount of access required to do their job, **least privilege**
+* Create IAM groups and assign your users to groups, **use groups**
+  * Group permissions are assigned using IAM policy documents
+  * Your users will automatically inherit the permissions of the group
 
 ### -- Amazon GuardDuty
 
@@ -2126,7 +2250,7 @@ Create custom rules that block common attack patterns, such as SQL injection or 
 
 ## Storage
 
-### -- Amazon Simple Storage Service (S3)
+### -- Simple Storage Service (S3) --
 
 S3 is an object storage service that offers industry-leading scalability, data availability, security and performance.
 
@@ -2163,7 +2287,7 @@ Other features:
   * Types of encryption:
     * In Transit (SSL/TLS)
     * At Rest (server side encryption)
-      * **Server** side encryption 
+      * **Server** side encryption
         * **SSE-S3**: S3 Managed Keys
         * **SSE-KMS**: AWS Key Management Service, Managed Keys
           * Envelop key: added layer of protection
@@ -2182,6 +2306,7 @@ Other features:
 * Can be configured to create access logs to log all requests made to S3 bucket
   * These logs can be written to another S3 bucket
 * Transfer Acceleration: uses CloudFront's edge locations to route data to S3 over an optimized network path
+* Object lock: store objects using a write-once-read-many (WORM) model to help you prevent objects from being deleted or overwritten for a fixed amount of time or indefinitely
 
 #### S3 File Gateway
 
@@ -2190,19 +2315,31 @@ A **file gateway** supports a file interface into S3 and combines a service and 
 S3 tier types:
 
 * S3 Standard
-* S3 - IA
+  * Data stored redundantly
+  * Frequently accessed data
+  * Ideal for websites, content distribution, etc.
+  * Most expensive, but no access/retrieval fee
+* S3 - Infrequent Access (S3 IA)
   * Lower fee, but charges for retrieval
-  * Less accessed files
-* S3 One Zone - IA
+  * Less accessed files, but requires rapid access when needed
+  * Great for long-term storage, backups, and as a data store for disaster recovery files
+* S3 One Zone - Infrequent Access (IA)
   * Lower cost for infrequently accessed data
-  * Does not require the multi-AZ data resilience
+  * Does not require the multi-AZ data resilience because data is stored in single AZ
+  * Ideal for non-critical data and long-lived docs
+  * 99.5% availibility
 * S3 - Intelligent Tiering
   * Uses ML to move data to the most cost-effective access tier, w/out performance impact or operational overhead
+  * Second most expensive
 * S3 Glacier
+  * Very cheap storage
+  * Think about data accessed 1 or 3 times a year
   * Data archiving
   * Any amounts of data at lower costs
-  * Retrieval times are configurable from minutes to hours
+  * Retrieval times are configurable from 1 minute to 12 hours
 * S3 Glacier Deep Archive
+  * Very cheap storage
+  * Think about data accessed 1 or 3 times a year
   * Data archiving
   * Lower cost storage
   * Retrieval time are 12 hours
@@ -2224,7 +2361,7 @@ S3 performance optimization:
 * Mixed-workloads: avoid sequential key names for your S3 objects
   * Instead, use a random prefix like a **hex** hash to the key name to prevent multiple objects from being stored on the same partition
 
-### -- Amazon Elastic Block Store (EBS)
+### -- Elastic Block Store (EBS) --
 
 Elastic Block Store (EBS) provides persistent block storage volumes for use with EC2s.
 
@@ -2234,11 +2371,11 @@ EBS volumes need to be in the same availability zone (AZ) to attach to an EC2.
 
 EBS volumes can be used with snapshots. Snapshot used to create an EBS volume will pass on their encryption status, so if snapshot is encrypted, the newly created EBS volume will inherit the encryption.
 
-### EBS Types
+#### EBS Types
 
 More detaile information can be found here [https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-volume-types.html](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-volume-types.html).
 
-#### General Purpose SSD
+##### General Purpose SSD
 
 General purpose SSDs provide a balance of price and performance.
 
@@ -2255,7 +2392,7 @@ General purpose SSDs provide a balance of price and performance.
 * Max throughput p/volume:
   * 250 MiB/s (gp2) - 1,000 MiB/s (gp3)
 
-#### Provisioned IOPS SSD
+##### Provisioned IOPS SSD
 
 Provisioned IOPS SSDs provide high performance for mission critical, low-latency or high-throughput workloads.
 
@@ -2273,9 +2410,15 @@ Provisioned IOPS SSDs provide high performance for mission critical, low-latency
 * Max throughput p/volume:
   * 1,000 MiB/s - 4,000 MiB/s
 
-#### Hard Disk Drives HDD
+##### Hard Disk Drives HDD
 
-##### Throughput Optimized HHD (st1)
+#### EBS Snapshots
+
+An EBS snapshot is a point-in-time copy of an EBS volume. Great for backing up EBS volumes.
+
+You can create a new EBS volume from an EBS snapshot. Encryption passes through from EBS snapshot.
+
+###### Throughput Optimized HHD (st1)
 
 * Use cases:
   * Big data
@@ -2287,7 +2430,7 @@ Provisioned IOPS SSDs provide high performance for mission critical, low-latency
   * 500 MiB/s
 * Cannot be a boot volume
 
-##### Cold HDD (sc1)
+###### Cold HDD (sc1)
 
 * Use cases:
   * Throughput-oriented for data that is **infrequently** accessed

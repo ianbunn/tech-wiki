@@ -158,27 +158,81 @@ Some use cases are:
 
 ### -- Amazon Kinesis
 
-Kinesis makes it easy to collect, process and analyze video and data streams in real-time. Kinesis enables you to process and analyze data as it arrives, instead of having to wait for it to begin processing.
+Kinesis is a family of services which enaables you to collect, process and analyze video and data streams in real-time. Kinesis enables you to process and analyze data as it arrives, instead of having to wait for it to begin processing.
 
-Amazon Kinesis capabilities include:
+Kinesis is a Greek word, meaning movement or motion. Good name for this services as it deals with data in motion, or streaming data.
+
+Streaming data, usually unstructured, is a continuos flow of data sources, which sends in data simultaneously and in small sizes (KBs).
+
+Use cases for:
+
+* Financial transactions
+* Stock prices
+* Game data (as the gamer plays)
+* Social media feeds
+* Location tracking data (Uber)
+* IoT sensors
+* Clickstream data
+* Log files
+
+High throughput info, Kinesis helps you analyze this data in real-time to make smart business decisions.
+
+#### Kinesis Streams
+
+Data producers send data streams to Kinesis Streams. Kinesis can retain data by default from 24 hours to 7 days. Kinesis uses shards to store sequential data streams. Each shard provides a fixed unit of capacity:
+
+* 5 reads p/second, the max total read rate is 2MB p/second
+* 1,000 writes p/second, the max total write rate is 1MB p/second
+
+The data capacity is determined by the number of shards. If data rate increases, increase the number of shards.
+
+Then data is processed by consumers, such as EC2s or Lambdas to then store it in DynamoDB, S3, EMR or Redshift.
 
 * Kinesis Video Streams
-  * Ingests and stores video streams to use in custom apps for analytics, ML, playback...
+  * Ingests and stores video streams to use in custom apps for analytics, ML, playback, etc.
 ![Kinesis Video Streams](https://i.imgur.com/BLPDeW9.png)
 
 * Kinesis Data Streams (KDS)
   * Takes care of getting the data streamed to storage, streams such as: DB event streams, website click streams, social media feeds, IT logs, location-tracking events
 ![Kinesis Data Streams](https://i.imgur.com/TAVFqqO.png)
 
+##### Kinesis Client Libraries (KCL) for Shard Management & Record Processors Management
+
+Kinesis Client Library runs on the consumer instances. It tracks the number of shards in your stream, and discovers new shards when you re-shard.
+
+* The KCL ensures e/shard has a record processor
+* Manages the number of record processors relative to the number of shards & consumers
+* If only one consumer available, KCL will create all the record processors on a single consumer
+* If multiple consumers, KCL will **load balance** and create half the processors on one instance and half on another
+
+With KCL, ensure that the number of instances does not exceed the number of shards (except for failure or standby purposes).
+
+You never need multiple instances to handle the processing load of one shard; however, one worker can process multiple shards.
+
+Don't think that just bc you reshard, you need to add more instances. Instead, CPU utilization is what should drive the qty of consumer instances you have, NOT the number of shards in your Kinesis Stream.
+
+Best practice is to use an **auto-scaling group**, and base scaling decisions on CPU load on your consumers.
+
+#### Kinesis Data Firehose
+
+With Kinesis Firehose, there are no shards and no data retention. Everything is automated for you. You can use a Lambda to analyze the data as soon as it hits Firehose or store it in S3, Elasticsearch or Redshift, but there are no data consumers.
+
 * Kinesis Data Firehose
   * Think of the name firehose and the shape of it, now think of data flowing through that actual hose, that is the data streaming into data stores and analytic tools
+  * Data Firehose captures, transforms, and loads data streams into AWS data stores to enable near-real-time analytics with BI tools
+  * Firehose can be used with other service providers such as Datadog or Splunk
 ![Kinesis Data Firehose](https://i.imgur.com/CzpPEg3.png)
 
+#### Kinesis Data Analytics
+
+Kinesis Data Analytics allows you to run SQL queries on the data streams sent to Kinesis Streams or Kinesis Firehose to then store it in S3, Redshift or Elasticsearch, in **real-time!!!**.
+
 * Kinesis Data Analytics
+  * Analyze, query and transform streamed data in real-time using standard SQL, storing the results in an AWS data store
   * Analytics happen at the end of the data stream to generate the output
 ![Kinesis Data Analytics stream](https://i.imgur.com/QBmWZtr.png)
 
-Major benefits from Amazon Kinesis:
+#### Major Kinesis Benefits
 
 * Real-time data metrics ingestion, buffering and processing
 * Fully managed infrastructure
@@ -492,9 +546,17 @@ Batch dynamically provisions the optimal quantity and type of compute resources 
 
 ### -- AWS Elastic Beanstalk
 
-Elastic Beanstalk deploys and scales web apps and services developed with Java, .NET, PHP Node.js, Python, Ruby, Go, and Docker on familiar servers such as Apache, Nginx, Passenger, and Internet Information Services (IIS).
+Elastic Beanstalk **deploys and scales** web apps and services developed with Java, .NET, PHP Node.js, Python, Ruby, Go, and Docker on familiar servers such as Apache, Nginx, Tomcat, Passenger, and Internet Information Services (IIS).
 
-There are a couple of deployment methods to use AWS Elastic Beanstalk.
+Elastic Beanstalk handles:
+
+* Provisioning infrastructure, load balancing, autoscaling, and app health monitoring
+* Install and manage app stack, including patching and updates to OS and app platform
+* You have complete admin control of the AWS resources
+
+Great for devs to focus on writing code, bc it gets your app to market faster. Quickes and easiest way to deploy and serve web apps.
+
+There are a couple of deployment methods to use AWS Elastic Beanstalk:
 
 * **Immutable deployment** - performs an immutable update to launch a full set of new instances running the new version of the app in a *separate* Auto Scaling group, alongside the instances running the old version of the app
   * Immutable deployments can prevent issues caused by partially completed rolling deployments. If new instances don’t pass health checks, Elastic Beanstalk terminates them, leaving the original instances untouched

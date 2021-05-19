@@ -249,3 +249,18 @@ func main() {
 Resources:
 
 - [GeeksForGeeks - Interfaces in golang](https://www.geeksforgeeks.org/interfaces-in-golang/)
+
+
+## Structs
+
+### Deep-clone data
+
+Just assigning a struct does not create new values for internal fields.
+
+Serializing to a data interchange format like `json` will cause us to lose the
+type information. Data formats like `gob` requires types to be registered,
+which may be too much work to set up for every possible type in the app.
+
+Another option is to use an external module to do a deep-clone.
+This will preserve the type info during serialization/logging later, and
+will guarantee the memory used throughout is not shared.

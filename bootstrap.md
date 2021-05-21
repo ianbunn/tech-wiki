@@ -1,4 +1,4 @@
-# Bootstrap Bookmarks
+# Bootstrap
 
 ## CodePly - Bootstrap 4 Navbar Examples
 

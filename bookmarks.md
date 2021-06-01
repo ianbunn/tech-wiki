@@ -18,7 +18,7 @@
 
 ## Project Ideas
 
-[CLone Wars](https://gourav.io/clone-wars) - list of open-source clones of popular sites
+[Clone Wars](https://gourav.io/clone-wars) - list of open-source clones of popular sites
 
 ## Security Operations / SecOps
 

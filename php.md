@@ -76,3 +76,5 @@ We can create cookies or remove them by starting a session or setting a time in 
 Run `composer install`
 
 In your folders, you'll see the `vendor` created. This is compared to the `node_modules` created after `npm install`
+
+[Back home](./README.md)

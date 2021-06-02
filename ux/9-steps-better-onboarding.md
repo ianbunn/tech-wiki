@@ -82,4 +82,6 @@ Break down things by cohort.
 - [LittleBigDetails.com](http://littlebigdetails.com)
 - [AndrewChen.com](http://andrewchen.com)
 
-Ref: [youtube.com/gosquared/9-steps-to-better-user-onboarding](https://www.youtube.com/watch?v=Uk4QyZhXC3w)
+Reference: [youtube.com/gosquared/9-steps-to-better-user-onboarding](https://www.youtube.com/watch?v=Uk4QyZhXC3w)
+
+[Back home](../README.md)

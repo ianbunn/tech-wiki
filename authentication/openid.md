@@ -30,7 +30,7 @@ Abstract steps:
 4. The RP can send a request with the Access Token to the UserInfo Endpoint.
 5. The UserInfo Endpoint returns Claims about the End-User.
 
-![OpenID Connect protocol: basic steps](img.png)
+![OpenID Connect protocol: basic steps](assets/img.png)
 
 ## ID Token
 
@@ -87,11 +87,11 @@ The flows determine how the ID Token and Access Token are returned to the Client
 
 Some characteristics from the flows above:
 
-![OIDC Authentication Flows](img_1.png)
+![OIDC Authentication Flows](assets/img_1.png)
 
 The flow is determined by the `response_type` value contained in the Authorization Request. These values are:
 
-![OIDC "response_type" Values](img_2.png)
+![OIDC "response_type" Values](assets/img_2.png)
 
 ### Authentication using the Authorization Code Flow
 
@@ -190,7 +190,7 @@ In addition to the response params, the following params MUST be included:
 
 All Token Responses that contain tokens, secrets, or other sensitive info MUST include the following HTTP response header fields and values:
 
-![HTTP Response Headers and Values](img_3.png)
+![HTTP Response Headers and Values](assets/img_3.png)
 
 Example of a successful Token Response:
 
@@ -241,3 +241,4 @@ When using this flow, these additional reqs for the following ID Token Claims ap
 
 * `at-hash`: *OPTIONAL*. Access Token hash value. For instance, if the `alg=RS256`, hash the `access-token` value with SHA-256, then take the left-most 128 bits and base64url encode them. CASE SENSITIVE string.
 
+[Back home](../README.md)

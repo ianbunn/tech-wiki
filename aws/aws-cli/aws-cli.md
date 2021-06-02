@@ -28,3 +28,5 @@ aws dynamodb batch-write-item --request-items file://items.json
 ```sh
 aws dynamodb get-item --table-name ProductCatalog --region us-east-1  --key '{"Id":{"N":"403"}}'
 ```
+
+[Back home](../../README.md)

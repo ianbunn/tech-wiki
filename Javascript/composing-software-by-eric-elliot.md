@@ -57,4 +57,6 @@ Monolithic systems, where you can't change or remove a class w/out understanding
 
 Paused here: [Medium/javascript-scene/object-composition](https://medium.com/javascript-scene/the-hidden-treasures-of-object-composition-60cd89480381) at 3 dif forms of object composition.
 
-Ref: [Medium/javascript-scene/object-composition](https://medium.com/javascript-scene/the-hidden-treasures-of-object-composition-60cd894803810)
+Reference: [Medium/javascript-scene/object-composition](https://medium.com/javascript-scene/the-hidden-treasures-of-object-composition-60cd894803810)
+
+[Back home](../README.md)

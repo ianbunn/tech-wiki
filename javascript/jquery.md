@@ -13,3 +13,5 @@ Reference: [jQuery - `.attr()`](https://api.jquery.com/attr/)
 `.addClass()` adds the specified class(es) to each element in the set of matched elements.
 
 Reference: [jQuery - `.addClass()`](https://api.jquery.com/addClass/)
+
+[Back home](../README.md)

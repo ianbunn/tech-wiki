@@ -15,3 +15,5 @@ This might be needed when `pip` install was skipped when installing Python (or w
 `python -m ensurepip --upgrade`
 
 Ref: [Python.org/3/library/ensurepip](https://docs.python.org/3/library/ensurepip.html)
+
+[Back home](./README.md)

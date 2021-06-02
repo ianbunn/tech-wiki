@@ -69,3 +69,5 @@ text-shadow: h-shadow v-shadow blur-radius color|none|initial|inherit;
 - `flex`
 
 `visibility` can be set to `hidden`, but it will always take space as if it was visible
+
+[Back home](../README.md)

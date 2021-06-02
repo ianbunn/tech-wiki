@@ -158,3 +158,5 @@ docker-compose -f docker-compose.yml down --rmi all
 ## Access localhost DB from Docker container
 
 Instead of using `localhost` as DB_HOST, use `host.docker.internal`.
+
+[Back home](../README.md)

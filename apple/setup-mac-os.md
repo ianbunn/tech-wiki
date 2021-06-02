@@ -15,6 +15,7 @@
 #### IDE
 
 * WebStorm
+* GoLand  
 * ~~Visual Studio Code~~
 
 ### Productivity
@@ -101,3 +102,5 @@ For when I was using VSC (now I'm into WebStorm):
 * Vue.js devtools
 * Wappalyzer
 * XV - XML Viewer
+
+[Back home](../README.md)

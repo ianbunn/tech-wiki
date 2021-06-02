@@ -27,3 +27,5 @@ An example can be seen below:
 ![VSM-example](./images/vsm-example.png)
 
 This information was summarized from this [video](https://harness-1.wistia.com/medias/xi2quvlgfm).
+
+[Back home](../README.md)

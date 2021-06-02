@@ -23,3 +23,5 @@ functions:
 ```
 
 [Serverless.com/blog/cors-api-gateway-survival-guide](https://serverless.com/blog/cors-api-gateway-survival-guide/)
+
+[Back home](../README.md)

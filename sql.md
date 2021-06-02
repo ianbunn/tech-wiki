@@ -134,3 +134,5 @@ Replace `table_name` and `column_name` below:
 SELECT * FROM table_name
 WHERE JSON_EXTRACT(column_name, '$.attribute_name') = "string";
 ```
+
+[Back home](./README.md)

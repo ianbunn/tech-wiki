@@ -9,3 +9,5 @@ Documentation: [yoyo-migrations 7.2.1 documentation](https://ollycope.com/softwa
 ## Lessons Learned
 
 **WARNING**: if a migration is not in the `_yoyo_log`, it will try to apply it every time, so set the migration's operation as `mark` if you don't want to lose any data! ESPECIALLY migrations with `0000.*` prefix (prefix varies between source codes).
+
+[Back home](../README.md)

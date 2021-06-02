@@ -88,3 +88,5 @@ Embedded Hypervisor [[1](https://www.networkworld.com/article/3243262/virtualiza
   * Mobile virtualization overlaps with embedded system virtualization, and shares some use cases
 
 [[1](https://www.networkworld.com/article/3243262/virtualization/what-is-a-hypervisor.html)] Shaw, Keith. “What Is a Hypervisor?” Network World, Network World, 19 Dec. 2017, 12:18, www.networkworld.com/article/3243262/virtualization/what-is-a-hypervisor.html.
+
+[Back home](./README.md)

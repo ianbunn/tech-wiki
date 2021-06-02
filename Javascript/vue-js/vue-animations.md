@@ -183,3 +183,5 @@ NuxtJS offers transition JS hooks out-of-the-box.
     transform-origin: 50% 50%;
 }
 ```
+
+[Back home](../../README.md)

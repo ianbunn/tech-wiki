@@ -113,3 +113,5 @@ Here is a list of common features controllable with HTTP:
   - Client can instruct intermediate cache proxies to ignore the stored document
   - **Relaxing the origin constraint**: helps to prevent from snooping and other privacy concerns
     - Web browsers enfore strict separation between Web sites
+
+[Back home](./README.md)

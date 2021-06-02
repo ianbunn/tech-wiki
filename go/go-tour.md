@@ -2313,3 +2313,5 @@ func main() {
 ### Left off on Buffered Channels
 
 [A Tour of Go - Buffered channels 3/11](https://tour.golang.org/concurrency/3)
+
+[Back home](../README.md)

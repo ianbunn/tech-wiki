@@ -11,3 +11,5 @@
 [Start / stop and restart Apache 2 web server command](https://www.cyberciti.biz/faq/star-stop-restart-apache2-webserver/)
 
 [Setup Apache, MySQL, PHP stack](https://help.ubuntu.com/community/ApacheMySQLPHP)
+
+[Back home](../../README.md)

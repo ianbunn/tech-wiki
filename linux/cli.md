@@ -63,3 +63,5 @@ Replace the following in the command below:
 ```sql
 sudo mount -t smbfs -o -f=0777,-d=0777 '//USERNAME@Root/To/Network/Drive' ~/YourLocalShare/YourMountedDrive
 ```
+
+[Back home](../README.md)

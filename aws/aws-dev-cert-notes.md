@@ -933,7 +933,7 @@ Ideal for:
   * Lambda then polls DynamoDB Stream and executes based on an event
 * Replicate data across multiple tables
 
-![DynamoDB Stream to trigger a workflow](./assets/images/dynamodb-stream.png)
+![DynamoDB Stream to trigger a workflow](assets/dynamodb-stream.png)
 
 #### DynamoDB Access Control
 
@@ -2171,7 +2171,7 @@ By using envelope encryption, it avoids sending all data into KMS over the netwo
 
 This data key is further encrypted using a plaintext **Customer Master Key** (CMK). The CMK is stored in AWS KMS and can only encrypt/decrypt data up to 4KB.
 
-![KMS Envelope Encryption](./assets/images/kms-envelope-encryption.png)
+![KMS Envelope Encryption](assets/kms-envelope-encryption.png)
 
 While **Customer-Managed CMK** is free of charge, **AWS Managed CMK** is chargeable.
 
@@ -2470,3 +2470,5 @@ S3 Glacier provides 3 options for access to archives, from a few minutes to seve
 ### -- AWS Storage Gateway
 
 Storage Gateway is a hybrid storage service that enables on-prem apps to seamlessly use AWS Cloud Storage, S3, S3 Glacier, and Amazon Elastic Block Store (EBS).
+
+[Back home](../README.md)

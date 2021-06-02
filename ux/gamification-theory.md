@@ -174,4 +174,6 @@ Gamification theory application is not that easy. It's a craft that requires a l
 
 "If the world adopts good gamification principles and focus on what truly drives fun and motivation, then it is possible to see a day where there is no longer a divide between things people must do and the things they want to do." Play all day!
 
-Ref: [yukaichou.com/gamification-examples/octalysis-complete-gamification-framework/](https://yukaichou.com/gamification-examples/octalysis-complete-gamification-framework/)
+Reference: [yukaichou.com/gamification-examples/octalysis-complete-gamification-framework/](https://yukaichou.com/gamification-examples/octalysis-complete-gamification-framework/)
+
+[Back home](../README.md)

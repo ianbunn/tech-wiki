@@ -90,11 +90,7 @@
 
 * Pull Requests (PR) shouldn't be too large that it becomes an anti-pattern
   * Feature toggles or feature flags
+  
+Reference: [Codementor - Code Review Checklist](https://www.codementor.io/blog/code-review-checklist-76q7ovkaqj)
 
-
-
-
-
-Reference:
-
-[Codementor - Code Review Checklist](https://www.codementor.io/blog/code-review-checklist-76q7ovkaqj)
+[Back home](./README.md)

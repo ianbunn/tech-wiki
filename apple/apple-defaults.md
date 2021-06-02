@@ -9,3 +9,5 @@ defaults write com.apple.Finder AppleShowAllFiles true
 # Stop Finder process
 killall Finder
 ```
+
+[Back home](../README.md)

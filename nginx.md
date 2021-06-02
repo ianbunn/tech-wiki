@@ -44,3 +44,5 @@ client_max_body_size 2m;
 - Reload the Nginx server by running the command `service nginx reload`
 
 The steps above should have fixed the upload size error
+
+[Back home](./README.md)

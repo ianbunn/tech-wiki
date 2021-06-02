@@ -29,3 +29,5 @@ Some rules:
 - Local variables could be declared with a lowercase and words should be separated with underscores:
   - Examples: `counter`, `masterful_method`
 - `if` code block following an `if` statement should be indented 2x
+
+[Back home](./README.md)

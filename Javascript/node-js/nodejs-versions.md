@@ -11,3 +11,5 @@
 ## `v4.0.0`
 
 * Supports promises since `v4.0.0` (released Sep. 2015)
+
+[Back home](../../README.md)

@@ -32,3 +32,5 @@ To access the DOM, you can immediately begin using the API for the document or w
 [MDN web docs `Document`](https://developer.mozilla.org/en-US/docs/Web/API/document)
 
 [MDN web docs `Element`](https://developer.mozilla.org/en-US/docs/Web/API/element)
+
+[Back home](./README.md)

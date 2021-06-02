@@ -224,3 +224,5 @@ Enter your password when prompted
 [Syncing a fork](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/syncing-a-fork)
 
 [Github@DianaEromsele - Notes](https://gist.github.com/DianaEromosele/fa228f6f6099a8996d3cb891109ab975)
+
+[Back home](./README.md)

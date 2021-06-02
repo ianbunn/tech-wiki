@@ -50,3 +50,5 @@ class Counter extends React.Component {
     }
 }
 ```
+
+[Back home](../../README.md)

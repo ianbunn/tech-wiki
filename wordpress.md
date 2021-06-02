@@ -104,3 +104,5 @@ After installation is complete, you will receive this message:
 ```shell
 Successfully installed MarkupSafe-1.1.0 ansible-2.7.4 asn1crypto-0.24.0 bcrypt-3.1.4 cffi-1.11.5 cryptography-2.4.2 ipaddress-1.0.22 jinja2-2.10 paramiko-2.4.2 pycparser-2.19 pynacl-1.3.0
 ```
+
+[Back home](./README.md)

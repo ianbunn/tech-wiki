@@ -107,3 +107,5 @@ Expression statements are the function call to itself, `alert(a);`
 ### Booleans
 
 Booleans are **TRUE** or **FALSE**.
+
+[Back home](../README.md)

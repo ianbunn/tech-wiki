@@ -24,3 +24,5 @@ The `docker run` command must specify an **image** to derive the container from.
 
 [Dockerfile sample](/Dockerfile) - Docker image that can run Google Chrome
 - Reference: [https://github.com/stephen-fox/chrome-docker](https://github.com/stephen-fox/chrome-docker)
+
+[Back home](../README.md)

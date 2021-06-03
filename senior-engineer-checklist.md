@@ -251,9 +251,9 @@ const scoreMessage = score >= 90 ? 'Excellent' : (score >= 80 ? 'Good' : (score 
 // good
 if (speed >= 90) {
   scoreMessage = 'Excellent'
-} else if () {
+} else if (score >= 80) {
    scoreMessage = 'Good'
-} else if () {
+} else if (score >= 60) {
   scoreMessage = 'Medium'
 } else {
   scoreMessage = 'Bad'

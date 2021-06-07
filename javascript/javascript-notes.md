@@ -1,5 +1,17 @@
 # Javascript Notes
 
+## Assets
+
+[Deep clone gist](./assets/deep-clone-gist.js)
+
+[Fizz buzz game practice](./assets/fizz-buzz-game-practice.js)
+
+[Friends list practice](./assets/friends-list-practice.js)
+
+[Fullstack JS roadmap](./assets/Fullstack-js-roadmap.png)
+
+[package-json sample](./assets/package-json-sample.png)
+
 ## [MDN Web Docs](https://developer.mozilla.org/)
 
 ### First class functions
@@ -75,37 +87,5 @@ console.log(Array.from(myMap.keys())) // ["key1", "key2"]
 Reference: [MDN web docs - Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map)
 
 ---
-
-## You Don't Know JS (YDKJS)
-
-### Javascript execution
-
-JS is an interpreted language, because your JS source code is processed each time the code runs
-
-- JS's V8 engine compiles the program on the fly and then immediately runs the compiled code
-- ---
-
-### Expressions
-
-Expressions are statements made up of one or more expressions. Some examples include:
-
-```Javascript
-a = b * 2
-```
-
-- `2` is a *literal value* expression
-- `b` is a *variable* expression
-- `b * 2` is an *arithmetic* expression
-- `a = b * 2` is an *assignment* expression
-
-General expressions are not very commonly used. General expressions run the arithmetic expression, but it will not do anything with the result, `b * 2;`
-
-Expression statements are the function call to itself, `alert(a);`
-
----
-
-### Booleans
-
-Booleans are **TRUE** or **FALSE**.
 
 [Back home](../README.md)

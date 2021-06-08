@@ -28,15 +28,16 @@
 
 * No out-of-date libraries
 * No known libraries' security issues
-* Unexploitable code
+* Un-exploitable code
 * DDoS security test
 
 4. Speed and Performance
 
 * Performance for users
-  * No lengthy DB queries
-  * No unoptimized assets
-  * Avoid multiple API requests
+  * Avoid the following:
+    * Lengthy DB queries
+    * Unoptimized assets
+    * Multiple API requests
 
 * Resource consumption
   * Cloud servers up to par
@@ -52,7 +53,7 @@
 * 404 error page
 * Failed API requests with 500 error page
 * DB records not found message
-* User authentication error messages
+* User authentication error messages:
   * Wrong password
   * User does not exist
 
@@ -61,9 +62,9 @@
 * Load stress test II
 * Load balance test
 
-8. Reusability
+8. Re-usability
 
-* KISS - Keep it simple, stupid
+* KISS - keep it simple, stupid
 * YAGNI - you aren't gonna need it
 * DRY - don't repeat yourself
 

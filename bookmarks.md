@@ -16,6 +16,10 @@
 
 [Sorted CSS Colors](https://enes.in/sorted-colors/) - find similar colors based on a color palette
 
+## GoLang
+
+[Three Dots Labs](https://threedots.tech) - golang, domain-driven design and continuous delivery
+
 ## Project Ideas
 
 [Clone Wars](https://gourav.io/clone-wars) - list of open-source clones of popular sites

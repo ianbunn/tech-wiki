@@ -16,6 +16,14 @@
 
 [Sorted CSS Colors](https://enes.in/sorted-colors/) - find similar colors based on a color palette
 
+## Dev Tools
+
+[Epoch Converter](https://www.epochconverter.com) - epoch & unix timestamp convesrtion tools
+
+[Yoyo](https://ollycope.com/software/yoyo/latest/) - database migrations
+
+[Yoyo migration tool by medwig - Github](https://github.com/medwig/yoyo-migration-tutorial)
+
 ## GoLang
 
 [Three Dots Labs](https://threedots.tech) - golang, domain-driven design and continuous delivery

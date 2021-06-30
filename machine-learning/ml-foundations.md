@@ -1,5 +1,7 @@
 # Machine Learning Foundations
 
+## Lesson 1
+
 Learning Objectives
 
 * Supervised learning VS Unsupervised learning
@@ -11,13 +13,15 @@ Learning Objectives
 * Describe how model training and testing works
 * Evaluate the performance of a ML model using metrics
 
-## What is Machine Learning?
+### What is Machine Learning?
 
 ML is a modern software development technique & a type of AI that enables computers to solve problems by using examples of real-world data.
 
 ML allows computers to auto-learn & **improve from experience** without being explicilty programmed to do so (mind-blown).
 
-## AI VS ML
+## Lesson 2
+
+### AI VS ML
 
 AI performs activities using human-like intelligence.
 
@@ -25,9 +29,9 @@ ML is a type of AI.
 
 ML is how computers learn from data to discover patterns & make predictions.
 
-## Types of Tasks or Techniques
+### Types of Tasks or Techniques
 
-### Supervised Learning
+#### Supervised Learning
 
 Supervised learning is a type of ML technique.
 
@@ -39,7 +43,7 @@ Use cases:
 * Predictions of the sale price of a house
 * Classify objects in an image
 
-### Unsupervised Learning
+#### Unsupervised Learning
 
 Unsupervised learning there are **no labels** for the training data.
 
@@ -47,13 +51,13 @@ The algos try to learn with the patterns discovered in the data.
 
 * Models inspect patterns to gain insights or make predictions
 
-### Reinforcement Learning
+#### Reinforcement Learning
 
 Reinforcement learning is learning what actions to take in a situation to maximize rewards (in the form of a number).
 
 * Learns through consequences of actions in an environment
 
-## How does ML help solve problems?
+### How does ML help solve problems?
 
 Traditional problem solving VS ML solving problems
 
@@ -72,7 +76,9 @@ ML is a new field that combines many traditional disciplines:
 * Statistics
 * Computer science
 
-## Components of ML
+## Lesson 3
+
+### Components of ML
 
 Nearly all ML tasks involve 3 primary compopnents:
 

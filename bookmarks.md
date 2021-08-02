@@ -36,6 +36,8 @@
 
 [OWASP Cheat Sheet Series](https://cheatsheetseries.owasp.org/index.html) - collection on specific app security topics
 
+[SecTools](https://sectools.org) - tools for SecOps
+
 ## Site Reliability Engineering / SRE
 
 [Github / upgundecha / howtheysre](https://github.com/upgundecha/howtheysre) - collection on how tech-savvy orgs around the world practice SRE

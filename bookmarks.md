@@ -1,5 +1,15 @@
 # Bookmarks
 
+## AWS
+
+### Tutorials
+
+[AWS Dojo - Builing AWS Glue Job using PySpark - Part 1 of 2](https://aws-dojo.com/workshoplists/workshoplist8/)
+
+[AWS Glue Workshop](https://aws-glue-intro.workshop.aws/intro.html)
+
+
+
 ## Data Visualization
 
 [Datawrapper - Chartable blog](https://blog.datawrapper.de/which-color-scale-to-use-in-data-vis/) - which color scale to use when visualizing data

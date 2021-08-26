@@ -29,27 +29,51 @@ ML is a type of AI.
 
 ML is how computers learn from data to discover patterns & make predictions.
 
-### Types of Tasks or Techniques
+## Types of Tasks
+
+### What is a ML task??
+
+All model training algos and models take data as their *input*.
+
+Their *output* can be very different and are classified into a few different groups based on the task.
+
+There are 2 common ML tasks:
+
+* **Supervised** learning
+* **Unsupervised** learning
 
 #### Supervised Learning
 
-Supervised learning is a type of ML technique.
+Supervised learning is a type of ML technique, AKA labeled data.
+
+The term *labeled* is used to refer to data that already contains the solutions, called **labels**.
 
 * Example-driven training: every data point has a corresponding label or output value associated with it
   * As a result, the algo learns to predict labels or output values
 
 Use cases:
 
-* Predictions of the sale price of a house
-* Classify objects in an image
+* Continuous label (regression)
+  * Predictions of the sale price of a house
+  * Does not have a discrete set of possible values, which often means you are working with numerical data
+* Categorical label (classification) (is hot dog; is not hot dog)
+  * Classify objects in an image
+  * Carry out classification tasks
+
+We are providing the model with labeled data and therefore, we are performing a **supervised ML task**.
 
 #### Unsupervised Learning
 
-Unsupervised learning there are **no labels** for the training data.
+Unsupervised learning there are **no labels** for the training data, AKA unlabeled data.
 
 The algos try to learn with the patterns discovered in the data.
 
+Use cases:
+
 * Models inspect patterns to gain insights or make predictions
+* **Clustering** is grouping unlabeled data to determine if data has some natural grouping
+* Neural networks
+* Deep learning
 
 #### Reinforcement Learning
 
@@ -97,3 +121,17 @@ Nearly all ML tasks involve 3 primary compopnents:
 * Model inference algorithm
   * Process to use a trained model to solve a task
   * Ready to start using a trained model to generate predictions
+
+## Intro to ML
+
+Steps in ML process:
+
+1. Define the problem
+   - Define a very specific task
+     - Example: Does adding a $0.50 upcharge for organic flavors in our snow cone increase the sales of snow cones?
+   - Identify the ML task we might use to solve this problem to understand the data needed for the project
+2. Build the dataset
+   - 
+3. Train the model
+4. Evaluate the model
+5. Use the model (inference)

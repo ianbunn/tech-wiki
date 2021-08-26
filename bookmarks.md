@@ -38,9 +38,23 @@
 
 [Three Dots Labs](https://threedots.tech) - golang, domain-driven design and continuous delivery
 
+## Machine Learning (ML)
+
+[AWS ML dev guide](https://docs.aws.amazon.com/machine-learning/latest/dg/what-is-amazon-machine-learning.html) - what is Amazon ML?
+
+[AWS ML Blog](https://aws.amazon.com/blogs/machine-learning/)
+
+[Udacity - intro to ML](https://www.udacity.com/course/intro-to-machine-learning--ud120)
+
+[Udacity - intro to Deep Learning with PyTorch](https://www.udacity.com/course/deep-learning-pytorch--ud188)
+
 ## Project Ideas
 
 [Clone Wars](https://gourav.io/clone-wars) - list of open-source clones of popular sites
+
+## Python
+
+[Udacity - intro to Python programming](https://classroom.udacity.com/courses/ud1110)
 
 ## Security Operations / SecOps
 

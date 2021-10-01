@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "obsidian-git:pull": [
     {
       "modifiers": [
@@ -8,6 +9,8 @@
       "key": "P"
     }
   ],
+=======
+>>>>>>> 8394a7544faf095de42429d13c08fdcd1185628a
   "obsidian-git:push": [
     {
       "modifiers": [

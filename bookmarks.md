@@ -9,8 +9,6 @@ lists/workshoplist8/)
 
 [AWS Glue Workshop](https://aws-glue-intro.workshop.aws/intro.html)
 
-
-
 ## Data Visualization
 
 [Datawrapper - Chartable blog](https://blog.datawrapper.de/which-color-scale-to-use-in-data-vis/) - which color scale to use when visualizing data
@@ -58,6 +56,8 @@ lists/workshoplist8/)
 [Udacity - intro to Python programming](https://classroom.udacity.com/courses/ud1110)
 
 ## Security Operations / SecOps
+
+[Hak5.org Shop](https://shop.hak5.org)
 
 [OWASP Cheat Sheet Series](https://cheatsheetseries.owasp.org/index.html) - collection on specific app security topics
 

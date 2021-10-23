@@ -9,6 +9,10 @@ lists/workshoplist8/)
 
 [AWS Glue Workshop](https://aws-glue-intro.workshop.aws/intro.html)
 
+## Books
+
+[The Architecture of Open Source Applications Books](http://www.aosabook.org/en/)
+
 ## Data Visualization
 
 [Datawrapper - Chartable blog](https://blog.datawrapper.de/which-color-scale-to-use-in-data-vis/) - which color scale to use when visualizing data
@@ -66,6 +70,12 @@ lists/workshoplist8/)
 ## Site Reliability Engineering / SRE
 
 [Github / upgundecha / howtheysre](https://github.com/upgundecha/howtheysre) - collection on how tech-savvy orgs around the world practice SRE
+
+## Conferences, Tutorials & Other Videos
+
+[Apple WWDC Vidoes](https://developer.apple.com/videos/) - conference videos
+
+[PyVideo](https://pyvideo.org/index.html) - conferences, talks and tutorials
 
 ## Web dev
 

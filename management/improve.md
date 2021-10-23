@@ -1,12 +1,14 @@
 # Improve on Software Engineering
 
-## Domain, Architecture and Design
+## From 50 Tips Improving Your Software Development Game
+
+### Domain, Architecture and Design
 
 You need to know how things work in the front end (UI), the back end, the data store, the OS, any virtualization layers, the hardware, the network, and the data center.
 
 Don't be a one-trick pony.
 
-## Languages and Tools - From Noob to Intermediate
+### Languages and Tools - From Noob to Intermediate
 
 Read more code!
 
@@ -23,7 +25,7 @@ Ask before you invent.
 
 Develop an aesthetic appreciation for code. Over time, you need to train yourself to know what great code looks like and what bad code “smells” like.
 
-## Code Readibility & Maintainability
+### Code Readibility & Maintainability
 
 Don't ask permission to refactor. It's your job.
 
@@ -35,7 +37,7 @@ Deep-nested code is harder to maintain, harder to reuse, and more likely to crea
 
 Write clear and effective comments as to self-document the code you write.
 
-## Technical Debt, Code Coverage & Process
+### Technical Debt, Code Coverage & Process
 
 Know when to take on technical debt, and when to spend more time to clean up or optimize a solution.
 
@@ -45,7 +47,7 @@ Ship often, fix less. Have better organizational practices, DevOps.
 
 Think about security during any process you take throughout your code.
 
-## Soft Skills & Productivity
+### Soft Skills & Productivity
 
 Focus on coding without interreptuions. Deep work.
 
@@ -64,3 +66,22 @@ Fail quick. Fail often. Win more.
 Reference:
 
 [techbeacon.com/app-dev-testing/50-tips-improving-your-software-development-game](https://techbeacon.com/app-dev-testing/50-tips-improving-your-software-development-game)
+
+## From How To Become A Better Software Developer
+
+1. Read more books
+2. Watch recorded conference talks
+3. Get your code reviewed
+4. Keep a journal
+    - Daily work log
+    - Things I learned today log
+5. Read the source code of **gold standard** projects
+6. Listen to podcasts
+7. Work on side projects
+8. Immerse yourself
+9. Read postmortems
+10. Learn a new language
+11. Start a *software craftmanship guild* at work
+12. Find a mentor
+
+Reference: [DBader.org/blog/how-to-become-a-better-software-developer](https://dbader.org/blog/how-to-become-a-better-software-developer)

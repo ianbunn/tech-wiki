@@ -30,6 +30,14 @@
 
 `git pull --allow-unrelated-histories` to force a merge to happen after cleaning commits
 
+`git tag` to list tags
+
+`git tag -n` to list tags with an extensive description
+
+`git tag -l <pattern>` followed with a tag pattern for example, `v1*` or `0.13*`
+
+More `git tag` commands for reference: https://devconnected.com/how-to-list-git-tags/
+
 ## Reset to `origin/master`
 
 ```shell

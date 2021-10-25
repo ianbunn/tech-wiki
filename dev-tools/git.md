@@ -8,11 +8,31 @@
 
 `git log -1` displays the last commit's details
 
-`git branch -d <branch>` removes branch name indicated in command
+## Git Branch
 
-`git branch -D <branch>` removes branch name indicated in command, capital `-D` flag is added to force a branch delete that contains unmerged changes (**BE CAREFUL!**)
+`git branch -d <branch>` - removes branch name indicated in command
+
+`git branch -D <branch>` - removes branch name indicated in command, capital `-D` flag is added to force a branch delete that contains unmerged changes (**BE CAREFUL!**)
+
+`git branch replace_this_branch_name $(echo "replace this message" | git commit-tree HEAD^{tree})` - cleans all commits to relevant feature commits
+
+### Delete All Merged Branches That Are Not Current, Master or Dev
+
+`git branch --merged | egrep -v "(^\*|master|dev)" | xargs git branch -d`
+
+1. `git branch --merged` - lists branches whose tips are reachable from the specified commit (HEAD if not specified)
+2. `egrep -v "(^\*|master|dev)"` - searches for all lines that DO NOT start with `*`, since it is the current branch, or don't have `master` or `dev` in it
+3. `xargs git branch -d` - executes the command to delete all found branches from step 2
+
+## Git Pull
+
+`git pull --allow-unrelated-histories` - forces a merge to happen after cleaning commits
+
+## Git Push
 
 `git push origin --delete <branch>` removes a branch from remotes
+
+## Git Stash
 
 `git stash list` lists all stashes
 
@@ -26,9 +46,7 @@
 
 `git stash show -p stash@{i}:<file_name>` to check diff against a selected stash's file (file_name)
 
-`git branch replace_this_branch_name $(echo "replace this message" | git commit-tree HEAD^{tree})` to clean all commits to relevant feature commits
-
-`git pull --allow-unrelated-histories` to force a merge to happen after cleaning commits
+## Git Tag
 
 `git tag` to list tags
 
@@ -38,7 +56,7 @@
 
 More `git tag` commands for reference: https://devconnected.com/how-to-list-git-tags/
 
-## Reset to `origin/master`
+## Reset Branch To `origin/master`
 
 ```shell
 # Make sure you got the latest changes
@@ -48,17 +66,14 @@ $ git fetch origin
 $ git reset --hard origin/master
 ```
 
-## Clone to make PRs on other accounts
+## Clone Repo And Make PR On Another Account
 
 1. Clone local repo and cd into it: `git clone <repo>` & `cd <repo>`
-
 2. Remove origin to then add your repo as origin: `git remote remove origin`
-
 3. Set main repo as upstream: `git remote add upstream git@github.com:<account>/<repo>.git`
-
 4. Add your repo as origin: `git remote add origin <your-fork>.git`
 
-## Cloning an existing repository
+## Cloning Existing Repo
 
 Run the following command to clone an existing repository:
 
@@ -72,7 +87,7 @@ Run the following command to clone an existing repository into a different named
 git clone https://github.com/<enter-your-github-username>/<enter-your-repo-name>.git tech-notes
 ```
 
-## Create a new repository using CLI (MacOS Terminal)
+## Create New Repo Using CLI (macOS Terminal)
 
 - Run the following commands in the folder you are creating your repository and in the order below:
 
@@ -102,7 +117,7 @@ git remote add origin https://github.com/<enter-your-github-username>/<enter-you
 git push -u origin master
 ```
 
-## Push new changes to your repository
+## Push Changes To Repo
 
 Run the following commands in the following order:
 
@@ -118,7 +133,7 @@ git commit -m "<enter your message>"
 git push -u origin master
 ```
 
-## Generate a new SSH key and add it to the SSH-Agent
+## Generate New SSH Key For SSH-Agent
 
 [Github - generate a new SSH key and addding it to SSH agent](https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent/)
 

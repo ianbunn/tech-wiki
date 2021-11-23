@@ -1,7 +1,5 @@
 # Glue Primer
 
-Ref: [AWS-blog.de/2021/06/aws-glue-primer](https://aws-blog.de/2021/06/what-i-wish-somebody-had-explained-to-me-before-i-started-to-use-aws-glue.html)
-
 ## Data Catalogs
 
 *Data Catalogs* don't store any data, but DOES store metadata that routes to the target destination.
@@ -77,3 +75,5 @@ glueContext.write_dynamic_frame.from_options(
     format = "parquet"
 )
 ```
+
+Ref: [AWS-blog.de/2021/06/aws-glue-primer](https://aws-blog.de/2021/06/what-i-wish-somebody-had-explained-to-me-before-i-started-to-use-aws-glue.html)

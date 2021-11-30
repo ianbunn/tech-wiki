@@ -2,6 +2,16 @@
 
 ## General
 
+### Documentation
+
+Documentation should be coupled to the code itself, so the documentation evolves along with the code.
+
+Suggested convetion is simple, document a type, variable, constant, function or package, write a regular comment directly preceding its declaration, with no intervening blank line.
+
+To signal that an identifier should not be used, add a paragraph to its doc comment that begins with "Deprecated:" followed by some info about the deprecation.
+
+Reference: https://go.dev/blog/godoc
+
 ### Focus on Fundamentals First (3 Fs)
 
 Technology's a changin'. It is key to have a strong foundation with fundamentals to grasp new concepts, new frameworks, new technologies, etc.

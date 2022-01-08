@@ -4,6 +4,10 @@
 
 [Booklets](https://www.booklets.io/) - a curated library of everything design and concepts
 
+## Icons
+
+[Hieroglyphs icons](https://copychar.cc/hieroglyphs/)
+
 ## Inspiration
 
 ### Design

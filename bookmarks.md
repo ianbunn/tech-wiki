@@ -13,6 +13,10 @@ lists/workshoplist8/)
 
 [The Architecture of Open Source Applications Books](http://www.aosabook.org/en/)
 
+## Checklists
+
+[Microsoft Engineering Fundamentals Checklist](https://microsoft.github.io/code-with-engineering-playbook/ENG-FUNDAMENTALS-CHECKLIST/)
+
 ## Data Visualization
 
 [Datawrapper - Chartable blog](https://blog.datawrapper.de/which-color-scale-to-use-in-data-vis/) - which color scale to use when visualizing data
@@ -33,6 +37,8 @@ lists/workshoplist8/)
 
 [Epoch Converter](https://www.epochconverter.com) - epoch & unix timestamp convesrtion tools
 
+[Remix.run](https://remix.run) - full-stack web framework that lets you focus on UI, no more jank or loading spinners
+
 [Yoyo](https://ollycope.com/software/yoyo/latest/) - database migrations
 
 [Yoyo migration tool by medwig - Github](https://github.com/medwig/yoyo-migration-tutorial)
@@ -40,6 +46,10 @@ lists/workshoplist8/)
 ## GoLang
 
 [Three Dots Labs](https://threedots.tech) - golang, domain-driven design and continuous delivery
+
+## Senior Insights
+
+[42 things learned from building a FB production DB](https://maheshba.bitbucket.io/blog/2021/10/19/42Things.html)
 
 ## Machine Learning (ML)
 

@@ -18,7 +18,7 @@
 
 ### Delete All Merged Branches That Are Not Current, Master or Dev
 
-`git branch --merged | egrep -v "(^\*|master|dev)" | xargs git branch -d`
+`git branch --merged | egrep -v "(^\*|master|dev|main|release)" | xargs git branch -d`
 
 1. `git branch --merged` - lists branches whose tips are reachable from the specified commit (HEAD if not specified)
 2. `egrep -v "(^\*|master|dev)"` - searches for all lines that DO NOT start with `*`, since it is the current branch, or don't have `master` or `dev` in it
@@ -43,6 +43,10 @@
 `git stash show -p` to see the most recent stash
 
 `git stash show -p stash@{i}` to check diff against selected stash (i)
+
+* NOTE: Windows Powershell does not like curly brackets, so use the following syntax when using PowerShell:
+
+`git stash show -p stash@'{'i'}'` wrapping the stash index in single apostrophes
 
 `git stash show -p stash@{i}:<file_name>` to check diff against a selected stash's file (file_name)
 

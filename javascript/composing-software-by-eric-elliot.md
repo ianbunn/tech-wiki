@@ -60,3 +60,11 @@ Paused here: [Medium/javascript-scene/object-composition](https://medium.com/jav
 Reference: [Medium/javascript-scene/object-composition](https://medium.com/javascript-scene/the-hidden-treasures-of-object-composition-60cd894803810)
 
 [Back home](../README.md)
+
+
+## Factory Functions with ES6
+
+Composition is more of a way of thinking than a particular technique in code.
+You can accomplish it in many ways.
+Function composition is just the easiest way to build it up from scratch,
+and factory functions are a simple way to wrap a friendly API around the implementation details.

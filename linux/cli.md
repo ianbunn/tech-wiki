@@ -1,8 +1,9 @@
 # Command Line Interface (CLI)
 
-## [Common SSH Commands - Linux Shell Commands](http://www.webhostgear.com/35.html)
+## Links
 
-## [Basic `vi` Commands](https://www.cs.colostate.edu/helpdocs/vi.html)
+- [Common SSH Commands - Linux Shell Commands](http://www.webhostgear.com/35.html)
+- [Basic `vi` Commands](https://www.cs.colostate.edu/helpdocs/vi.html)
 
 ## Basic commands for CLI
 
@@ -42,6 +43,22 @@ Run `touch <name-of-file.txt>`
 ### Move a file to a different folder
 
 Run `mv <name-of-file.txt> <folder-name>`
+
+### Find And Replace All Occurrences
+
+[Credit to baeldung](https://www.baeldung.com/linux/find-replace-text-in-file)
+
+By default, `sed` only replaces the first occurrence that it finds; however, add a `g` to the end of search expression to instruct `sed` to replace all occurrences globally:
+
+```shell
+sed -i 's/{OLD_TERM}/{NEW_TERM}/g' {file}
+```
+
+To run the command in multiple files, just add the names for all of the files as such:
+
+```shell
+sed -i 's/{OLD_TERM}/{NEW_TERM}/g' {file} {file2} {file3}
+```
 
 ## iOS Computers - Terminal
 

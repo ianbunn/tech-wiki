@@ -18,7 +18,7 @@
 
 ### Delete All Merged Branches That Are Not Current, Master or Dev
 
-`git branch --merged | egrep -v "(^\*|master|dev|main|release)" | xargs git branch -d`
+`git branch --merged | egrep -v "(^\*|master|dev|main|staging|releagit se)" | xargs git branch -d`
 
 1. `git branch --merged` - lists branches whose tips are reachable from the specified commit (HEAD if not specified)
 2. `egrep -v "(^\*|master|dev)"` - searches for all lines that DO NOT start with `*`, since it is the current branch, or don't have `master` or `dev` in it

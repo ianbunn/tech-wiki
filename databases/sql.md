@@ -4,15 +4,29 @@
 
 SQL is a **relational DB** using a *primary key*.
 
+## Cheat Sheets
+
+[MySQL Cheat Sheet](https://www.mysqltutorial.org/mysql-cheat-sheet.aspx)
+
 ## Queries
 
-### Create new database
+### Create New DB
 
 First, create a database where you will host your tables by using the command below:
 
 ```sql
 CREATE DATABASE databasename
 ```
+
+### Import A SQL Dump File Into DB
+
+Run command from OS CLI, and either navigate to the file or replace with filepath to current location:
+
+```sql
+mysql -u username -p -f databasename < file.sql
+```
+
+The `-f` argument option is to _force_ the import by ignoring errors and continue with the rest of the import.
 
 ### Create new tables
 

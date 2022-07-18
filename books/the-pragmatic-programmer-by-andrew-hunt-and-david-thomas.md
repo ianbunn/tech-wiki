@@ -833,3 +833,416 @@ Coupling can occur just about any time two pieces of code share something. Keep 
 - “Simple” changes that propagate through unrelated modules in the system or break stuff elsewhere
 - Devs who are afraid to change code bc they aren’t sure what might be affected
 - Meetings where everyone has to attend bc no one is sure who will be affected by a change
+
+In every app, there are certain top-level concepts that are universal. So we have no problem creating APIs that expose some universal objects.
+
+#### The Law of Demeter (LoD)
+
+Created by Ian Holland that states to keep their functions cleaner and decoupled.
+
+Don't chain method calls. Try not to have more than one "." when you access something.
+
+#### Chain and Pipelines
+
+Pipelines transform data, passing it from one function to the next, so they introduce some coupling. However, this coupling is far less a barrier to changing the code than the form introduced by train wrecks.
+
+#### The Evils of Globalization
+
+Globally accessible data is an insidious source of coupling between app components. If your code uses global data, then it becomes difficult to split it out from the rest.
+
+Avoid global data. Global data includes singletons. Global data includes external resources. If it's important enough to be global, wrap it in an API.
+
+### Topic 29 - Juggling the Real World
+
+Computers have to integrate into our world, not the other way around.
+
+#### Events
+
+An event represents the availability of information. It might come from the outside world, it might be internal, it can even be something as trivial as fetching the next element in a list.
+
+If we write apps that respond to events, and adjust what they do based on those events, those apps will work better in the real world. Their users will find them to be more interactive.
+
+Let's look at 4 strategies that help:
+
+1. Finite State Machines (FSM)
+2. The Observer Pattern
+3. Publish/Subscribe
+4. Reactive Programming and Streams
+
+#### Finite State Machines
+
+A state machine is basically just a specification of how to handle events. It consists of a set of states, one of which is the current state. For each state, we list the events that are significant to that state. For each of those events, we define the new current state of the system.
+
+A pure FSM is an event stream parser. Its only output is the final state. We can beef it up by adding actions that are triggered on certain transitions.
+
+#### The Observer Pattern
+
+The observer pattern has a source of events, called the observable and a list of clients, the observers, who are interested in those events.
+
+An observer registers its interest with the observable, typically by passing a reference to a function to be called. Subsequently, when the event occurs, the observable iterates down its list of observers and calls the function that each passed it. The event is given as a parameter to that call.
+
+It is particularly prevalent in UI systems, where the callbacks are used to inform the app that some interaction has occurred. Because each of the observer has to register with the observable, it introduces coupling.
+
+The callbacks are handled inline by the observable, synchronously, it can introduce performance bottlenecks.
+
+#### Publish/Subscribe
+
+Publish/Subscribe (pubsub) generalizes the observer pattern, at the same time solving the problems of coupling and performance.
+
+In the pubsub model, we have publishes and subscribers. These are connected via channels. The channels are implemented in a separate body of code.
+
+Every channel has a name. Subscribers register interest in one or more of these named channels, and publishers write events to them. Communication between publisher and subscriber is handled outside your code, and is potentially asynchronous.
+
+Most cloud service providers have pubsub offerings, allowing you to connect apps around the world. Every popular language will have at least one pubsub library.
+
+Pubsub is a good technology for decoupling the handling of asynchronous events. The downside is that it can be hard to see what is going on in a system that uses pubsub heavily.
+
+Pubsub is still basically just a message passing system.
+
+#### Reactive Programming, Streams and Events
+
+It's clear that events can also be used to trigger reactions in code, but it isn't necessarily easy to plumb them in. That's where streams come in.
+
+Streams let us treat events as if they were a collection of data. We can treat streams just like any other collection: we can manipulate, combine, filter, and do all theh other data-ish things we know so well. Streams can be asynchronous.
+
+Event streams are normally populated as events occur, which implies that the observables that populate them can run in parallel.
+
+#### Streams of Events are Asynchronous Collections
+
+Event streams unify synchronous and asynchronous processing behind a common, convenient API.
+
+#### Events are Ubiquitous
+
+Code that's crafted around events can be more responsive and better decoupled than its more linear counterpart.
+
+### Topic 30 - Transforming Programming
+
+All programs transform data, converting an input into an output.
+
+We need to get back to thinking of programs as being something that transforms inputs into outputs.
+
+#### Finding Transformations
+
+Programming is about code, but programs are about data. The easiest way to find the transformations is to start with the requirement and determine its inputs and outputs.
+
+You can then find steps that lead you from input to output. This is a top-down approach.
+
+Using a pipeline means that you're automatically thinking in terms of transforming data; each time you see a pipeline you're actually seeing a place where data is flowing between one transformation and the next.
+
+Don't hoard state; pass it around.
+
+Instead of little pools of data spread all over the system, think of data as a mighty river, a flow. It is free to represent the unfolding progress of our app as it transforms its inputs into its outputs.
+
+#### What About Error Handling?
+
+We never pass raw values between transformations. Instead, we wrap them in a data structure (or type) which also tells us if the contained value is valid. You can handle checking for errors inside your transformations or outside them.
+
+When an error occurs, we don't want to run code further down a pipeline, and we don't want that code to know that this is happening.
+
+#### Transformations Transform Programming
+
+Once you've developed the habit you'll find your code becomes cleaner, your functions shorter, and your designs flatter.
+
+### Topic 31 - Inheritance Tax
+
+Inheritance was a way of combining types, where inheritance was a dynamic organization of behaviors.
+
+Those who don't like typing save their fingers by using inheritance to add common functionality from a base class into child classes. 
+
+Those who like types use inheritance to express the relationships between classes. 
+
+Both kinds of inheritance have problems.
+
+#### Problems Using Inheritance to Share Code
+
+Inheritance is coupling.
+
+Some folks view inheritance as a way of defining new types. They view problems the way Victorian gentleman scientists viewed nature, as something to be broken down into categories.
+
+Don't pay inheritance tax! The alternatives are better. 3 suggested techniques to help you stop using inheritance:
+
+- Interfaces and protocols
+- Delegation
+- Mixins and traits
+
+#### Interfaces and Protocols
+
+Most OO languages allow you to specify that a class implements one or more sets of behavior. Some languages call them interfaces, other languages call them protocols, and some call them traits.
+
+What makes interfaces and protocols so powerful is that we can use them as types, and any class that implements the appropriate interface will be compatible with that type.
+
+Prefer interfaces to express polymorphism. Interfaces and protocols give us polymorphism without inheritance.
+
+#### Delegation
+
+Delegate to services: has A trumps is A
+
+#### Mixins, Traits, Categories, Protocol Extensions...
+
+The basic idea is simple: we want to be able to extend classes and objects with new functionality without using inheritance.
+
+The important thing is the capability that all these implementations have: merging functionality between existing things and new things.
+
+We all know our business objects need validation code to prevent bad data from infiltrating our calculations. Use mixins to share functionality.
+
+### Topic 32 - Configuration
+
+When code relies on values that may change after the app has gone live, keep those values external to the app. Parameterizing your app helps your code adapt to the place where it runs.
+
+The config is read into your app as a data structure, normally when the app starts. Commonly, this data structure is made global. However, it is preferable to not do that. Instead, wrap the config info behind a thin API.
+
+#### Configuration As A Service
+
+Rather than in a flat file or database, we'd like to see it stored behind a service API.
+
+The idea we should have to stop and restart an app to change a single parameter is hopelessly out of touch with modern realities. Configuration data drives the runtime behavior of an app. When config values change, there's no need to rebuild the code.
+
+## Chapter 6 - Concurrency
+
+Concurrency is when the execution of 2 or more pieces of code act as if they run at the same time. Parallelism is when they do run at the same time.
+
+Concurrency is a requirement if you want your app to be able to deal with the real world, where things are asynchronous.
+
+Temporal coupling happens when your code imposes a sequence on things that is not required to solve the problem at hand.
+
+Our languages have feats that are relatively safe when used sequentially but become a liability once two things can happen at the same time. One of the biggest culprits is shared state.
+
+Shared state is incorrect state.
+
+Actor model, where independent processes, which share no data, communicate over channels using defined, simple semantics.
+
+### Topic 33 - Breaking Temporal Coupling
+
+There are 2 aspects of time that are important to us: concurrency (things happening at the same time) and ordering (the relative positions of things in time).
+
+#### Looking for Concurrency
+
+Analyze workflow to improve concurrency. You can use activity diagrams to maximize parallelism by identifying activities that could be performed in parallel, but aren't.
+
+#### Opportunities for Concurrency
+
+What we're looking for when we're designing concurrency is to find activities that take time, but not time in our code.
+
+#### Opportunities for Parallelism
+
+Concurrency is a software mechanism, and parallelism is a hardware concern.
+
+### Topic 34 - Shared State is Incorrect State
+
+The problem with shared state is that it cannot guarantee that its view of that memory is consistent.
+
+#### Semaphores and Other Forms of Mutual Exclusion
+
+Semaphore is simply a thing that only one person can own at a time.
+
+#### Non-transactional Update
+
+Problems can pop up anywhere where your app code shares mutable resources.
+
+Random failures are often concurrency issues.
+
+Most languages have library support for some kind of exclusive access to shared resources. They may call it mutexes (for mutual exclusion), monitors, or semaphores.
+
+### Topic 35 - Actors and Processes
+
+Actors and processes offer interesting ways of implementing concurrency without the burden of synchronizing access to shared memory.
+
+An actor is an independent virtual processor with its own local (and private) state. Each actor has a mailbox. When processing a message, an actor can create other actors, send messages to other actors that it knows about, and create a new state that will become the current state when the next message is processed.
+
+A process is typically a more general-purpose virtual processor, often implemented by the OS to faciliate concurrency.
+
+#### Actors Can Only Be Concurrent
+
+A few true statements about actors:
+
+- There's no single thing that's in control
+- The only state in the system is held in messages and in local state of each actor
+  - Messages cannot be examined except by being read by their recipient, and local state is inaccessible outside the actor
+- All messages are one way
+  - There's no concept of replying
+- An actor processes each message to completion, and only processes one message at a time
+
+Actors execute concurrently, asynchronously and share nothing.
+
+Use actors for concurrency without shared state.
+
+#### A SimpleActor
+
+Keys are the message types that it receives and the values are functions to run when that particular message is received.
+
+#### No Explicit Concurrency
+
+In the actor model, there's no need to write any code to handle concurrency, as there is no shared state.
+
+### Topic 36 - Blackboards
+
+A blackboard, in combo with a rules engine that encapsulates the legal reqs, is an elegant solution to the difficulties found here. Order of data arrival is irrelevant: when a fact is posted it can trigger the appropriate rules. Feedback is easily handled as well: the output of any set of rules can post to the blackboard and cause the triggering of yet more applicable rules.
+
+Use blackboards to coordinate workflow.
+
+#### Messaging Systems Can Be Like Blackboards
+
+Many apps are constructed using small, decoupled services, all communicating via some form of messaging system.
+
+They offer persistence (in the form of an event log) and the ability to retrieve messages through a form of pattern matching.
+
+#### But It's Not That Simple
+
+The actor and/or blackboard and/or microservice approach to architecture removes a whole class of potential concurrency problems for your apps. These approaches are harder to reason about, bc a lot of the action is indirect.
+
+You'll also need a good tooling to be able to trace messages and facts as they progress through the system. A useful technique is to add a unique trace ID when a function is initiated and then propagate it to all the actors involved. You'll be able to reconstruct what happens from the log files.
+
+These kinds of systems can be more troublesome to deploy and manage, as there are more moving parts.
+
+## Chapter 7 - While You Are Coding
+
+You can better harness your instincts and non-conscious thoughts when you listen to your Lizard Brain.
+
+Pragmatic programmers think critically about all code. We constantly see room for improvement in our programs and our designs.
+
+The major benefits of testing happen when you think about and write the tests, not just when you run them.
+
+It's critical that you write code that is readable and easy to reason about.
+
+### Topic 37 - Listen To Your Lizard Brain
+
+As you gain exp as a programmer, your brain is laying down layers of tacit knowledge. Instincts share one thing: they have no words. Instincts make you feel, not think.
+
+#### Fear Of The Blank Page
+
+Many of us would prefer to put off making the initial commitment of starting. Give it time and your doubts will probably crystallize into something more solid, something you can address. Let you rinstincts contribute to your performance.
+
+We can take errors in that code as reflections on our competence, perhaps there's an element of imposter syndrome. Fight it!
+
+Your code is trying to tell you something. it's saying that this is harder than it should be. Maybe the structure or design is wrong, maybe you're solving the wrong problem, or maybe you're just creating an ant farm's worth of bugs. Whatever the reason, your lizard brain is sensing feedback from the code, do not ignore it.
+
+#### How To Talk Lizard
+
+Give yourself a little time and space to let your brain organize itself. If that's not working, try externalizing the issue. Expose different parts of your brain to the issue. We need to tell your brain that what you're about to do doesn't matter. And we do that by prototyping.
+
+A brain hack is to tell yourself you need to prototype something. Do the following:
+
+1. Write "I'm prototyping" on a sticky note, and stick it on the side of your screen
+2. Remind yourself that prototypes are meant to fail
+   - Remind yourself that prototypes are meant to be thrown away, even if they don't fail
+3. In your empty editor buffer, create a comment describing in one sentence what you want to do or learn
+4. Start coding
+
+### Topic 38 - Programming By Coincidence
+
+We should avoid programming by coincidence - relying on luck and accidental successes - in favor of programming deliberately.
+
+For code you write that others will call, the basic principles of good modularization and of hiding implementation behind small, well-documented interfaces can all help.
+
+For routines you call, rely only on documented behavior.
+
+#### Phantom Patterns
+
+Human beings are designed to see patterns and causes, even when it's just a coincidence. Don't assume it, prove it.
+
+#### Implicit Assumptions
+
+Coincidences can mislead at all levels. Assumptions are rarely documented and are often in conflict between diff developers. Assumptions that aren't based on well-established facts are the bane of all projects.
+
+#### How To Program Deliberately
+
+- Always be aware of what you are doing
+- Can you explain the code in detail
+- If you're not sure why it works, you won't know why it fails
+- Proceed from a plan
+- Rely only on reliable things, don't depend on assumptions, and assume the worst
+- Document your assumptions
+- Don't just test your code, but test your assumptions as well
+  - Don't guess, actually try it
+- Spend time on the important aspects, prioritize your effort
+- Don't let existing code dictate future code, all code can be replaced
+
+### Topic 39 - Algorithm Speed
+
+Estimating the resources that algorithms use - time, processor, memory and so on.
+
+Writing approximations call the Big-O notation.
+
+The size of the input will affect the algorithm: the larger the input, the longer the running time or the more memory used.
+
+#### Big-O Notation
+
+The Big-O notation, written O(), is a mathematical way of dealing with approximations. Think of the O as meaning on the "order of".
+
+The O() notation puts an upper bound on the value of the thing we're measuring (time, memory and so on). The highest-order term will dominate the value as "n" increases, the convetion is to remove all low-order terms, and not to bother sowing any constant multiplying factors.
+
+Big-O is never going to give you actual numbers for time or memory or whatever: it simply tells you how these values will change as the input changes.
+
+The O() notation doesn't apply just to time; you can use it to represent any other resources used by an algo.
+
+#### Common Sense Estimation
+
+List of basic algos:
+
+- Simple Loops: algo is likely to be O(n), time increases linearly with "n"
+  - Examples include exhaustive searches, finding the max value in an array, generating check-sums, etc.
+- Nested Loops: algo becomes O(m x n), where m and n are the 2 loops' limits
+  - Used in "bubble sort", where the outer loop scans each element in the array in turn, and the inner loop works out where to place that element in the sorted result
+  - Such sorting algos tend to be O(n^2)
+- Binary chop: algo halves the set of things it considers each time around the loop, O(lg n)
+  - Examples are sorted list, traversing a binary tree, finding the first set bit in a machine word, etc
+- Divide and conquer: partition their input work on the two halves independently, and then combine the result can be O(n lg n)
+  - Classic example is quicksort, which partitions the data into 2 halves and recursively sorting each
+  - O(n^2), bc its behavior degrades when it is fed sorted input, the avg. runtime of quicksort is O(n lg n)
+- Combinatoric: start looking at the permutations of things
+  - Examples include algos for many of the acknowledged hard problems - the traveling salesman problem, optimally packing things into a container, partitioning a set of numbers so that each set has the same total, etc.
+
+#### Algorithms Speed In Practice
+
+Whenever you find yourself writing a simple loop, then you're looking at O(n) algo. If that loop contains an inner loop (nested loop), then you're looking at O(m x n).
+
+Estimate the order of your algos. If you have an algo that is O(n^2), try to find a divide-and-conquer approach that will take you down to O(n lg n).
+
+Test your estimates. Use code profilers to count the number of times the diff steps in your algo get executed, and plot these figures against the size of the input.
+
+Be wary of premature optimization. It's always a good idea to make sure an algo really is a bottleneck before investing time to improve it.
+
+Challenges:
+
+- Every dev should have a feel for how algos are designed and analyzed
+
+### Topic 40 - Refactoring
+
+Software is more like gardening - it is more organic than concrete. You plant many things in a garden according to an initial plan and conditions. Some thrive, others are destined to end up as compost.
+
+Things that don't work out as planned need to be weeded or pruned.
+
+Rewriting, reworking and re-architecting code is collectively known as restructuring, AKA refactoring.
+
+Martin Fowler states refactoring is "disciplined technique for restructuring an existing body of code, altering its internal structure without changing its external behavior".
+
+Refactoring is a day-to-day activity. It's a targeted, precision approach to help keep the code easy to change.
+
+To guarantee that the external behavior hasn't changed, you need good, automated unit testing that validates the behavior of the code.
+
+#### When Should You Refactor?
+
+You refactor when you've learned something; when you understand something better than you did last year, yesterday, or even just ten minutes ago.
+
+There's no time like the present. What qualifies code to be refactored:
+
+- Duplication: violation of the DRY principle
+- Nonorthogonal design
+- Outdated knowledge
+- Usage: must have features perhaps weren't
+- Performance: improvements
+- The Test Pass
+
+Fail to refactor now, and there'll be a far greater time investment to fix the problem down the road. Refactor early, refactor often.
+
+You shouldn't need a week to refactor a piece of code - that's a full-on rewrite.
+
+Refactoring is redesigning. Refactoring is an activity that needs to be undertaken slowly, deliberately and carefully:
+
+1. Don't try to refactor and add functionality at the same time
+2. Make sure you have good tests before you begin refactoring
+3. Take short, deliberate steps
+   - Refactoring often involves making many localized changes that result in a larger-scale change
+
+### Topic 41 - Test To Code
+

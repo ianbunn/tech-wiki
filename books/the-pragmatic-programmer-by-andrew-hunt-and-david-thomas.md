@@ -12,6 +12,12 @@ Within the overall structure of a project there is always room for individuality
 
 Every day work to refine your skills and add new tools to your repertoire.
 
+## Links
+
+[The Pragmatic Programmer, 20th Anniversary Edition](https://pragprog.com/titles/tpp20/the-pragmatic-programmer-20th-anniversary-edition/)
+
+[The Pragmatic Programmer Tips](https://pragprog.com/tips/)
+
 ## Chapter 1 - A Pragmatic Philosophy
 
 Pragmatic programmers think beyond the immediate problem, placing it in its larger context and seeking out the bigger picture.
@@ -520,6 +526,7 @@ Iterate the schedule with the code.
 #### What to Say When Asked for an Estimate
 
 “I’ll get back to you”.
+
 ## Chapter 3 - The Basic Tools
 
 A basic set of good-quality tools is a great start to a journey. The tools become conduits from the maker’s brain to the finished product - they have become extensions of their hands.
@@ -1245,4 +1252,3 @@ Refactoring is redesigning. Refactoring is an activity that needs to be undertak
    - Refactoring often involves making many localized changes that result in a larger-scale change
 
 ### Topic 41 - Test To Code
-

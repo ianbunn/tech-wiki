@@ -4,6 +4,24 @@
 
 SQL is a **relational DB** using a *primary key*.
 
+## Setting SQL_MODE
+
+SQL supports several modes which allow you to tune it to suit your needs.
+
+Check the local and global values for [`sql_mode`](https://mariadb.com/kb/en/sql-mode/):
+
+```sql
+SELECT @@SQL_MODE, @@GLOBAL.SQL_MODE;
+```
+
+View more docs on `sql_mode` [here](https://dev.mysql.com/doc/refman/8.0/en/server-system-variables.html#sysvar_sql_mode)
+
+To remove a value, run the following:
+
+```sql
+SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
+```
+
 ## Cheat Sheets
 
 [MySQL Cheat Sheet](https://www.mysqltutorial.org/mysql-cheat-sheet.aspx)
@@ -122,7 +140,7 @@ INNER JOIN authors ON books.authorId = authors.id;
 
 ### Select multiple tables with `LEFT JOIN`
 
-`LEFT JOIN` will return all of the values from the left table, and the matching ones from the right table. There could be some NULL records in the right table, since some might not return a match.
+`LEFT JOIN` will return all the values from the left table, and the matching ones from the right table. There could be some NULL records in the right table, since some might not return a match.
 
 ```sql
 SELECT title, firstName, lastName

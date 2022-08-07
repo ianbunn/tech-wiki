@@ -1253,4 +1253,480 @@ Refactoring is redesigning. Refactoring is an activity that needs to be undertak
 
 ### Topic 41 - Test To Code
 
+Testing is not about finding bugs. To begin thinking about tests, start by imagining that you'd finished writing the function and now had to test it.
 
+Use some test data, work in a database you control, since running tests against a test db means we should be passing the db instance into our function testing.
+
+Populate that test data. Look at the db schema for fields that might help. To write our test data, we need to know which field to use.
+
+Thinking about writing a test for our method makes us look at it from the outside, as if we were a client of the code, and not its author.
+
+A test is the first user of your code, testing is vital feedback that guides your coding.
+
+A method that is tightly coupled to other code is hard to test, so making your stuff testable also reduces its coupling.
+
+Before you can test something, you have to understand it.
+
+If you think about testing boundary conditions and how that will work before you start coding, you may well find the patterns in the logic that'll simplify the function.
+
+If you think about the error conditions you'll need to test, you'll structure your function accordingly.
+
+#### Test-Driven Development (TDD)
+
+Basic cycle of TDD:
+
+1. Decide on small piece of functionality
+2. Write a test that will pass
+3. Run all tests, only failure should be the one you just wrote
+4. Write the smallest amount of code needed to get the test to pass, and verify it
+5. Refactor your code: can it be improved? Make sure all tests pass when you're done
+
+The idea is that this cycle should be very short, you're constantly writing tests and then getting them to work.
+
+Don't forget to stop sometimes and look at the big picture. It is easy to become seduced by the green "tests passed" message,
+writing lots of code that doesn't actually get you closer to a solution. Have a destination in mind.
+
+The idea is that generic software components should be available and combined just as easily as common integrated circuits (ICs) are combined.
+Chips are designed to be tested. We need to build testability into the software from the very beginning.
+Test each piece thoroughly before trying to wire them together.
+
+#### Unit Testing
+
+Testing done on each module, in isolation, to verify its behavior is called **unit testing**.
+
+The unit test will establish some kind of artificial environment, then invoke routines in the module being tested. It then checks the results that are returned, either vs known values or vs the results from previous runs of the same tests (regression testing).
+
+#### Testing Against Contract
+
+Think of unit testing as testing against contract (see Topic 23, Design by Contract). This will tell us 2 things: whether the code meets the contract, and whether the contract means what we think it means.
+
+Avoid creating "time bombs", something that sits around unnoticed and blows up at an awkward moment later in the project.
+
+Design to test.
+
+#### Ad Hoc Testing
+
+Ad-hoc testing is when we run poke at our code manually.
+
+#### Built A Test Window
+
+Log files containing trace messages to "test" in production. Keep the log messages regular, consistent format, you may want to parse them automatically to see what is going on.
+
+Another mechanism is to run code using a "hot-key" sequence or magic URL, when these keys are pressed or URL accessed, a diagnostic window pops up with status messages and so on.
+
+You could use a feature switch to enable extra diagnostics for a particular user or class of users.
+
+#### A Culture Of Testing
+
+Treat test codde with the same care as any production code. Keep it decoupled, clean, and robust. Don't rely on unreliable things.
+
+Test your software, or your users will. Testing, design, coding - it's all programming.
+
+### Topic 42 - Property-Based Testing
+
+"Trust but verify" - Russian proverb
+
+We recommend writing unit tests for your functions. One of the biggest benefits of thinking about tests is the way it informs the code you write.
+
+#### Contracts, Invariants, & Properties
+
+Code has contracts that it meets: you meet the conditions when you feed it input, and it will make certain guarantees about the outputs it produces.
+
+There are also code invariants, things that remain true about some piece of state when it's passed through a function.
+
+Once we work out our contracts and invariants, we lump them together and call them "properties". We can use these properties to automate our testing.
+This is what we end up calling "property-based testing".
+
+Use property-based tests to validate your assumptions.
+
+### Topic 43 - Stay Safe Out There
+
+External attackers will seize on any opening we leave to compromise our systems. There are a handful of basic principles that you should always bear in mind:
+
+1. Minimize attack surface area
+2. Principle of least privilege
+3. Secure defaults
+4. Encrypt sensitive data
+5. Maintain security updates
+
+#### Minimize Attack Surface Area
+
+The attack surface area of a system is the sum of all access points where an attacker can enter data, extract data, or invoke execution of a service.
+
+**Code complexity** leads to attack vectors, which it also makes the attack surface larger, more porous and open to infection.
+Simple, smaller code is better. Less code means fewer bugs, fewer opportunities for a security hole.
+
+Simpler, tighter, less complex code is easier to reason about and spot potential weaknesses.
+
+**Input data is an attack vector**, so never trust data from an external entity, always sanitize it before passing it on to a database, view rendering or other processing.
+
+**Unauthenticated services are an attack vector** and an opportunity for a _denial-of-service_ attack.
+
+**Authenticated services are an attack vector**, cull unused, old, or outdated users and services.
+
+**Output data is an attack vector**, don't give away information. Truncate or obfuscate potentially risky info.
+
+**Debugging info is an attack vector**, info designed to make debugging easier can make breaking in easier as well.
+
+Keep it simple and minimize attack surfaces.
+
+#### Principle Of Least Privilege
+
+Don't automatically grab the highest permission level, such as `root` or `admin`. If that high level is needed, take it, do the minnimum amount of work,
+and relinquish your permission quickly to reduce the risk.
+
+#### Secure Defaults
+
+The default settings on your app should be the most secure values.
+
+#### Encrypt Sensitive Data
+
+If the data gets exposed, encryption offers an additional level of safety.
+
+#### Maintain Security Updates
+
+Apply security patches quickly.
+
+#### Password Antipatterns
+
+Accept all printing ASCII chars, space and Unicode.
+
+You want to encourage long, random passwords with a high degree of entropy. Putting artificial constraints limits entropy and
+encourages bad password habits.
+
+#### Common Sense VS Crypto
+
+The first and most important rule when it comes to crypto is never do it yourself. Leave it to the experts.
+
+If you want to implement your own auth method or cryptography method, make sure you understand how hashes and salts work, how crackers use things like Rainbow tables,
+why you shouldn't use MD5 or SHA1, and a host of other concerns. Also, make sure you know the new legislation and legal obligations about your data.
+
+At the end of the day, it is less time-consuming and safe enough to use a third-party authentication provider.
+
+### Topic 44 - Naming Things
+
+Names reveal a lot about your intent and belief. Always ask yourself, "what is my motivation to create this?".
+Look at the bigger picture, what is special about it, about what it can do, and what it interacts with.
+
+The brain can read and understand words really fast: faster than many other activities. WOrds have a certain priority when we try to make sense of something.
+This can be demonstrated using the **Stroop effect**. Brain treats written words as something to be respected.
+
+When naming things, you're constantly looking for ways of clarifying what you mean, and that act of clarification will lead you to a better understanding of your code as you write it.
+
+#### Honor The Culture
+
+Honor the culture. Keep the same consistency. It's important that everyone on the team knows what these words mean, and that they use them consistently.
+
+When you see a name that no longer expresses the intent, or is misleading or confusing, fix it.
+
+Name well, rename when needed. Make renaming easy, and do it often. 
+
+Refactoring tip: rename a function to express all the things it really does. Now it's an easy target for refactoring.
+
+## Chapter 8 - Before The Project
+
+### Topic 45 - The Requirements Pit
+
+"Perfection is achieved, not when there is nothing left to add but when there is nothing left to take away." - Antoine de St. Exupery
+
+No one knows exactly what they want. Our job is to help people understand what they want. That's prob our most valuable attribute.
+Programmers help people understand what they want.
+
+#### Programming As Therapy
+
+Let's call the ppl who ask us to write software our clients. The typical client comes with a need. A response to a current problem.
+The need will sometimes be expressed in business terms, and sometimes in technical ones.
+
+This initial statement of need is not an absolute requirement, but it is really an invitation to explore.
+
+When given something that seems simple, we annoy people by looking for edge cases and asking about them. 
+Asking the questions just flushes that information out.
+
+Your role int his is to interpret what the client says and to feed back to them the implications.
+
+#### Requirements Are A Process
+
+Requirements are learned in a feedback loop. You do that by generating feedback, and letting them use that feedback to refine their thinking.
+
+We prefer short iterations; ones that end with direct client feedback. This keeps us on track, and if we do go in the wrong direction, the amount of time is minimized.
+
+#### Walk In Your Client's Shoes
+
+Become your client. Work with a user to think like a user.
+
+#### Requirement VS Policy
+
+Policy is metadata. Implement the general case, with the policy info as an example of the type of thing the system needs to support.
+
+#### Requirements Docs Are For Planning
+
+Fit a "user story" - short description, in an index card, real or virtual, to easily go through them or post them on a board.
+Move them around to show both status and priority.
+
+By keeping the user story short, you're encouraging devs to ask clarifying questions.
+
+#### Overspecification
+
+Good requirements are abstract. This doesn't mean to be vague - you must capture the underlying semantic invariants as requirements,
+and document the specific or current work practices as policy. Requirements are need.
+
+What can we do to prevent requirements from creeping up on us? The answer is feedback. When adding a new feedback card (user story) on the board, 
+they'll see another story card go up on the board, and they'll help choose another card to move into the next iteration to make room.
+
+#### Maintain A Glossary
+
+Create and maintain a project glossary - defines all the specific terms and vocabulary used in a project. Use the glossary to ensure consistency.
+This implies that you need buy-in and for it to be widely accessible.
+
+### Topic 46 - Solving Impossible Puzzles
+
+The secret to solving the puzzle is to ID the real (not imagined) constraints, and find a solution therein. Some constraints are absolute; others are merely preconceived notions.
+
+The key to solving puzzles is both to recognize the constraints placed on you and to recognize the degrees of freedom you do have.
+
+Don't think outside the box, find the box. When faced with an intractable problem, enumerate all the possible avenues you have before you. Don't dismiss anything.
+
+Categorize and prioritize your constraints. ID the most restrictive constraints first, and fit the remaining constraints within them.
+
+#### Get Out Of Your Own Way!
+
+Your conscious brain is aware of the problem, but your conscious brain is really pretty dumb. So it's time to give your real brain, that amazing associative neural net that lurks below your consciousness, some space.
+
+Ask some questions:
+
+- Why are you solving this problem?
+- What's the benefit of solving this problem?
+- Are the problems you're having related to edge cases? Can you eliminate them?
+- Is there a simpler, related problem you can solve?
+
+Asking questions to yourself is an example of "Rubber Ducking".
+
+#### Fortune Favors The Prepared Mind
+
+"When it comes to observation, fortune favors the prepared mind." - Louis Pasteur
+
+Your non-conscious brain needs to have plenty of raw material; prior experiences that can contribute to an answer.
+
+### Topic 47 - Working Together
+
+"Working with" is having discussions, asking questions and actually coding, **pair programming**.
+
+Conway's Law - Orgs which design systems are constrained to produce designs which are copies of the communication structures of these orgs.
+
+#### Pair Programming
+
+The dev acting as typist must focus on the low-level details of syntax and coding style, while the other dev is free to consider higher-level issues and scope.
+
+The inherent peer-pressure of a second person helps against moments of weakness and bad habits. This results in higher-quality software.
+
+#### Mob Programming
+
+Mobs can easily include ppl not usually considered part of the dev team, including users, project sponsors and testers. Mob programming is a tight collab with livve-coding.
+
+With all collab, you need to manage human aspects of it as well as the technical, so here are tips to get started:
+
+- Build the code, not your ego
+- Start small, w 4-5 ppl in short sessions
+- Criticize the code, not the person
+- Listen and try to understand others' viewpoints
+- Conduct frequent retrospectives to try and improve next time
+
+Don't go into the code alone.
+
+### Topic 48 - The Essence Of Agility
+
+Agile is not a noun, agile is how you do things. From the Agile Manifesto:
+
+  We are uncovering better ways of developing software by doing it and helping others do it.
+  Through this work we have come to value:
+
+  - Individuals and interactions over processes and tools
+  - Working software over comprehensive documentation
+  - Customer collab over contract negotiation
+  - Responding to change over following a plan
+
+There can never be an agile process, because agility is all about responding to change, responding to the unknowns you encounter after you set out.
+
+These decisions are always contextual: they depend on you, nature of your team, your app, your tools, your company, your users, the outside world.
+A vast number of factors.
+
+Here is a recipe for working in an agile way:
+
+1. Work out where you are
+2. Make the smallest meaningful step towards where you want to be
+3. Evaluate where you end up, and fix anything you broke
+
+Repeat these steps until you're done, and use them recursively.
+
+A team that doesn't continuously experiment with their process is not an agile team.
+
+To make this whole agile thing work, we need to practice good design, because good design makes things easy to change.
+If it's easy to change, we can adjust at every level.
+
+## Chapter 9 - Pragmatic Projects
+
+The purpose of software development method is to help people work together. 
+
+None of it matters if you can't deliver software consistently and reliably. That's the basis of the magic trio of version control, testing, and automation: **the pragmatic starter kit**.
+
+Sign your work and take pride in what you do.
+
+### Topic 46 - Pragmatic Teams
+
+Programmers are a bit like cats: intelligent, strong-willed, opinionated, independent and often worshiped by the net. To manage engineers is like herding cats.
+
+A pragmatic team is small, under 10-12 or so members. Everyone knows everyone well, trusts each other and depends on each other.
+
+As team size grows, communication paths grow at the rate of O(n^2), where n is the number of team members. On larger teams, communication begins to break down and becomes ineffective.
+
+#### No Broken Windows
+
+Quality is a team issue. Teams as a whole should not tolerate broken windows. Quality is built-in, not bolted on.
+
+Encourage everyone to actively monitor the environment for changes. Keep metrics on new requirements. A burnup chart is better as you can clearly see how the additional features move the goalposts.
+
+#### Schedule Your Knowledge Portfolio
+
+The team works on more than just new features. Some others are:
+
+- Old systems maintenance
+- Process reflection and refinement
+- New tech experiments
+- Learning and skill improvements
+
+Schedule it to make it happen.
+
+#### Communicate Team Presence
+
+The worst project teams are those that appear sullen and reticent. They hold meetings w no strcuture, no one wants to talk, docs are a mess, terminology is muddy, etc.
+
+Great project teams have a distinct personality. Generate a brand. When you start a project, come up with a name for it, ideally something off-the-wall. Spend 30 mins coming up w a zany log and use it.
+Use your team's name liberally when talking to people.
+
+#### Don't Repeat Yourselves
+
+Good communication is key to avoiding these problems. Good means **instant** and **frictionless**.
+The team speaks with one voice - externally. Internally, we strongly encourage lively, robust debate. Good devs tend to be passionate about their work.
+
+Frictionless means it's easy and low-ceremony to ask questions, share your progress, your problems, your insights and learnings, and to stay aware of what your teammates are doing. Maintain awareness to stay DRY.
+
+#### Team Tracer Bullets
+
+With tracer bullets, we recommend developing individual features, however small and limited initially, that go end-to-end through the entire system.
+
+With a tracer bullet approach, you can implement very small bits of functionality very quickly, and get immediate feedback on how well your team communicates and delivers.
+
+Organize fully functional teams. Build teams so you can build code end-to-end, incrementally and iteratively.
+
+#### Automation
+
+Automation is an essential component of every project team. Construct and deploy the tools that automate the project development and production deployment.
+
+Know when to stop adding paint.
+
+### Topic 50 - Coconuts Don't Cut It
+
+Do what works, not what's fashionable. Don't try to copy big corps. Those companies mature and pivot and continue to thrive, they'll be doing something different yet again.
+That's the actual secret to their success.
+
+#### One Size Fits No One Well
+
+You need the ability to see beyond the existing rules and exploit possibilities for advantage. Take the best pieces from any particular methodology and adapt them for use.
+
+The goal is to be positioned to deliver working software that gives the users some new capability at a movement's notice. The key is to keep aiming in the right direction.
+
+### Topic 51 - Pragmatic Starter Kit
+
+Whether it is the build and release procedure, testing, project paperwork, or any other recurring task on the project, it has to be automatic and repeatable on any capable machine.
+
+Pragmatic starter kit includes:
+
+- Version control
+- Regression testing
+- Full automation
+
+#### Drive With Version Control
+
+At the project level, version control drives the build and release process. Use version control to drive builds, tests and releases.
+
+Build, test and deployment are triggered via commits or pushes to version control, and build it in a container in the cloud. Relase to staging or production is specified by using a tag in your version control system.
+
+#### Continuous Testing
+
+We are driven to find our bugs now, so we don't have to endure the shame of others finding our bugs later. We use fine, small nets (unit tests) to catch the minnows, and big, coarse nets (integration tests) to catch the killer sharks.
+
+Test early, test often, test automatically.
+
+Coding ain't done until all the tests run.
+
+The build may cover server major types of testing: unit testing, integration testing, validation and verification, and performance testing.
+
+**Unit testing** is to exercise a module. Unit testing is the foundation of all the other forms of testing. All the modules you are using must pass their own unit tests before you can proceed.
+
+**Integration testing** shows the major subsystems that make up the project work and play well with each other.
+
+**Validation and verification** asks the question, does it meet the functional requirements of the system?
+
+**Performance testing** or stress testing is testing under real world conditions. Is it scalable?
+
+Use saboteurs to test your testing. 
+
+**Coverage analysis tools** watch your code during testing and keep track of which lines of code have been executed and which haven't.
+
+Test state coverage, not code coverage.
+
+**Property-based testing** techniques to generate test data according to the contracts and invariants of the code under test.
+
+If a bug slips through the net of existing tests, you need to add a new test to trap it next time. Find bugs once, write a test to address it.
+We have to spend our time writing new code - and new bugs.
+
+#### Full Automation
+
+Don't use manual procedures. You can't build the project on an anonymous cloud server unless the build is fully automatic.
+
+You can't deploy automatically if there are manual steps involved.
+
+Once you introduce manual steps, you've broken a VERY LARGE window.
+
+### Topic 52 - Delight Your Users
+
+Our goal as developers is to delight users.
+
+The software is only a means to an end.
+
+- Make sure everyone on the team is totally clear about expectations
+- When making decisions, think about which path forward moves closer to those expectations
+- Critically analyze the user requirements in light of the expectations
+  - Don't be afraid to make suggestions that change the requirement if you can demonstrate that they will move the project closer to the objective
+- Continue to think about these expectations as you progress through the project
+
+As our knowledge of the domain increases, we're better able to make suggestions on other things that could be done to address the underlying business issues.
+
+Delight users, don't just deliver code.
+
+### Topic 53 - Pride & Prejudice
+
+Sign your work. Artisans of an earlier age were proud to sign your work.
+
+The idea of code ownership can cause cooperation problems. People may become territorial, or unwilling to work on common foundation elements.
+
+You shouldn't jealously defend your code against interlopers; by the same token, you should treat other people's code with respect.
+
+Do unto others as you would have them do unto you, the Golden Rule.
+
+Anonymity, esp. on large projects, can provide a breeding ground for sloppiness, mistakes, sloth and bad code. Recommend communal ownership of code.
+
+## Postface
+
+The moral compass. Ask 2 questions about every piece of code we deliver:
+
+1. Have I protected the user?
+2. Would I use this myself?
+
+DO NO HARM.
+
+Some inventive ideas begin to skirt the bounds of ethical behavior, and if you're involved in that project, you are just as responsible as the sponsors.
+
+DO NOT ENABLE SCUMBAGS.
+
+It's your life. Share it. Celebrate it. Build it. Have fun.

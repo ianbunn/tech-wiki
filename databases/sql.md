@@ -167,4 +167,15 @@ SELECT * FROM table_name
 WHERE JSON_EXTRACT(column_name, '$.attribute_name') = "string";
 ```
 
+## Advanced Techniques
+
+When working with apps and API development, most of the time there is a 
+need for a relational DB. To ease with the load processing in the app, you
+can plan your queries to pass that load to the DB with `UNION` queries and the like.
+
+`UNION` is executed as a shared-nothing parallel process with a fast combination step at the end.
+This is similar to **Map-Reduce** data processing pattern.
+Ultimately, it lets the query use multiple indexes over the same data that
+would otherwise require a table scan to combine with `OR`.
+
 [Back home](../README.md)

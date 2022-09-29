@@ -244,7 +244,71 @@ progress to more complex solutions only as-needed.
 
 ## Composable Datatypes With Functions
 
-Left off here: https://medium.com/javascript-scene/composable-datatypes-with-functions-aec72db3b093
+In JS, the easiest way to compose is function composition, and a function is just an object you can add methods to.
 
-Reference: 
-[Medium/javascript-scene/object-composition](https://medium.com/javascript-scene/the-hidden-treasures-of-object-composition-60cd894803810)
+```js
+const t = value => {
+  const fn = () => value;
+  fn.toString = () => `t(${ value })`;
+  return fn;
+};
+const someValue = t(2);
+console.log(
+  someValue.toString() // "t(2)"
+);
+```
+
+You can do this with any data type, as long as there is composition operation that makes sense, i.e.:
+
+- List or strings, it could be concatenation
+- For DSP (Digital Signal Processing) it could be signal summing
+
+The question is which operation best represents the concept of composition?
+
+## Lenses
+
+Composable getters and setters for functional programming.
+
+A lens is a composable pair of pure getter and setter functions which focus on a particular field inside an object, and obey a set of axioms known as the lens laws.
+
+NOTE: for production code, look at a well-tested library like Ramda, the lenses expressed there are in more composable, elegant ways than other libs.
+
+### Why Lenses?
+
+State shape dependencies are a common source of coupling in software. Many components may depend on the shape of some shared state, so
+if you need to later change the shape of that state, you have to change logic in multiple places.
+Lenses allow you to abstract state shape behind getters and setters.
+
+### Lenses Background
+
+In 1985, these getter/setter pairs were a bit like referenced queries which have existed in relational DBs for decades.
+
+Lenses are more generic and composable, and were popularized after Edward Kmett released the Lens library for Haskell.
+He was influenced by Jeremy Gibbons and Bruno C. d. S. Oliveira, who demod that traversals express the iterator pattern,
+Luke Palmer's "accessors", Twan van Laarhoven, and Russell O'Connor.
+
+### Lens Laws
+
+They are algebraic axioms ensuring the lens is well behaved:
+
+1. `view(lens, set(lens, a, store)) = a` - setting a value in store, and immediately viewing it through the lens, you get the value that was set
+2. `set(lens, b, set(lens, a, store)) = set(lens, b, store)` - setting a lens value to `a` then immediately setting it to `b`, it's the same as if you'd just set the value to `b`
+3. `set(lens, view(lens, store), store) = store` - getting the lens value from the store, and then immediately setting it back to the store, the value is unchanged
+
+When you compose lenses, the resulting lens will dive deep into the object, traversing the full object path.
+
+## Transducers: Efficient Data Processing Pipelines in JS
+
+A transducer is a composable higher-order reducer. It takes a reducer as input, and returns another reducer.
+
+Transducers are:
+
+- Composable using simple function composition
+- Efficient for large collections w/multiple operations
+  - Only enumerates over the collection once, regardless of the # of operations in the pipeline
+- Able to transduce over any enumerable source (e.g. arrays, trees, streams, graphs, etc.)
+- Usable for either lazy or eager evaluation with no changes to the transducer pipeline
+
+### Why Transducers?
+
+Left off here: https://medium.com/javascript-scene/transducers-efficient-data-processing-pipelines-in-javascript-7985330fe73d#6720

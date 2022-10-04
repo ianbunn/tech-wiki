@@ -311,4 +311,39 @@ Transducers are:
 
 ### Why Transducers?
 
-Left off here: https://medium.com/javascript-scene/transducers-efficient-data-processing-pipelines-in-javascript-7985330fe73d#6720
+When we process data, it's useful to break up the processing into multiple independent, composable stages.
+
+### Background & History
+
+Instead of arrays and arrays processing, everything is represented as a stream of values in a continuously running,
+interactive program loop. Each value is processed by each node as it arrives at the parameter input.
+
+Transducers have impacted data flow programming, signal processing for scientific and media applications, networking,
+AI, etc.
+
+To use transducers in PROD, recommendation is to use an existing lib which implements the transducers protocol for
+interoperability reasons.
+
+Apply transducers in any context, w/any lib, in any language that supports closures and high-order functions.
+
+There are two data flow ways:
+
+- Pull: lazy evaluation, waits until a consumer asks for the next value
+- Push: eager evaluation, enumerates over the source values and pushes them through the tubes as fast as it can
+
+Transducers don't care whether you pull or push, they have no awareness of the data structure they're acting on, they simply
+call the reducer to pass into them to accumulate new values.
+
+Transducers are higher order reducers: reducer functions that take a reducer and return a new reducer.
+
+```
+transducer = ((accumulator, current) => accumulator) => ((accumulator, current) => accumulator)
+```
+
+Some popular libraries which support transducers include Ramda, RxJS, and Mori.
+
+Transducers compose top-to-bottom, left to right.
+
+### Transducer Rules
+
+Left off [here](https://medium.com/javascript-scene/transducers-efficient-data-processing-pipelines-in-javascript-7985330fe73d#db64).

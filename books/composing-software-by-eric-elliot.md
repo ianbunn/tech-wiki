@@ -346,4 +346,188 @@ Transducers compose top-to-bottom, left to right.
 
 ### Transducer Rules
 
-Left off [here](https://medium.com/javascript-scene/transducers-efficient-data-processing-pipelines-in-javascript-7985330fe73d#db64).
+1. Initialization - a transducer must call the step function to produce a valid initial value to act on; value should
+                    represent an empty state.
+  I. When called with no arguments, a reducer should always return a valid initial (empty) value for the reduction.
+2. Early termination - must check for and stop when it receives a reduced accumulator value; a transducer step function
+                        that uses a nested reduce must check for and convey reduced values when they're encountered.
+3. Completion (optional) - some transducing processes never complete, but those that do should call the completion function
+                            to produce a final value and/or flush state. Stateful transducers should supply a completion
+                            operation to clean up accumulated resources
+
+### The Transducer Protocol
+
+Transducers are not really a single function, but 3 different functions.
+
+In computer science, the arity of a function is the number of arguments a function takes. In the case of transducers,
+there are 2 arguments to the reducer function:
+
+1. The accumulator
+2. The current value
+
+All languages handle transducer protocol differently, JS transducers are a function that take a transducer and return a
+transducer. The transducer is an object with 3 methods:
+
+1. `init` - return a valid initial value for the accumulator (usually just called the next `step()`)
+2. `step` - apply the transform, e.g. for `map(f)`: `step(accumulator), f(current))`
+3. `result`
+
+### Transducers Conclusion
+
+Transducers are composable, higher-order reducers which can reduce over any underlying data type.
+
+Transducers produce code that can be orders of magnitude more efficient than dot chaining with arrays, and handle potentially
+infinite data sets without creating intermediate aggregations.
+
+NOTE: transducers aren't always faster than built-in array methods, performance benefits kick in when data sets are very large,
+or pipelines are quite large, always remember to profile.
+
+Use transducers when needing to subscribe to streams of data and want to process the data in the stream before using it in app code.
+Whenever needing to combine a `n` of operations, such as `map`, `filter`, `chunk`, `take` and so on, use transducers
+to optimize the process and keep code readable and clean.
+
+## Elements of JavaScript Style
+
+Use guidelines as, well, guides, not as immutable laws. There may be valid reasons to deviate from them.
+
+Almost every guideline from the elementary principles of composition applies to source code:
+
+- Make the function the unit of composition (one job for each function)
+  - The ideal function is simple, deterministic, pure function:
+    - Given the same input, always return the same output
+    - No side effects
+- Omit needless code
+  - More code creates more surface area for bugs, less code = fewer places for bugs
+  - Concise code is more legible, less code = less syntax noise and stronger signal for meaning transmission
+  - Concise code is more vigorous
+  - Omit needless variables, the human brain has a limited number of resources available in working memory, each
+    var must be stored as a discrete quanta, occupying working mem slots
+  - Use **point-free style** by defining functions without referencing the args on which the functions operate, i.e. function composition
+  - Do the same thing with any functor, anything you can map over
+- Use active voice, it is more direct and vigorous
+  - Name things as directly as possible
+  - Name predicates and booleans as if they were questions
+  - Name functions using verb forms
+    - Event handlers are an exception to the verb rule since they're used as qualifiers, they express when to do it instead of what to do
+- Avoid a succession of loose statements
+  - An excess of procedures is a recipe for spaghetti code
+- Keep related code together
+  - For smaller projects, it's fine to group files by technical type
+  - For larger projects, it's better to group files by feature (domain-driven)
+    - Colocate files related by feature
+- Put statements and expressions in positive form
+  - Prefer strong negative statements if you care about a variable that it's missing or unknown, i.e. `missingValue`, `anonymous`, `isEmpty`
+- Use parallel code for parallel concepts
+  - Id the parts that are the same, and build an abstraction that allows you to supply only the parts that are different
+
+### Elements of Style Conclusion
+
+Be simple, but not simplistic.
+
+Use techniques such as concise syntax, currying & composition.
+
+Assume the code reader knows nothing about the implementation, but do not assume the reader is stupid. Be clear, but
+don't dumb it down.
+
+## Mocking is a Code Smell
+
+### Unit Tests
+
+Unit tests test individual units (modules, functions, classes) in isolation from the rest of the program.
+
+Unit tests are different from integration tests. Functional tests are a subset of integration tests, because
+they test all the units of an app, integrated in the context of the running app.
+
+**Black box testing** is done using only the public interface of the unit, leads to less brittle tests, bc 
+the implementation details of a unit tend to change more over time than the public API of the unit.
+
+In **white box testing** tests are aware of implementation details, any change to the logic could break the test, even if
+the public API continues to function as expected. White box testing leads to wasted rework.
+
+### Code Coverage
+
+**Code coverage** refers to the amt of code covered by test cases. In general, we try to produce a high level of coverage, but
+code coverage starts to deliver diminishing returns as it gets closer to 100%.
+
+There are 2 types of coverage:
+
+1. Code coverage: how much code is exercised
+2. Case coverage: how many of the use-cases are covered by the test suites
+
+Case coverage refers to context of real world environment, with real users, real networks, and even hacker-cases.
+
+100% code coverage does not guarantee 100% case coverage.
+
+Developers targeting 100% code coverage are chasing the wrong metric.
+
+A mock is a test double that stands in for real implementation code during the unit testing process, capable of producing assertions
+about how it was manipulated by the test subject during a test run.
+
+All mocks are tightly coupled to the code. 
+
+Don't get over-focused to have 100% unit test coverage. Don't waste your time wedging dependency injection into your app,
+so you can mock the whole world.
+
+A code smell is a surface indication that usually corresponds to a deeper problem in the system, but it doesn't mean
+it is def wrong, or that something must be fixed right away. It is a rule of thumb to alert you to improve something.
+
+NOTE: not all mocking is bad. Some code needs diff levels of mocks, or diff kinds.
+
+### Tight Coupling
+
+Tight coupling makes code more rigid and brittle: more likely to break when changes are required.
+
+Coupling takes diff forms:
+
+- Subclass coupling: dependent on the implementation and entire hierarchy of the parent class
+- Control dependencies: code that controls its dependencies by telling them what to do
+- Mutable state dependencies: code that shares mutable state with other code
+- State shape dependencies: code that shares data structures with other code, and only uses a subset of the structure
+- Event/message coupling: code that communicates w/other units via message passing, events, etc.
+
+Tight coupling has many causes:
+
+- Mutation vs immutability
+- Side-effects vs purity/isolated side-effects
+- Responsibility overload vs do one thing (DOT)
+- Procedural instructions vs describing structure
+- Class inheritance vs composition
+
+Imperative and object-oriented code is more susceptible to tight coupling than functional code, since pure functions are less 
+vulnerable to tight coupling by nature.
+
+How do pure functions reduce coupling?
+
+- Immutability
+- No side effects
+- Do one thing
+- Structure, not instructions
+
+### TDD Should Lead to Better Design
+
+The process of learning effective TDD is the process of learning how to build more modular apps.
+
+### Composition And Mocking
+
+Mocking is required when our decomposition strategy has failed.
+
+When you use generic composition utilities, each element of the composition can be unit tested in isolation
+without mocking the others. They'll contain *zero unit-testable logic*, so there's nothing meaningful to unit test;
+you need integration tests instead.
+
+Declarative style means we’re telling the computer the relationships between things.
+It’s a description of structure using equational reasoning.
+
+The more dependencies your unit has, the more likely it is that there may be problematic coupling.
+
+Remember: Logic and I/O are separate concerns. Logic is thinking. Effects are actions. Think before you act!
+
+### Code Smells Are Warning Signs, not Laws
+
+Mocks are not evil.
+
+### Mocking is Great for Integration Tests
+
+Because integration tests test collaborative integrations between units, it’s perfectly OK to fake servers,
+network protocols, network messages, and so on in order to reproduce all the various conditions you’ll encounter 
+during communication with other units, potentially distributed across clusters of CPUs or separate machines on a network.

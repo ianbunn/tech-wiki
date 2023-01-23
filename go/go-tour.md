@@ -1,4 +1,6 @@
-# [A Tour of Go](https://tour.golang.org/list)
+# A Tour of Go
+
+https://tour.golang.org/list
 
 ## Basics
 

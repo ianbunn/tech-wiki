@@ -1,4 +1,4 @@
-## Solidity Tutorials
+# Solidity Tutorials
 
 ## Arrays
 

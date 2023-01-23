@@ -142,4 +142,8 @@ Our approach to Clean Architecture is two ideas combined:
 1. Separating Ports and Adapters
 2. Limiting how code structures refer to each other
 
+### Separating Ports and Adapters
+
+Ports and adapters can also be called interfaces and infrastructure.
+
 

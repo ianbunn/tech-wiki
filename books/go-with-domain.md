@@ -175,4 +175,53 @@ The rule states that outer layers (implementation details) can refer to inner la
 
 In practice, CQRS is a very simple pattern that does not require a lot of investment. It can be easily extended with more complex techniques like event-driven architecture, event-sourcing, or polyglot persistence.
 
+CQRS has one simple assumption: instead of having one big model for reads and writes, it has two separate models, one for writes and one for reads. It also introduces concepts of **command** and **query**, and leads to splitting application services into two separate types: **command** and **query** handlers.
+
+In simplest words: a **Query** should not modify anything, just return the data. A **command** is the opposite: it should make changes in the system, but not return any data.
+
+### Naming
+
+There is a rule that says you should stick to the language that is as close as it can be to how non-technical people (often referred to as “business”) talk. It also applies to **Commands** and **Queries** names.
+
+Go to your business people and listen how they call operations. Think twice if any of your command names really need to start with
+“Create/Delete/Update”.
+
+### Async Commands
+
+Some commands are slow by nature. They may be doing some external calls or some heavy computation. In that case, we can introduce **Asynchronous Command Bus**, which executes the command in the background.
+
+### Separate DBs for Reads and Writes
+
+If we need to provide more complex queries or need really fast reads, we could use the **polyglot persistence technique**. The idea is to duplicate queried data in a more optimal format in another database. For example, we could use Elastic to index some data that can be searched and filtered more easily.
+
+Data synchronization, in this case, can be done via _events_. One of the most important implications of this approach is **eventual consistency**. You should ask yourself if it’s an acceptable tradeoff in your system. If you are not sure, you can just start without polyglot persistence and migrate later.
+
+### Event Sourcing
+
+If you work in a domain with strict audit requirements, you should definitely check out the **event sourcing technique**. It provides out-of-the-box audit and helps with reverting some bug implications.
+
+CQRS is often described together with event sourcing. The reason is that by design in event-sourced systems, we don’t store the model in a format ready for reads (queries), but just a list of events used by writes (commands). In other words, it’s harder to provide any API responses.
+
+## Combining DDD, CQRS, and Clean Architecture
+
+You need to create your code in a way that will not block your future work. Even if at the beginning it may look like over-engineering and a lot of extra boilerplate, you need to keep in mind the long term. This is exactly what these patterns give you when they are combined – the ability to keep constant development speed without destroying and touching existing code too much.
+
+To start building a domain layer, we need to identify the use cases of the application. Look at RPC and HTTP endpoints to find supported use cases.
+
+If you don’t believe that this code may become complex, I recommend checking the Git history of the worst place in the project you work on. We should be sensitive to emerging complexity and try to simplify it as soon as we can.
+
+### Orchestrate with Command
+
+The application layer can be responsible only for the orchestration of the flow. There is no domain logic there. We hide the entire business complexity in the domain layer.
+
+If you start to see some if’s related to logic in your application layer, you should think about how to move it to the domain layer. It will be easier to test and re-use in other places.
+
+It may depend on the project, but often domain logic is pretty stable after the initial development and can live unchanged for a long time. It can survive moving between services, framework changes, library changes, and API changes.
+
+### Refactoring
+
+When you are doing refactoring, it’s also critical to agree on reasonable timeboxes. And keep them. You can quickly lose your stakeholders’ trust when you spend an entire month on refactoring, and the improvement is not visible. It is also critical to integrate and deploy your refactoring as fast as you can.
+
+## Tests Architecture
+
 

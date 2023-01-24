@@ -144,6 +144,35 @@ Our approach to Clean Architecture is two ideas combined:
 
 ### Separating Ports and Adapters
 
-Ports and adapters can also be called interfaces and infrastructure.
+Ports and adapters can also be called interfaces and infrastructure, or groups that are divided in "layers":
+
+- An **adapter** is how your application talks to the external world, adapt your internal structures to what the external API expects
+- A **port** is an input to your application
+- The **application** logic is a thin layer that “glues together” other layers. It’s also known as “use cases”, think of it as the "orchestrator"
+- **Domain layers** holds business logic
+
+![Clean architecture layers](assets/clean-arch-layers.png)
+
+Mixing the business rules with the database model slows down development, as the code becomes hard to understand and reason about. It’s also diﬀicult to test such logic.
+
+### The Dependency Inversion Principle
+
+A clear separation between ports, adapters, and application logic is useful by itself. Clean Architecture improves it further with Dependency Inversion.
+
+The rule states that outer layers (implementation details) can refer to inner layers (abstractions), but not the other way around. The inner layers should instead depend on interfaces.
+
+- The **Domain** knows nothing about other layers whatsoever
+  - The **Domain** contains pure business logic
+- The **Application** can import domain but knows nothing about outer layers
+  - The **Application** has no idea whether it’s being called by an HTTP request, a Pub/Sub handler, or a CLI command
+- **Ports** can import inner layers
+  - **Ports** are the entry points to the application, so they often execute application services or commands
+  - **Ports** can’t directly access _Adapters_
+- **Adapters** can import inner layers
+  - Usually, **Adapters** will operate on types found in _Application_ and _Domain_, for example, retrieving them from the database
+
+## CQRS (Command Query Responsibility Segregation)
+
+In practice, CQRS is a very simple pattern that does not require a lot of investment. It can be easily extended with more complex techniques like event-driven architecture, event-sourcing, or polyglot persistence.
 
 

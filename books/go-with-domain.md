@@ -224,4 +224,34 @@ When you are doing refactoring, it’s also critical to agree on reasonable time
 
 ## Tests Architecture
 
+End-to-end tests might give you some confidence, but you don’t want to maintain such a test suite. It’s hard to debug, takes a long time to test even the simplest change, and releasing the application takes hours. Introducing new tests is also not trivial in this scenario, so developers avoid it if they can.
 
+### Unit Tests
+
+The domain layer is where the most complex logic of your service lives. However, the tests here should be some of the simplest to write and running super fast. There are no external dependencies in the domain, so you don’t need any special infrastructure or mocks.
+
+As a rule of thumb, you should aim for high test coverage in the domain layer. Table-driven tests are especially great for this.
+
+Watch out for complex logic living in the application layer. If you start testing business scenarios here, it’s worth considering introducing the domain layer.
+
+On the other hand, it’s the perfect place for orchestration — calling adapters and services in a particular order and passing the return values around. If you separate it like that, application tests should not break every time you change the domain code.
+
+There are many external dependencies in the application’s commands and queries, as opposed to the domain code.
+
+In most cases, a struct with a single method will make a perfect mock here. If you prefer to use mocking libraries or code-generated mocks, you can use them as well.
+
+![Continuous Delivery Maturity Model](./assets/cd-maturity-model.webp)
+
+### Integration Tests
+
+There’s no reason for integration tests to be slow and flaky. And practices like automatic retries and increasing sleep times should be absolutely out of the question.
+
+In our context, an integration test is a test that checks if an adapter works correctly with an external infrastructure, i.e. database repositories.
+
+These tests are not about checking whether the database works correctly, but whether you use it correctly (the integration part). It’s also an excellent way to verify if you know how to use the database internals, like handling transactions.
+
+Because we need real infrastructure, integration tests are more challenging than unit tests to write and maintain. Usually, we can use docker-compose to spin up all dependencies.
+
+When dealing with network calls and databases, the test speed becomes super important. It’s crucial to run tests in parallel, which can be enabled in Go by calling `t.Parallel()`.
+
+### Component Tests

@@ -255,3 +255,66 @@ Because we need real infrastructure, integration tests are more challenging than
 When dealing with network calls and databases, the test speed becomes super important. It’s crucial to run tests in parallel, which can be enabled in Go by calling `t.Parallel()`.
 
 ### Component Tests
+
+Component tests are used to make sure each service works correctly internally. It checks all layers are working together without errors.
+
+These tests call real port handlers and use infrastructure provided by Docker, however, it uses mocks for all adapters (external services).
+
+In component tests, our goal is to check the completeness of a single service in isolation, with all infrastructure it needs.
+
+If you follow the **Dependency Inversion Principle** (part of SOLID), injecting mocks at the service level should be trivial.
+
+It's crucial to ensure the service has properly started, and DO NOT replace it with `sleeps`. This will add too much delay or make it fail randomly.
+
+Testing for happy paths using component tests should be enough. Edge cases should be covered by unit and integration tests.
+
+### End-to-end Tests
+
+End-to-end tests verify your whole system working together. They're slow, error-prone, and hard to maintain.
+
+They're still needed, but a good organization, planning and management is required.
+
+It could be run as:
+
+- Spin up all services inside a docker-compose, K8s cluster or some type of testing environment
+- Verify a few critical paths calling HTTP endpoints or anything exposed to the external world
+
+The hard questions to answer about end-to-end tests are:
+
+- Where should they be kept?
+- Which team should own it?
+- Where to run it?
+- How often to run it?
+- Should they be part of the CI/CD pipeline or a separate thing ran from a cron job?
+
+End-to-end tests should be short and used to test if services are working correctly together, not the logic inside of them.
+
+### Acceptance Tests
+
+Acceptance tests focuses on a complete business feature instead of implementation details. Sometimes acceptance tests can be used to refer to component and/or end-to-end tests.
+
+![Behavior Driven Design Tests](./assets/bdd-tests.png)
+
+Just keep in mind that no test suite will give you 100% confidence. It's IMPORTANT to have a process in place that allows:
+
+- Quick rollbacks
+- Reverts
+- Undoing migrations
+
+## Repository Secure By Design
+
+You will be surprised how long the code you have written will live. We should not trust ppl to use the code we've created in the way it's intended - they will not.
+
+In some cases, the solution that will protect us from issues like that is **good design**. Good design should not allow using our code in an invalid way.
+
+The repository should be the only one accessing data. Because of that, adding authorization on the repository level makes sense. 
+
+TL;DR: **repository** is a pattern that helps us abstract db implementation from our app logic.
+
+To achieve this robust design, we need to implement 3 things:
+
+1. Consolidate logic about who can access what (domain layer)
+2. Find all functions/methods that get a resource from db
+3. Find all functions/methods that insert or update a record into db
+
+

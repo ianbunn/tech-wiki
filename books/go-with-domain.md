@@ -314,7 +314,77 @@ TL;DR: **repository** is a pattern that helps us abstract db implementation from
 To achieve this robust design, we need to implement 3 things:
 
 1. Consolidate logic about who can access what (domain layer)
-2. Find all functions/methods that get a resource from db
+2. Find all functions/methods that get a resource from db (repository)
 3. Find all functions/methods that insert or update a record into db
+
+### Handling Collections
+
+Try to abstract it in the domain layer to the format that you can convert to query parameters in your database driver.
+
+### Handling Internal Updates
+
+If you need repository methods that don’t require any user (for Pub/Sub message handlers or migrations), it’s better to create separate repository methods. If updates are becoming much different for different actors, it’s worth to even introduce a separate CQRS Commands per actor.
+
+### Passing Authentication Via `context.Context`
+
+I highly recommend not passing anything required by your application to work correctly via context.Context. The reason is simple – when passing values via context.Context, we lose one of the most significant Go advantages – static typing. It also hides what exactly the input for your functions is.
+
+## Setting Up Infrastructure With Terraform
+
+### Infrastructure As Code
+
+A few benefits of Infrastructure As Code (IaC):
+
+- Storing infrastructure configuration in a repository: gives you all the benefits of version control, one source of truth, and code reviews
+- Consistency over time: no manual changes other than the ones described in the configuration files
+- Multiple environments: easy to create identical environments on-demand
+
+### Terraform 101
+
+Terraform uses `.tf` files using `HCL` syntax to define resources. A resource can be a db, network config, compute instance, or even a set of permissions.
+
+Resources are defined in a **declarative** way, you define the desired outcome, and Terraform is smart enough to create the configuration you specified.
+
+Resources can refer to each other using their full name.
+
+A project can also specify **input variables** to be filled by user and **output values**, that can be printed on screen or stored in a file.
+
+There are also **data sources** that don't create anything but read existing remote resources.
+
+2 basic commands for Terraform:
+
+- `terraform plan`:  a “dry-run” mode, printing out all changes that would be applied by apply
+- `terraform apply`: applies all resources defined in the current directory in all files with `.tf` extension
+
+After applying changes, you will find a `terraform.tfstate` file in the same directory. This file holds a local “state” of your infrastructure.
+
+A **module** in Terraform is a separate set of files in a subdirectory. Think of it as a container for a group of resources. It can have its own inputs and outputs, can call other modules using the module block and passing the dir in the `source` field. A single module can be used multiple times. Modules defined in the main working dir are called `root modules`.
+
+A **null resource** lets you run custom provisioners locally or on remote servers.
+
+A **provisioner** is a command or other software making changes in the system.
+
+A **local-exec provisioner** executes a bash command on the local system.
+
+Environment variables can be passed individually or in a variables file.
+
+You will likely encounter errors in your projects, so you will need to choose between fully-automated solutions glued together with alpha APIs or using plain Terraform with some manual steps documented in the project.
+
+## Running Integration Tests in the CI/CD Pipeline
+
+Please don’t try to define such a complex scenario directly in the Makefile. Make is terrible at managing environment variables.
+
+When in doubt, reach for basic tools for investigating Linux issues, like `strace`, `curl`, or `telnet`, or even a reverse SSH tunnel.
+
+## Introduction to Strategic DDD
+
+Having awesome Kubernetes cluster and most fancy microservices infrastructure will not help you if your software design sucks.
+
+**System Thinking** is a technique used to analyze complex issues sets.
+
+DDD can be broken into 2 parts:
+
+- Tactical patterns: how to implement the solution in code
+- Strategical patterns: what to implement
 
 

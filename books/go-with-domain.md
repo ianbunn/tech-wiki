@@ -387,4 +387,62 @@ DDD can be broken into 2 parts:
 - Tactical patterns: how to implement the solution in code
 - Strategical patterns: what to implement
 
+Strategic DDD helps you answer:
 
+- What problem am I solving?
+  - DO NOT ASSUME
+- What features are necessary? Which ones are not?
+- Will my solution meet stakeholders' expectations?
+  - DO NOT WAIT TO VERIFY
+- How complex is the project/solution/task?
+  - COMMUNICATE COMPLEXITY
+- How will I maintain DDD for clean architecture?
+  - Practice tactical DDD
+
+To properly use strategic DDD, there needs to be good communication between teams in a company. Without proper communication, it’s much harder to create solutions that help clients in the right way. The unasked questions will not magically disappear.
+
+### Event Storming
+
+**Event Storming** is a workshop during which people with questions (often software engineers) meet with people with answers (often stakeholders).
+
+Event storming can discuss various topics as followed depending on the session's goal, but not limited to:
+
+- Explore complex business domains
+- Verify if the solution meets expected requirements
+- Diagram data flow
+- Find potential problems
+- Polish UX
+
+The event storming flow:
+
+- Build an entirely working flow based on **domain events** (orange sticky notes)
+
+Verifying if the solution has no gaps and is about what users asked takes minutes. Introducing changes and verifying ideas in the developed and deployed code is hugely more expensive. Changing a sticky note on the board is extremely cheap.
+
+Event Storming works when you are planning both a big project or just a single story.
+
+Event Storming creates trusts between SEs and stakeholders, because everyone is involved in the planning, and SEs are not in isolation.
+
+What’s excellent about Event Storming is that the outcome of a properly done session can be mapped directly to the code.
+
+#### Event Modeling
+
+##### Bounded Context and Transaction Boundaries (Aggregates)
+
+**Bounded Context** is another _Strategic DDD pattern_ that helps us split big models into smaller, logical pieces. It’s a key for achieving proper services separation.
+
+If you need to touch half of the system to implement and test new functionality, your separation is wrong. Alternative to the wrong separation is lack of separation. Often, a symptom of lack of separation is god objects (huge objects that know too much or do too much).
+
+A great tool that helps with the discovery of Bounded Context and Aggregates is (of course) Event Storming. As a result of the session, you can visually see how you should split your services and touch-points between them.
+
+#### Ubiquitous Language
+
+Ubiquitous Language is a Strategic DDD pattern that covers building up a common language between developers, operations, stakeholders, and users.
+
+While using DDD, you should pay special attention to avoid:
+
+- Big design up front
+- Implementing code “for the future”
+- Trying to create anything "perfect"
+
+Instead, focus on delivering the MVP to the stakeholders in a short time.

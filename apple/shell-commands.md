@@ -19,4 +19,4 @@ alias gs="git status"
 alias gpud="git pull upstream develop"
 ```
 
-[Back home](../README.md)
+## 

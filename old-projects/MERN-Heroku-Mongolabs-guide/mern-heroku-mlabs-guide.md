@@ -1,4 +1,5 @@
 # Guide to deploying mern stack with MongoLab and Heroku
+
 This guide assumes you already have...
 - The Heroku cli installed globally
 - A Heroku account

@@ -164,8 +164,53 @@ Feedback has to be planned. Feedback MUST also be prioritized, so that unimporta
 
 #### Conceptual Models
 
+A **conceptual model** is an explanation, usually highly simplified, of how something works, a prototype. It doesn't have to be complete or even accurate as long as it is useful.
 
-## Chapter 2
+Simplified models are valuable only as long as the assumptions that support them hold true. There are often multiple conceptual models of a product or device. The most important conceptual models are the ones that reside in the minds of the ppl who are using the product, so they're also "mental models". They're conceptual models in ppl's minds that represent their understanding of how things work. Diff ppl may hold diff mental models of the same item. Sometimes the models can even be in conflict within a single person.
+
+Conceptual models are valuable in providing understanding, in predicting how things will behave, and in figuring out what to do when things do not go as planned. A good conceptual model allows us to predict the effects of our actions.
+
+There is no need to understand the underlying physics or chemistry of each device we own, just the relationship between the controls and the outcomes.
+
+### The System Image
+
+The combined information available to the users is called **the system image**. The user's conceptual model comes from the system image, through the interaction w/the product, reading, searching for online, information, and from whatever manuals are provided.
+
+Designers expect the user's model to be identical to their own, but bc they cannot communicate directly w/the user, the burden of communication is w/the system image.
+
+It is up to the designer to provide the appropriate information to make the product understandable and usable. Most important is the provision of a good conceptual model that gudies the user when things go wrong.
+
+With a good conceptual model, ppl can figure out what has happened and correct the things that went wrong.
+
+Good conceptual models are the key to understandable, enjoyable products: good communication is the key to good conceptual models.
+
+### The Paradox of Technology
+
+Technology offers the potential to make life easier and more enjoyable; e/new technology provides increased benefits. At the same time, added complexities increase our difficulty and frustration w/technology.
+
+The same tech that simplifies life by providing more functions in each device also complicates life by making the device harder to learn, harder to use.
+
+### The Design Challenge
+
+The hardest part of producing a product is coordinating all the many, separate disciplines, e/with diff goals and priorities. E/discipline has a diff perspective of the relative important of the many factors that make up a product.
+
+- One discipline argues that it must be usable and understandable
+- Another that it must be attractive
+- Another that it has to be affordable
+- Another reliable
+- Others to be able to be manufactured and serviced
+- Distinguishable from competing products
+- Superior in critical dimensions such as price, features, reliability, appearance
+
+Overall, ppl need to want to purchase it. It doesn't matter how good a product is if, in the end, nobody uses it. 
+
+The successful product has to satisfy all of these requirements.
+
+Another hard part is to convince ppl to understand the viewpoints of others, to abandon their disciplinary viewpoint and to think of the design from the viewpoints of the person who buys the product and those who use it.
+
+If the design team has representatives from all the constituencies present at the same time, it is often possible to reach satisfactory solutions for all the needs. It is when the disciplines operate independently of one another that major clashes and deficiencies arise.
+
+## Chapter 2: The Psychology of Everyday Actions
 
 Different emotions arise at different stages, and show which stages are primarily located at each of the three levels of processing:
 

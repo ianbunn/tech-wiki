@@ -103,6 +103,68 @@ Combined info, "information pickup", picked up by all of our sensory apparatus -
 
 **Signifiers** are signs, perceptible signals of what can be done. **Signifiers** are of far more importance to designers than are **affordances**.
 
+Designers need to know how to design things to make them understandable. They're trying to signify where the "touch" should take place. This is not the same thing as saying what action is possible.
+
+People search for clues, for any sign that might help them cope and understand. It is the sign that is important, anything that might signify meaningful information.
+
+**Good design** requires, among other things, good communication of the purpose, structure, and operation of the device to the users. That is the role of the signifier.
+
+**Signifiers** refer to any mark or sound, any perceivable indicator that communicates appropriate behavior to a person. Signifiers can be deliberate and intentional.
+
+**Signifiers** provide valuable clues as to the nature of the world and of social activities.
+
+#### Affordances VS Signifiers
+
+Affordances are the possible interactions between ppl and the environment. Some affordances are perceivable, some are not.
+
+Perceived affordances often act as signifiers, but they can be ambiguous.
+
+Signifiers signal things, in particular what actions are possible and how they should be done. Signifiers must be perceivable, else they fail to function.
+
+In design, signifiers are more important than affordances, for they communicate how to use the design. Creative designers incorporate the signifying part of the design into a cohesive experience.
+
+#### Mappings
+
+**Mapping** is a technical term, borrowed from mathematics, meaning the relationship between the elements of two sets of things. It is an important concept in the design and layout of **controls** and **displays**.
+
+The relationship between a control and its results is easiest to learn wherever there is an _understandable mapping_ between the _controls_, the _actions_, and the _intended result_.
+
+**Natural mappings** take advantage of spatial analogies, leading to immediate understanding. Other natural mappings follow from the principles of perception and allow for the natural grouping or patterning of controls and feedback.
+
+Groupings and proximity are important principles from Gestalt psychology that can be used to map controls to functions:
+
+- Groupings: related controls should be grouped together
+- Proximity: controls should be close to the item being controlled
+
+NOTE: What is natural to one culture is not necessarily natural for another!
+
+A device is easy to use when the set of possible actions is visible, when the controls and displays exploit natural mappings.
+
+The principles are simple but rarely incorporated into design. Good design takes care, planning, thought, and an understanding of how people behave.
+
+#### Feedback
+
+**Feedback** is some way of letting you know that the system is working on your request, or done with your request. It is communicating the results of an action. It is a well-known concept from the _science of control and information theory_.
+
+The human nervous system is equipped with numerous feedback mechanisms, including:
+
+- Visual
+- Auditory
+- Touch sensors
+- Vestibular (body equilibrium)
+- Proprioceptive systems that monitors body position and muscle and limb movements
+
+Feedback MUST be immediate: even a delay of a tenth of a second can be disconnecting. If the delay is too long, ppl often give up.
+
+Feedback MUST also be informative.
+
+Poor feedback can be worse than no feedback at all, bc it is distracting, uninformative, and in many cases, irritating and anxiety-provoking. Too much feedback can be even more annoying than too little. Machines that give too much feedback are like backseat drivers. Too many announcements cause ppl to ignore all of them, or wherever possible, disable all of them, which means that critical and important ones are apt to be missed.
+
+Feedback has to be planned. Feedback MUST also be prioritized, so that unimportant info is presented in an unobtrusive fashion, but important signals are presented in a way that does capture attention.
+
+#### Conceptual Models
+
+
 ## Chapter 2
 
 Different emotions arise at different stages, and show which stages are primarily located at each of the three levels of processing:

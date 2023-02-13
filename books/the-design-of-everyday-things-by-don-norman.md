@@ -212,6 +212,18 @@ If the design team has representatives from all the constituencies present at th
 
 ## Chapter 2: The Psychology of Everyday Actions
 
+### How People Do Things: The Gulfs of Execution & Evaluation
+
+The "Gulf of Execution" is where we try to figure out how it operates.
+
+We bridge the gulf of execution through the use of signifiers, constraints, mappings, and a conceptual model.
+
+The "Gulf of Evaluation" is where we try to figure out what happened. This gulf reflects the amount of effort that the person must make to interpret the physical state of the device and to determine how well the expectations and intentions have been met.
+
+What are the major design elements that help bridge the gulf of evaluation? Feedback and a good conceptual model.
+
+The difficulties reside in the design, not in the ppl attempting to use the design.
+
 Different emotions arise at different stages, and show which stages are primarily located at each of the three levels of processing:
 
 - Visceral: for the elementary levels of motor action performance and perception

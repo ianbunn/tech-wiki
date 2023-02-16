@@ -210,19 +210,11 @@ pbcopy < ~/.ssh/<ssh-filename>.pub>
   - Make sure there are no newlines or whitespace
 - In the upper-right corner of any Github page, click your profile photo, then click **Settings**
 
-![User-bar-account-settings](https://help.github.com/assets/images/help/settings/userbar-account-settings.png)
-
 - In the user settings sidebar, click **SSH** and **GPG** keys
 - Click **New SSH key** or **Add SSH key**
-
-![SSH-add-key](https://help.github.com/assets/images/help/settings/ssh-add-ssh-key.png)
-
 - In the "Title" field, add a descriptive label for the new key
   - For example, if you're using a personal MAC, you might call this key "Personal MacBook Air"
 - Paste your key into the "Key" field
-
-![SSH-key-paste](https://help.github.com/assets/images/help/settings/ssh-key-paste.png)
-
 - Click **Add SSH key**
 - If prompted, confirm your Github password
 

@@ -348,7 +348,53 @@ Engineers and other logical ppl tend to dismiss the visceral response as irrelev
 
 #### The Behavioral Level
 
-TBC...
+The behavioral level is the home of learned skills, triggered by situations that match the appropriate patterns. Actions and analyses at this level are largely subconscious.
+
+When playing sports, our responses occur far too quickly for conscious control: it is the behavioral level that takes control.
+
+When we perform a well-learned action, all we have to do is think of the goal and the behavioral level handles all the details.
+
+For designers, the most critical aspect of the behavioral level is that every action is associated with an expectation.
+
+The information in the feedback loop of evaluation confirms or disconfirms the expectations.
+
+Behavioral states give rise to a feeling of control when there is good understanding and knowledge of results, and frustration and anger when things do not go as planned.
+
+Feedback provides reassurance, even when it indicates a negative result. A lack of feedback creates a feeling of lack of control, which can be unsettling. Feedback is critical to managing expectations. Expectations play an important  role in our emotional lives.
+
+#### The Reflective Level
+
+The reflective level is the home of conscious cognition. This is where deep understanding develops, where reasoning and conscious decision-making take place.
+
+Reflection is cognitive, deep, and slow. A reflection is looking back over them, evaluating the circumstances, actions, and outcomes, often assessing blame or responsibility.
+
+The **highest levels** of emotions come from the reflective level, for it is here that causes are assigned and where predictions of the future take place. Emotion and cognition are tightly intertwined.
+
+#### Design Must Take Place At All Levels: Visceral, Behavioral, & Reflective
+
+Reflective responses are part of our memory of events. Memories last far longer than the immediate experience or the period of usage, which are the domains of the visceral and behavioral levels. It is reflection that drives us to recommend a product, to recommend that others use it - or perhaps avoid it.
+
+Advertisers hope that the strong reflective value associated with a well-known, highly prestigious brand might overwhelm our judgment, despite a frustrating experience in using the product.
+
+The behavioral level, which is the home of interaction, is also the home of all expectation-based emotions, of hope and joy, frustration and anger.
+
+Understanding arises at a combination of the behavioral and reflective levels. Enjoyment requires ALL three.
+
+High-level reflective cognition can trigger lower-level emotions. Lower-level emotions can trigger higher-level reflective cognition.
+
+### The 7 Stages of Action and the 3 Levels of Processing
+
+At the lowest level are the visceral levels of calmness or anxiety when approaching a task or evaluating the state of the world.
+
+Then in the mid levels are the behavioral ones driven by expectations on the execution side - for example hope and fear - and emotions driven by the confirmation of those expectations on the evaluation side - for example relief or despair.
+
+At the highest level are the reflective emotions, ones that assess the results in terms of the presumed causal agents and the consequences, both immediate and long-term.
+
+One important emotional state is the one that accompanies complete immersion into an activity, a state that social scientist Mihaly Csikszentmihalyi has labeled "flow". 
+
+When in the "flow" state, ppl lose track of time and the outside environment. They are at one with the task they are performing.
+
+
 
 ## Chapter 3
 

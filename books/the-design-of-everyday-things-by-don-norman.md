@@ -394,11 +394,177 @@ One important emotional state is the one that accompanies complete immersion int
 
 When in the "flow" state, ppl lose track of time and the outside environment. They are at one with the task they are performing.
 
+The task is at the proper level of difficulty: difficult enough to provide a challenge and require continued attention, but not so difficult that it invokes frustration and anxiety.
+
+When the results of our actions are evaluated against expectations, the resulting emotions affect our feelinlgs as we continue through the many cycles of action.
+
+### People As Storytellers
+
+Ppl are innately disposed to look for causes of events, to form explanations and stories.
+
+Stories resonate with our experiences and provide examples of new instances.
+
+From our experiences and the stories of others, we tend to form generalizations about the way ppl behave and things work.
+
+We attribute causes to events, and as long as these cause-and-effect pairings make sense, we accept them and use them for understanding future events.
+
+Conceptual models are a form of story, resulting from our predisposition to find explanations. These models are essential in helping us understand our experiences, predict the outcome of our actions, and handle unexpected occurrences.
+
+Conceptual models are often constructed from fragmentary evidence, with only a poor understanding of what is happening, and with a kind of naive psychology that postulates causes, mechanisms, and relationships even where there are none.
+
+In the absence of external info, ppl can let their imagination run free as long as the conceptual models they develop account for the facts as they perceive them.
+
+### Blaming The Wrong Things
+
+Ppl try to find causes for events. They tend to assign a causal relation whenever 2 things occur in succession, even if there really was no relationship between the two.
+
+The tendency to repeat an action when the first attempt fails can be disastrous, so feedback is very important.
+
+Often ppl will use their own conceptual models of the world to determine the perceived causal relationship between the thing being blamed and the result.
+
+It seems natural for ppl to blame their own misfortunes on the environment. It seems equally natural to blame other ppl's misfortunes on their personalities.
+
+When things go right, ppl credit their own abilities and intelligence. When they see things go well for someone else, they sometimes credit the environment, or luck.
+
+#### Learned Helplessness
+
+**Learned helplessness** refers to the situation which ppl experience repeated failure at a task. As a result, they decide the task cannot be done, at least not by them: they are helpless. They stop trying.
+
+Sometimes all it takes to get such a feeling of  helplessness are a few experiences that accidentally turn out bad.
+
+The problem is that once failure starts, it is soon generalized by self-blame. The vicious cycle starts: if you fail at something, you think it is your fault. Therefore you think you can't do the task. Next time you have to do a task, you believe you can't, so you don't even try. You're trapped in a sel-fulfilling prophecy.
+
+#### Positive Psychology
+
+When something doesn't work, it can be considered an interesting challenge, or perhaps just a positive learning experience.
+
+We need to remove the word failure from our vocab., replacing it instead with **learning experience**. To fail is to learn: we learn more from our failures than from our successes.
+
+"Fail often, fail fast!". Failures are essential part of exploration and creativity.
+
+It is possible to avoid failure, to always be safe, but that is also the route to a dull, uninteresting life. In design, make sure to follow this philosophy:
+
+- Do not blame ppl when they fail to use your products properly
+- Take ppl's difficulties as signifiers of where the product can be improved
+- Eliminate all error messages from electronic or computer systems, instead provide help and guidance
+- Make it possible to correct problems directly from help and guidance msgs
+  - Allow ppl to continue with their task
+  - Don't impede progress
+  - Help make it smoot and continuous
+  - Never make ppl start over
+- Assume that what ppl have done is partially correct, so if it is inappropriate, provide the guidance that allows them to correct the problem and be on their way
+- Think positively, for yourself and for the ppl you interact with
+
+### False Blaming Yourself
+
+Invariably ppl feel guilty and either try to hide the error or blame themselves for "stupidity" or "clumsiness". Nobody likes to be observed performing badly.
+
+The idea that a person is at fault when something goes wrong is deeply entrenched in society. That's why we blame others and even ourselves. Unfortunately, the idea that a person is at fault is embedded in the legal system.
+
+Humans err continually; it is an intrinsic part of our nature. System design should take this into account.
+
+Blaming the person without fixing the root, underlying cause does not fix the problem.
+
+Eliminate the term **human error**, instead talk about communication and interaction: what we call an error is usually bad communication or interaction.
+
+Why can't the interaction between a person and a machine be thought of as collaboration?
+
+Designers have a special obligation to ensure that the behavior of machines is understandable to the ppl using them.
+
+We insist that ppl perform abnormally, to adapt themselves to the peculiar demands of machines, which inc always giving precise, accurate info. Humans are particularly bad at this, yet when they fail to meet the arbityrary, inhuman requirements of machines, we call it human error. No, it is design error.
+
+Strive to minimize the chance of inappropriate actions in the first place by using affordances, signifiers, good mapping, and constraints to guide the actions.
+
+If a person performs an inappropriate action, the design should maximize the chance that this can be discovered and then rectified.
+
+This requires good, intelligible feedback coupled with a simple, clear conceptual model.
+
+We are creative and imaginative, not mechanical and precise. Machines require precision and accuracy; ppl don't.
+
+It is easy to design devices that work well when e/thing goes as planned. The hard and necessary part of design is to make things work well even when things do not go as planned.
+
+### The 7 Stages of Action: 7 Fundamental Design Principles
+
+E/stage of action requires its own special design strategies and, in turn, provides its own opportunity for disaster:
+
+1. What do I want to accomplish?
+2. What are the alternative action sequences?
+3. What action can I do now?
+4. How do I do it?
+5. What happened?
+6. What does it mean?
+7. Is this okay? Have I accomplished my goal?
+
+How should the design convey the info required to answer the user's question? Through appropriate constraints and mappings, signifiers and conceptual models, feedback and visibility.
+
+The info that helps answer questions of execution (doing) is **feedforward**. 
+
+**Feedforward** is accomplished through appropriate use of signifiers, constraints, and mappings. The conceptual model plays an important role.
+
+The info that aids in understanding what has happened is **feedback**.
+
+**Feedback** is accomplished through explicit info about the impact of the action.
+
+Both feedforward and feedback need to be presented in a form that is readily interpreted by the ppl using the system.
+
+The presentation has to match how ppl view the goal they are trying to achieve and their expectations.
+
+Info must match human needs.
+
+The 7 fundamental design principles:
+
+1. **Discoverability**: determine what actions are possible and the current state
+2. **Feedback**: full and continuous info about the results of actions and the current state
+   - After an action is executed, it is ez to determine the new state
+3. **Conceptual Model**: projects all the info needed leading to understanding and feeling of control
+   - Enhances both discoverability and evaluation of results (feedback)
+4. **Affordances**: exist to make the desired actions possible
+5. **Signifiers**: ensures discoverability and that the feedback is well communicated and intelligible
+6. **Mappings**: relationships between controls and their actions
+   - Enhanced as much as possible through spatial layout and temporal contiguity
+7. **Constraints**: providing physical, logical, semantic, and cultural constraints guides actions and eases interpretation
+
+When evaluating a product or a service's failure, ask at which of the 7 stages of action does it fail? Which design principles are deficient? Ask how the difficulty came about.
+
+It is easy to find fault: the key is to be able to do things better.
+
+The result may appear to be poor design, but it may actually arise from poor comms.
+
+"Don't criticize unless you can do better!"
+
+Good design requires consideration of the entire system to ensure that the requirements, intentions, and desires at each stage are faithfully understood and respected at all the other stages.
+
+## Chapter 3: Knowledge In The Head And In The World
+
+We combine knowledge in the head w/knowledge in the world, bc neither alone will suffice.
+
+The psychologists Ray Nickerson and Marilyn Adams found easy to demonstrate the faulty nature of human knowledge and memory with different experiments, one of them asking if ppl could tell which penny was the real one in a group of many pennies with different looks. Most of them failed.
+
+This is bc not all the knowledge required for precised behavior has to be in the head to be that a penny = one cent. It can be distributed - partly in the head, partly in the world, and partly in the constraints of the world.
+
+### Precise Behavior From Imprecise Knowledge
+
+Precise behavior can emerge from imprecise knowledge for 4 reasons:
+
+1. Knowledge is both in the head and in the world
+   - Much of the knowledge a person needs to do a task can be derived from the info in the world
+2. Great precision is not required
+3. Natural constraints exist in the world
+4. Knowledge of cultural constraints and conventions exists in the head
+
+Bc behavior can be guided by the combo of internal and external knowledge and constraints, ppl can minimize the amt of material they must learn, as well as the completeness, precision, accuracy, or depth of the learning.
+
+They also can deliberately organize the environment to support behavior.
+
+We arrange things so that we don't need to have complete knowledge, or we rely upon the knowledge of the surrounding ppl, copying their behavior or getting them to do the required actions.
+
+Simplified models are the key to successful application. Natural mappings can present info in the world in a manner readily interpreted and usable.
+
+#### Knowledge Is In The World
 
 
-## Chapter 3
 
-Culture
+## Chapter 4: Culture
 
 ## Chapter 5
 

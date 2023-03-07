@@ -180,8 +180,6 @@ Peace,
         - [MIT License](old-projects/vue-material-dashboard-master/LICENSE.md)
 - [**php**](php)
     - [PHP](php/php.md)
-- [**pocket-dev**](pocket-dev)
-    - [Pocket (POKT) Development](pocket-dev/pocket.md)
 - [**postgresql**](postgresql)
     - [PostgreSQL CLI Commands](postgresql/postgresql-cli.md)
     - [PostgreSQL](postgresql/postgresql.md)

@@ -1,5 +1,42 @@
 # Improve on Software Engineering
 
+## Want an unfair advantage in your tech career? Consume content meant for other roles
+
+To stand out in your career, you need a **competitive advantage**.
+
+Learning about the roles you work and collaborate with to understand where they’re coming from and what their priorities are.
+
+Learning the roles of others helps you avoid common inter-role pitfalls. A little understanding and honesty can go a long way.
+
+Cross-functional understanding is critical in modern tech companies in order for them to succeed.
+
+Engineering leaders already look at the org from diff roles as an unavoidable part of their career progression. The best engineering leaders are the ones that have been down in the trenches never more than 2-3 years removed from hands-on work, and the best individual contributors (IC) are the ones that have done time in management or leadership. The best tech leaders are the ones that can do both, back and forth, like a pendulum. This is bc when ICs have done time in mgmt, they know what is worth focusing on - for the sake of the team/company - and what is not.
+
+Relationships are key to getting things done at work and having a good career. To have a good relationship with someone, it’s essential to **CARE ABOUT WHAT THEY CARE ABOUT**.
+
+You must also communicate in a way that works for them.
+
+Each role thinks they do a lot and are under-appreciated. Learning about others’ roles helps you to avoid ignorantly assuming that ppl don’t do much in that specific role. It also helps to avoid underestimating the importance and difficulty in other roles.
+
+Learning from others’ roles helps clear up misconceptions about their roles. This helps to manage relationships based on understanding of their roles and creates alignment in the team to drive changes for the better. A leader gains respect from understanding their roles.
+
+It also helps you be strategic in your interaction with ppl in that role. Optimize your own actions when dealing with them.
+
+Some roles that are important to learn from when in an engineering role:
+
+* Product
+* CEO
+* President
+* Founder
+* Recruiter
+* Technical Project Manager (TPM)
+* Staff engineer
+* HR
+* QA
+* Data science
+* Sales
+* Customer Service
+
 ## From 50 Tips Improving Your Software Development Game
 
 ### Domain, Architecture and Design

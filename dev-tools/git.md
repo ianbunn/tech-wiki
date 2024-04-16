@@ -185,10 +185,10 @@ Host *
   - If you created your key with a different name, or if you are adding an existing key that has a different name, replace `id_rsa` in the command with the name of your private key file
 
 ```unix
-ssh-add -K ~/.ssh/id_rsa
+ssh-add --apple-use-keychain --apple-load-keychain ~/.ssh/path-to-key
 ```
 
-- TIP: the `-K` option is a version of `ssh-add`, which stores the passphrases in your Keychain for you when you add an SSH key to the SSH-Agent
+- TIP: the `--apple-use-keychain --apple-load-keychain` option is a version of `ssh-add`, which stores the passphrases in your Apple MacOs Keychain for you when you add a SSH key to the SSH-Agent
 - Then, add your SSH key to your Github account (instructions below)
 
 ## Add SSH key to your Github account
@@ -203,7 +203,7 @@ Follow the steps below:
     - Use the command below to copy straight to your clipboard without any newlines or whitespace:
 
 ```unix
-pbcopy < ~/.ssh/<ssh-filename>.pub>
+pbcopy < ~/.ssh/<ssh-filename>.pub
 ```
 
 - TIP: if `pbcopy` isn't working, you can locate the hidden `.ssh` folder, open the file in your favorite text editor, and copy it to your clipboard

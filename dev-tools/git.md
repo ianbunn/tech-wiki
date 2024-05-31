@@ -8,6 +8,8 @@
 
 `git log -1` displays the last commit's details
 
+`git config -l` lists git user info
+
 ## Git Branch
 
 `git branch -d <branch>` - removes branch name indicated in command

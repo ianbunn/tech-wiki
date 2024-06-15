@@ -88,3 +88,179 @@ of the execution stay constant as we increase the problem size, which is true in
 
 According to Gustafson's Law, when we increase the resources, there is an expectation of an increase in the system's capabilities
 that engineers can put to good use, therefore taking advantage of the extra processing power.
+
+## 2 Dealing with Threads
+
+### 2.1 Multiprocessing in Operating Systems
+
+Multiprocessing AKA multiprogramming is the ability of a CPU to execute multiple processes concurrently.
+
+An *interrupt* is a mechanism used to stop the current execution and notify the OS of a particular event.
+
+A piece of hardware called the **interrupt controller** handles all interrupts coming from multiple devices.
+
+**Process context block** is the list of all the information needed to restore a process to its previous state. Loading this adds is called *context switching*.
+
+In the 1950s, Semi-Automatic Ground Environment (SAGE) was the first system to use multiprocessing in a US military air defense system.
+
+In the 1960s, IBM's OS/360 was the first OS to use multiprocessing. It also introduced the concept of *time-sharing*. Time-sharing is when many programmers are connected via terminals.
+
+Parallelism is when multiple processes are executed at the same time, also in a multicore system. Concurrency is when multiple processes are executed in overlapping time periods.
+
+### 2.2 Abstracting Concurrency with Processes and Threads
+
+A **process** represents a program that is currently running on the system. Processes provide isolation at the cost of consuming more resources.
+
+A **thread** is an extra construct that executes within the process context to give us a more lightweight and more efficient approach to concurrency.
+
+#### 2.2.2 Creating Processes
+
+In Unix-like systems, the `fork()` system call is used to create a new process. The new process is a copy of the parent process. **Copy on write (COW)** is an optimization introduced to the fork() system call. It reduces the time taken by not copying the entire memory space.
+
+In Windows, the `CreateProcess()` function is used to create a new process.
+
+We refer to the new process as the **child** and the process that created it as the **parent**.
+
+Because each process has its own memory space, if one process changes its memory contents (for example, changing a variable’s value), the other process will not see this change.
+
+In addition to consuming more memory, copying and allocating system resources takes time and consumes precious CPU cycles. This means that creating too many processes takes a heavy toll on the system.
+
+Support for creating and forking processes in Go is limited to the `syscall` package and is OS-specific. Go also gives us the ability to run commands in a new process by calling the exec() function, abstracting some of the OS-specific functions in the syscall package. However, concurrent programming in Go does not typically rely on heavyweight processes.
+
+A process will terminate when it has finished executing its code or has encoun- tered an error it cannot handle. Once a process terminates, the OS reclaims all its resources so they are free to be used by other processes.
+
+#### 2.2.4 Concurrency with Threads
+
+Threads are the answer to some of the problems that come with using processes for concurrency.
+
+We can think of threads as the lightweight alternative to multiple processes. Creating a thread is much faster (sometimes 100x faster), and a thread consumes fewer system resources than a process. This is more efficient because we’re not consuming large amounts of memory for each execution.
+
+Conceptually, we can separate the resources from the execution because this lets us create more than one execution and share the resource between them, each single execution is called a **thread** or a **thread of execution**.
+
+When you start a process, it contains one main thread by default. When we have more than one, it is **multithreaded**, meaning we code in a manner that has different threads working together in the same app.
+
+When we create a new thread, the operating system needs to create only enough resources to manage the stack space, registers, and a program counter. The new thread runs inside the context of the same process.
+
+We can typically create many more threads than processes before the system starts running out of resources.
+
+In addition, because there are so few new resources to allocate, starting a thread is a lot faster than starting a process. Although threads share the same memory space, it's important to realize that e/thread has its own private stack space.
+
+The **stack space** stores local vars that live within a function, these are short-lived vars. This space does not include vars that are allocated on the heap, the main memory space.
+
+Working in the same memory space means we don’t get the isolation that processes offer. This can lead to one thread stepping over another thread’s work. Communication between and synchronization of the mul- tiple threads are important in avoiding this.
+
+Each thread has a **program counter** aka **instruction pointer**, which tells the CUP where to execute the next instruction. Each thread also has its own **register set**. The register set is a small amount of memory that is used to store the current state of the thread.
+
+In Go, when the main thread of execution terminates, the entire process also terminates, even if other threads are still running.
+
+Operating systems and programming languages implement threads in different manners. For example, on Windows, we can create a thread using the CreateThread() system call. On Linux, we can use the clone() system call with the CLONE_THREAD option.
+
+IEEE attempted to standardize thread implementations using a standard called POSIX Threads (pthreads for short). These threads are created, managed, and synchronized through the use of a standard POSIX Threads API.
+
+### 2.3 What's So Special About Goroutines?
+
+Go’s answer to concurrency is the goroutine. Instead, goroutines are managed by Go’s runtime at a higher level to give us an even more lightweight construct, consuming far fewer resources than an operating system thread.
+
+#### 2.3.1 Creating Goroutines
+
+Adding the keyword go in front of a function call creates a goroutine. This tells the Go runtime to execute the function concurrently. We can never guarantee the execution order of goroutines.
+
+#### 2.3.2 Implementing Goroutines In the User Space
+
+Goroutines are user-level threads that are managed by the Go runtime. The Go runtime is responsible for scheduling the goroutines on the available OS threads.
+
+he OS also stores the context of each thread (registers, stack, and state) and uses it whenever the threads need executing. We refer to these types of threads as **kernel-level** threads because the operating system manages them.
+
+Instead of implementing threads at the kernel level, we can have threads running
+completely in the user space, which means the memory space that is part of our application, as opposed to the operating system’s space. 
+
+From an operating system point of view, a process containing user-level threads will
+appear to have just one thread of execution. The OS doesn’t know anything about user- level threads.
+
+The process itself is responsible for managing, scheduling, and context switching between the user-level threads.
+
+To execute this internal context switch, there needs
+to be a separate runtime that maintains a table containing all the data (such as the
+state) of each user-level thread. We are replicating on a small scale what the OS does.
+
+The main advantage of user-level threads is performance. Context-switching a user-
+level thread is faster than context-switching a kernel-level one. When we can switch execution without invoking any kernel, the executing process can keep hold of the CPU without needing to flush its cache and slow us down.
+
+The downside of using user-level threads comes when they execute code that
+invokes blocking I/O calls. If a user-level thread performs this blocking read call, the entire process is descheduled. If any other user-level threads are present in the same process, they will not get to execute until the read operation is complete.
+
+To work around this limitation, applications using user-level threads
+tend to use non-blocking calls to perform their I/O operations. However, using non-blocking I/O is not ideal, since not every device supports non-blocking calls.
+
+Another disadvantage of user-level threads is that if we have a multiprocessor or a
+multicore system, we will be able to utilize only one of the processors at any point in
+time. The OS sees the single kernel-level thread, containing all the user-level threads,
+as a single execution. Thus, the OS executes the kernel-level thread on a single processor, so the user-level threads contained in that kernel-level thread will not execute in a truly parallel fashion.
+
+Go’s runtime allows its goroutines to take full advantage of multiple CPUs.
+
+Go provides a hybrid system that gives us the great performance of user-level threads
+without most of the downsides. It achieves this by using a set of kernel-level threads,
+each managing a queue of goroutines.
+
+The system that Go uses for its goroutines is sometimes called the **M:N threading
+model**. This is when you have M user-level threads (goroutines) mapped to 
+N kernel-level threads.
+
+Go’s runtime determines how many kernel-level threads to use based on the number
+of logical processors. This is set in the environment variable called `GOMAXPROCS`.
+
+Go’s runtime will assign a **local run queue (LRQ)** to each of these kernel-level threads.
+Each LRQ will contain a subset of the goroutines in the program. In addition, there is
+a **global run queue (GRQ)** for goroutines that Go has not yet assigned to a kernel-level thread. Each of the kernel-level threads running on a processor will
+take care of executing the goroutines in its LRQ.
+
+To work around the problem of blocking calls, Go wraps any blocking operations so
+that it knows when a kernel-level thread is about to be descheduled.
+
+When this happens, Go creates a new kernel-level thread (or reuses an idle one from
+a pool) and moves the queue of goroutines to this new thread, which picks a goroutine 
+from the queue and starts executing it
+
+This system of moving goroutines from one queue to another is known in Go as
+**work stealing**.
+
+Work stealing does not just happen when a goroutine makes a blocking
+call. Go can also use this mechanism when there is an imbalance in the number of
+goroutines in the queues. This will ensure that there are no processor cores that are
+idle while others are overloaded.
+
+In Go, we can force a goroutine to lock itself to an OS thread by calling the
+runtime.LockOSThread() function. This call binds the goroutine exclusively to its
+kernel-level thread. No other goroutines will run on the same OS thread until the
+goroutine calls runtime.UnlockOSThread(). This is useful when we need to interact
+with C code that expects to run on a single thread.
+
+#### 2.3.3 Scheduling Goroutines
+
+The Go scheduler needs to execute to perform its context switching. Thus, the Go
+scheduler needs user-level events to trigger its execution
+
+We can also call the Go scheduler in our code to try to get the scheduler to 
+context-switch to another goroutine. In concurrency lingo, this is usually called a **yield command**. It’s when a thread decides to yield control so that another thread gets its turn on the CPU.
+
+We have no control over which goroutine the scheduler will select
+to execute. When we call the Go scheduler, it might pick up the other goroutine
+and start executing it, or it might continue the execution of the goroutine that
+called the scheduler.
+
+As programmers writing concurrent programs, we must never write
+code that relies on an apparent scheduling order, because the next time we run the
+program, the ordering might be different.
+
+If we need to control the order of execution of our threads,
+we’ll need to add synchronization mechanisms to our code instead of relying on the
+scheduler. 
+
+### 2.4 Concurrency VS Parallelism
+
+**Concurrency** is about planning how to do many tasks at the same time.
+**Parallelism** is about performing many tasks at the same time.
+
+In fact, we can say that parallelism is a subset of concurrency. Only concurrent programs can execute in parallel, but not all concurrent programs will execute in parallel.
+

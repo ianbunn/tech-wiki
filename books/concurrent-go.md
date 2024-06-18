@@ -264,3 +264,120 @@ scheduler.
 
 In fact, we can say that parallelism is a subset of concurrency. Only concurrent programs can execute in parallel, but not all concurrent programs will execute in parallel.
 
+## 3 Thread Communication Using Memory Sharing
+
+Threads of execution working together need to communicate with **inter-thread communication (ITC)**
+or **inter-process communication (IPC)** when referring to processes.
+They communicate two things: 
+
+- **Memory sharing**
+- **Message passing**
+
+### 3.1 Memory Sharing
+
+In concurrent programming, memory sharing is sharing part of the process's memory -
+for example, sharing a variable or a data structure, and we have different goroutines
+working concurrently on this memory.
+
+Memory sharing gets complicated when there are multiple processors, because
+computer architecture involves various layers of cache between the CPUs and the main memory.
+
+Since processors utilize a system bus to communicate with the main memory and
+to reduce the load on the bus, we can use caches to bring memory contents closer to where
+they need to be, thus improving performance.
+
+In a multithreaded process, if thread 1 updates a variable in its cache, thread 2 will have an outdated copy of the variable in its cache. This is known as the **cache coherence problem**.
+
+One solution to this problem is to perform **cache write-through**, where the cache is updated and the main memory is updated at the same time. This is a slow operation because it involves writing to the main memory every time we update a variable.
+
+Another solution is to use **cache write-back**, where the cache listens for updates from another thread
+and updates or invalidates its cache accordingly.
+
+The mechanism for dealing with reads and writes on memory and caches in a multiprocessor system is known as the **cache-coherency protocols**.
+
+The **coherency wall** is the point at which the cost of maintaining cache coherency outweighs the benefits of using caches.
+
+### 3.2 Memory Sharing in Practice
+
+#### 3.2.2 Escape Analysis
+
+The Go compiler uses **escape analysis** to determine whether a variable should be allocated on the memory heap or the function's stack.
+
+It doesn't make sense for one goroutine to read or modify the memory contents of another
+goroutine's stack, because the goroutines might have completely different lifecycles.
+One goroutine's stack might not be available by the time another goroutine needs to update it.
+
+Go's compiler is smart enough to realize when we are sharing memory between goroutines.
+When it notices this, it allocates memory on the heap instead of the stack.
+
+**Escape analysis** consists of the compiler algorithms that decide whether a variable should be allocated
+on the heap instead of the stack.
+
+When a variable that looks like it belongs to the local function's stack
+but instead is allocated in the heap memory, we say that the variable has **escaped** to the heap.
+
+There are many reasons why a variable might escape to the heap
+
+- For example, if we pass a pointer to a local variable to another function, the variable will escape to the heap
+- Anytime a variable is shared outside the scope of a function's stack frame, it will escape to the heap
+
+Goroutines can update heap variable through a pointer. There is a tax to using heap memory,
+as the heap will need to be cleaned up by Go's **garbage collector**.
+
+The **garbage collector** goes through the objects in the heap that are no longer referenced
+by any goroutine and marks the space as free, so it can be reused. As opposed to using space on the stack,
+this memory is reclaimed when the function finishes executing.
+
+By using goroutines, we are forfeiting some compiler optimizations, such as inlining, 
+and we are increasing overhead by putting our shared variable on the heap.
+The trade-off is that by executing our code concurrently, we potentially achieve a performance boost.
+
+### 3.3 Race Conditions
+
+A **race condition** may arise when two or more goroutines try to update a shared variable at the same time, 
+and they step over each other, giving us unexpected results.
+
+**Race conditions** happen in other environments as well, such as:
+
+- Distributed systems
+- Electronic circuits
+- Human interactions
+
+A race condition is a good example of a **Heisenbug**, named after the physicist Werner Heisenberg,
+with the reference to his quantum mechanics uncertainty principle, a Heisenbug is a bug that disappears or changes its behavior when we attempt to debug and isolate it.
+
+A **critical section** in our code is a set of instructions that should be executed without interferences from other executions affecting the state used in that section. When this happens, race conditions can occur.
+
+The word **atomic** has its origins in the ancient Greek language meaning "indivisible". In computer science, an atomic operation is an operation that is indivisible, meaning it cannot be interrupted.
+
+When we're using goroutines, user-level threads, and we're running only on a single processor, 
+it's unlikely that the runtime will interrupt the execution in the middle of these instructions.
+This is bc **user-level scheduling** is usually non-preemptive; it'll only context switch in specific cases,
+such as I/O or when the app calls a thread yield (`runtime.Gosched()` will invoke the scheduler to yield execution to another goroutine).
+
+The above is unlike the **OS scheduling**, which is usually preemptive and can interrupt the execution at any time.
+
+WARNING: to test with a single processor, we can set the following: `runtime.GOMAXPROCS(1)`. DO NOT USE THIS IN PRODUCTION, it's just for testing purposes and to understand how the runtime works.
+
+#### 3.3.3 Proper Synchronization & Communication Eliminate Race Conditions
+
+There is no single best technique to solve for every race condition case out there. 
+
+Find the best tool to fix the race condition, is it improving channel communication? Is it using a mutex? Is it using a waitgroup?
+
+The second step to good concurrent programming is identifying when a race condition can happen.
+We must be mindful when we are sharing resources with other goroutines.
+
+To avoid race conditions in our programming, we need good synchronization and communication between the goroutines to make sure they don't step all over each other.
+
+Good concurrent programming involves effectively synchronizing your concurrent executions to eliminate race conditions while improving performance and throughput.
+
+#### 3.3.4 The Go Race Detector
+
+Go gives us a tool to detect race conditions in our code: we can run the Go compiler with the `-race` command-line flag. 
+With this flag, the compiler adds special code to all memory accesses to track when different goroutines are reading from and writing to memory. 
+When we use this flag and a race condition is detected, it outputs a warning message on the console.
+
+WARNING: Go's race detector only finds race conditions when a particular race condition is triggered.
+For this reason, the detector is not perfect.
+When using the race detector, production-like scenarios should be used; however, enabling the race detector in production is not recommended, since it slows performance and uses a lot of memory.

@@ -381,3 +381,6 @@ When we use this flag and a race condition is detected, it outputs a warning mes
 WARNING: Go's race detector only finds race conditions when a particular race condition is triggered.
 For this reason, the detector is not perfect.
 When using the race detector, production-like scenarios should be used; however, enabling the race detector in production is not recommended, since it slows performance and uses a lot of memory.
+
+## 4 Synchronization With Mutexes
+

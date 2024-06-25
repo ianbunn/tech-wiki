@@ -384,3 +384,108 @@ When using the race detector, production-like scenarios should be used; however,
 
 ## 4 Synchronization With Mutexes
 
+We can protect critical sections of our code with **mutexes**, so that only one goroutine at a time
+can access a shared resource. This eliminates race conditions.
+
+Variations on mutexes, sometimes called **locks**, are used in many programming languages and systems.
+
+**Reader-writer mutexes** gives us performance optimizations in situations where we need to block concurrency for writing, but not for reading. They give us the ability to perform multiple concurrent reads
+while still allowing us to lock write access.
+
+### 4.1 Protecting Critical Sections With Mutexes
+
+A **mutex** can be used to ensure that only one goroutine is executing a critical section of code at a time.
+Think of it as physical locks that block certain parts of our code from more than one goroutine at a time.
+
+If only one goroutine is accessing a critical section at a time, then we can ensure there will not be any race conditions.
+
+#### 4.1.1 How Do We Use Mutexes?
+
+When a goroutine comes to a critical section of our code protected by a mutex, it must first lock the mutex
+explicitly as an instruction of the program. When the goroutine is done with the critical section, then it must unlock the mutex.
+
+Mutex is short for **mutual exclusion**, and is a form of **binary semaphore**. A binary semaphore is a semaphore that can only have two states: locked and unlocked.
+
+A mutex allows only one execution, such as a goroutine or a kernel-level thread to enter a critical section of our code.
+The semantics of a mutex guarantees that only one execution will acquire access to the critical section at a time.
+The other executions will have to wait until the mutex is unlocked.
+
+In go, mutex functionality is provided by the `sync` package under the `sync.Mutex` type.
+This gives us the `Lock()` and `Unlock()` methods to lock and unlock the mutex.
+When we create a new mutex, it is in an unlocked state.
+It's always good practice to protect shared resources with a mutex, even if we think we don't need it.
+The compiler's organization can cause the executions to go out of order, so it is always
+a good idea to protect shared resources with a mutex.
+
+Mutexes need help from OS and hardware to work. Mutexes rely on hardware to provide atomic tests and set operations.
+With this operation, an execution can check the memory address, and if the value is what was expected,
+it updates the memory to a locked flag value.
+
+It is said to be **atomic** because the operation is indivisible, meaning it cannot be interrupted.
+
+#### 4.1.2 Mutex and Sequential Processing
+
+According to Amdahl's Law, the sequential-to-parallel ratio will limit the performance scalability of our code,
+so it's essential that we reduce the time spent holding a mutex lock.
+
+Locking the mutex too many times turns a concurrent program into a sequential one.
+
+When we decide where to use mutexes, it's best to focus on which resources to protect,
+and discover where critical sections in our code begin and end. We need to think about how to 
+minimize the number of `Locks()` and `Unlocks()` calls.
+
+Maximize the scalability of our code by using the locks only on code that runs fast in proportion to the rest.
+
+#### 4.1.3 Non-Blocking Mutex Locks
+
+A **blocking function** is when the execution of the goroutine stops until `Unlock()` is called by another goroutine.
+
+In some apps, we might not want to block the goroutine, but instead, perform some other work
+while waiting for the mutex to be unlocked.
+
+It doesn't make much sense to have a goroutine do something else if the mutex is not available,
+since in Go it’s easier to just spawn another goroutine to do the work while we’re waiting for the lock to be released.
+
+Golang provides us with a non-blocking mutex lock, called `TryLock()`. When we call this, we can expect 2 things:
+
+- The lock is available, and we acquire it, returning `true`
+- The lock is not available and used by another goroutine, so we don't acquire it, returning `false`
+
+From Go’s mutex documentation (pkg.go.dev/sync#Mutex.TryLock):
+
+NOTE: that while correct uses of TryLock do exist, they are rare, and use of TryLock
+is often a sign of a deeper problem in a particular use of mutexes.
+
+### 4.2 Improving Performance with Reader-Writer Mutexes
+
+**Reader-Writer mutexes** gives us a variation on standard mutexes that only block concurrency
+when we need to update a shared resource. Using reader-writer mutexes, we can improve a read-heavy app's performance.
+
+When we need to update the shared resource, the goroutine executing the write critical section requests the write lock to acquire exclusive access.
+
+Go comes with its own implementation of a readers–writer lock, called `sync.RWMutex`.
+
+#### 4.2.2 Building Our Own Read-Preferred Readers-Writer Mutex
+
+**Read-preferring** means that if we have a consistent number of readers’ goroutines hogging the
+read part of the mutex, a writer goroutine would be unable to acquire the mutex.
+In technical terms, we say that the reader goroutines are starving the writer ones.
+
+## 5 Conditional Variables And Semaphores
+
+Mutexes are not the only synchronization tool that we have available: 
+condition variables give us extra controls that complement exclusive locking.
+
+Conditional variables give us the ability to wait for a certain condition to occur before unblocking the execution.
+
+**Semaphores** go one step further than mutexes in that they allow us to control how
+many concurrent goroutines can execute a certain section at the same time.
+
+In addition, **semaphores** can be used to store a signal (of an occurring event) for later
+access by an execution.
+
+Apart from being useful in our concurrent applications, condition variables and
+semaphores are additional primitive building blocks that we can use to build more
+complex tools and abstractions.
+
+
